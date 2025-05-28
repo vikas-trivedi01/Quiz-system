@@ -1,5 +1,6 @@
 import progress from "../assets/illustrations/progress.png";
 import "../styles/home.css";
+import Testimonial from "./Testimonial";
 
 const Home = () => {
   return (
@@ -21,6 +22,27 @@ const Home = () => {
               About Us
             </button>
           </div>
+        </div>
+      </div>
+
+      <div className="row">
+        <div className="col-4">
+            <Testimonial
+             userAvatar="import i1 from '../../assets/illustrations/i1.png'"
+             userName="abc"
+             feedback="feed1"
+             date="03 April, 2024"
+             
+             />
+        </div>
+        <div className="col-4">
+            <Testimonial
+             userAvatar="import i1 from '../../assets/illustrations/i1.png'"
+             userName="xyz"
+             feedback="feed2"
+             date="03 April, 2024"
+
+            />
         </div>
       </div>
     </>

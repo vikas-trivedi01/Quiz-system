@@ -14,6 +14,10 @@
     margin-bottom: 10px;
 }
 
+#footer-btn:hover {
+    background-color: rgba(0, 0, 0, 0.377);
+}
+
 #footer-pages-list {
     display: flex;
     list-style-type: none;

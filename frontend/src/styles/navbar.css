@@ -1,0 +1,36 @@
+ul {
+  margin: 0 0 1em 25px;
+  list-style: none;
+}
+
+#nav-ul {
+  display: flex;
+  align-content: center;
+  justify-content: space-between;
+  background: linear-gradient(12deg, #ff397e, #0091ff);
+  border-radius: var(--border-radius);
+  padding: 15px;
+}
+
+.nav-item {
+  padding: 6px;
+  margin-left: 12px;
+}
+
+.nav-item a {
+  color: rgb(255, 255, 255);
+  list-style-type: none;
+  text-decoration: none;
+  padding: 10px;
+}
+
+.nav-item:hover {
+  background-color: #030404;
+  border-radius: var(--border-radius);
+  transition:  0.7s ease-out;
+  transform: scale(1.2);
+}
+
+.nav-item a:hover {
+  color: rgb(247, 241, 241);
+}

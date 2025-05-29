@@ -1,25 +1,24 @@
 @import "variables.css";
 
 #tag-line {
-    color: var(--clr-text);
+  color: var(--clr-text);
 }
 
 #progress-buttons {
-    display: flex;
-    justify-content: space-evenly;
-    
+  display: flex;
+  justify-content: space-evenly;
 }
 
-#start-btn {
-    border-radius: var(--border-radius);
-    background-color: var(--clr-primary);
-    padding: 12px;
-    width: 30%;
-    color: white;
+#quiz-btn {
+  border-radius: var(--border-radius);
+  background-color: var(--clr-primary);
+  padding: 12px;
+  width: 30%;
+  color: white;
 }
 
 #about-btn {
-    border-radius: var(--border-radius);
-    padding: 12px;
-    width: 30%;
+  border-radius: var(--border-radius);
+  padding: 12px;
+  width: 30%;
 }

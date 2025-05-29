@@ -40,10 +40,6 @@ const Footer = () => {
           />{" "}
           by <strong>QuizGenius</strong>
           <br />
-          <span style={{ fontSize: "13px" }}>
-            Elevate your thinking. Master your knowledge. Stay curious.
-          </span>
-          <br />
           <span> {currentYear} &copy; QuizGenius. All rights reserved.</span>
         </span>
       </div>

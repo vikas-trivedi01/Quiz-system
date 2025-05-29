@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "../styles/navbar.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRectangleList, faTerminal } from "@fortawesome/free-solid-svg-icons";
+import { faChevronDown, faChevronUp, faRectangleList, faTerminal } from "@fortawesome/free-solid-svg-icons";
 
 import { NavLink } from "react-router-dom";
 
@@ -12,77 +12,81 @@ const Navbar = () => {
     e.preventDefault();
     setOpen(!open);
   };
+
   return (
     <nav>
       <ul id="nav-ul">
+
+
         <li className="nav-item">
-          {/* <a href="index.html" className="nav-link">
-            Home
-          </a> */}
-          <NavLink to="/"
-            className={ isActive => {
-              `nav-link ${isActive ? "active-nav-link" : ""} `
-            }}
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              `nav-link ${isActive ? "active-nav-link" : ""}`
+            }
           >
             Home
           </NavLink>
         </li>
-        <li className="nav-item dropdown">
-          {/* <a
-            href="#"
-            className="nav-link dropdown-toggle"
-            onClick={toggleDropdown}
-            data-toggle="dropdown"
-            >
-            Quizzes
-            </a> */}
-        <NavLink to="/quizzes"
-            className={ isActive => {
-              `nav-link dropdown-toggle ${isActive ? "active-nav-link" : ""}`
-            }}
-            
-            onClick={toggleDropdown}
-            data-toggle="dropdown"
-            >
 
-            Quizzes
+
+        <li className="nav-item dropdown">
+          <NavLink
+            to="/quizzes"
+            className={({ isActive }) =>
+              `nav-link ${isActive ? "active-nav-link" : ""}`
+            }
+            onClick={toggleDropdown}
+            data-toggle="dropdown"
+          >
+            Quizzes{" "}
+            { open ? 
+              <FontAwesomeIcon icon={faChevronUp} className="ms-1" /> :
+              <FontAwesomeIcon icon={faChevronDown} className="ms-1" />  
+             }
+             
           </NavLink>
+
           <div className={`dropdown-menu${open ? " show" : ""} bg-dark p-3`}>
-            {/* <a className="dropdown-item">
+            
+            <NavLink to="/quizzes/quizcode" className="dropdown-item bg-light text-dark mb-3">
               Join via code{" "}
               <FontAwesomeIcon icon={faTerminal} className="ms-3" />
-              </a> */}
-        <NavLink to="/quizzes/quizcode"
-            className= "dropdown-item"
-            >
-            Join via code{" "}
-              <FontAwesomeIcon icon={faTerminal} className="ms-3" />
+            </NavLink>
 
-          </NavLink>
-
-            
-            {/* <a className="dropdown-item" href="#">
+            <NavLink to="/quizzes/quizlist" className="dropdown-item bg-light text-dark">
               Join from list{" "}
               <FontAwesomeIcon icon={faRectangleList} className="ms-3" />
-              </a> */}
-        <NavLink to="/quizzes/quizlist"
-            className= "dropdown-item"
-            >
-              Join from list{" "}
-              <FontAwesomeIcon icon={faRectangleList} className="ms-3" />
-          </NavLink>
+            </NavLink>
+
           </div>
         </li>
+
+
         <li className="nav-item">
-          <a href="#" className="nav-link">
-            Your Progress
-          </a>
+          <NavLink
+            to="/terms"
+            className={({ isActive }) =>
+              `nav-link ${isActive ? "active-nav-link" : ""}`
+            }
+          >
+            Terms
+          </NavLink>
         </li>
+
+
         <li className="nav-item">
-          <a href="#" className="nav-link">
-            About Us
-          </a>
+          <NavLink
+            to="/privacy"
+            className={({ isActive }) =>
+              `nav-link ${isActive ? "active-nav-link" : ""}`
+            }
+          >
+            Privacy Policy
+          </NavLink>
         </li>
+
+
       </ul>
     </nav>
   );

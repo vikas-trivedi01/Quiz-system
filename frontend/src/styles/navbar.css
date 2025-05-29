@@ -21,15 +21,14 @@ ul {
 .nav-item a {
   color: rgb(255, 255, 255);
   list-style-type: none;
-  text-decoration: none;
-  padding: 16px;
+  padding: 16px 28px;
+  border-radius: var(--border-radius);
 }
 
 .nav-item a:hover {
   color: rgb(0, 0, 0);
   background-color: #ffffff;
-  border-radius: var(--border-radius);
-  transition: 0.7s ease-out;
+  transition: 0.8s ease-out;
   text-decoration: underline;
   text-decoration-color: black;
   text-underline-offset: 10px;
@@ -38,9 +37,9 @@ ul {
 }
 
 .active-nav-link {
-  color: rgb(0, 0, 0);
+  color: rgb(0, 0, 0) !important;
   text-decoration: underline;
-  text-decoration-color: #35B0FC;
+  text-decoration-color: #ffffff;
   text-underline-offset: 10px;
   text-decoration-thickness: 3px;
   text-decoration-skip-ink: none;

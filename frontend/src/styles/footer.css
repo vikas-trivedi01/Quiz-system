@@ -44,3 +44,12 @@
   text-decoration-thickness: 3px;
   text-decoration-skip-ink: none;
 }
+
+.active-nav-link {
+  color: rgb(0, 0, 0) !important;
+  text-decoration: underline;
+  text-decoration-color: #ffffff;
+  text-underline-offset: 10px;
+  text-decoration-thickness: 3px;
+  text-decoration-skip-ink: none;
+}

@@ -1,21 +1,22 @@
 import "../styles/home.css";
 import Testimonial from "./Testimonial";
 
-import progress from "../assets/illustrations/progress.png";
+import progress from "../assets/illustrations/progress.jpg";
 
 import userOne from "../assets/users/user-one.png";
 import userTwo from "../assets/users/user-two.png";
 import userThree from "../assets/users/user-three.png";
 import Quiz from "./Quiz";
+import { NavLink } from "react-router-dom";
 
 const Home = () => {
   return (
     <>
       <div className="row">
-        <div className="col-6 bg-danger">
-          <img src={progress} alt="Illustration for progress" width={650} />
+        <div className="col-6 py-2 px-5">
+          <img src={progress} alt="Illustration for progress" style={{ borderRadius: "30px", border: "2px solid black"}} width={550} height={450} />
         </div>
-        <div className="col-6 mt-5">
+        <div className="col-6" style={{ marginTop: "93px"}}>
           <h2 id="tag-line">Test Your Knowledge. Track Your Growth</h2>
           <h4>
             Welcome to the smarter way to learn. <br /> Take quizzes across
@@ -23,7 +24,7 @@ const Home = () => {
             all in one place.
           </h4>
           <div id="progress-buttons" className="mt-5">
-            <button id="quiz-btn">Explore Quizzes</button>
+            <button id="quiz-btn"><NavLink to="quizzes/quizlist" style={{ color: "#fff", textDecoration: "none" }}>Explore Quizzes</NavLink></button>
             <button className="btn btn-dark" id="about-btn">
               About Us
             </button>

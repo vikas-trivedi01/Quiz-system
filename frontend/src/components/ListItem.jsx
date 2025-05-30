@@ -39,6 +39,7 @@ const ListItem = ({
         borderRadius: "6px",
         color: "0A0F2A",
         margin: "30px",
+        border: "2px solid black"
       }}
     >
       <div className="d-flex justify-content-between py-3 px-5">
@@ -101,8 +102,6 @@ const ListItem = ({
           <span style={infoStyle}>{difficulty}</span>
         </span>
       </div>
-
-      <hr style={{ border: "2px solid black", height: "5px" }}/>
     </div>
   );
 };

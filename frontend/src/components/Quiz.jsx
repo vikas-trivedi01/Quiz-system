@@ -11,7 +11,7 @@ const Quiz = () => {
     color: "#fff",
     borderRadius: `var(--border-radius)`,
     padding: "8px",
-    width: "240px",
+    width: "230px",
     border: "none",
     cursor: "pointer",
     marginLeft: "30rem",
@@ -67,7 +67,7 @@ const Quiz = () => {
   const [questionsCounter, setQuestionsCounter] = useState(1);
   const [answers, setAnswers] = useState([]);
 
-  const [timer, setTimer] = useState(0);
+  const [timer, setTimer] = useState(20);
   const [isAnswered, setIsAnswered] = useState(false);
   const [selectedOptionId, setSelectedOptionId] = useState(null);
 
@@ -76,7 +76,7 @@ const Quiz = () => {
   let interval = null;
   useEffect(() => {
     interval = setInterval(() => {
-      setTimer((prev) => prev + 1);
+      setTimer((prev) => prev - 1);
     }, 1000);
 
     return () => clearInterval(interval);
@@ -86,13 +86,21 @@ const Quiz = () => {
     setSelectedOptionId(null);
   }, [currentQuestionObj]);
 
+  setTimeout( () => {
+     clearInterval(interval);
+     setIsAnswered(true);
+     setQuestionsCounter(prev => prev + 1);
+     selectedOptionId(null);
+    getNextQuestion();
+  }, 2000);
+
   const getNextQuestion = () => {
     if (isAnswered) {
       const nextIndex = questionsCounter;
       if (nextIndex < quizData.length) {
         setCurrentQuestionObj(quizData[nextIndex]);
         setQuestionsCounter(nextIndex + 1);
-        setTimer(0);
+        setTimer(200);
         setIsAnswered(false);
         setSelectedOptionId(null);
       }

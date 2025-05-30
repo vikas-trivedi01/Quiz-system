@@ -14,13 +14,30 @@ const Footer = () => {
 
       <ul id="footer-pages-list">
         <li className="footer-link-container">
-          <a href="#">Home</a>
+          <NavLink
+            to="/"
+            className={({ isActive }) => `${isActive ? "active-nav-link" : ""}`}
+          >
+            Home
+          </NavLink>{" "}
         </li>
         <li className="footer-link-container">
-          <a href="#">Terms of Use</a>
+          <NavLink
+            to="/terms"
+            className={({ isActive }) =>
+              `${isActive ? "active-nav-link" : ""}`
+            }
+          >
+            Terms
+          </NavLink>
         </li>
         <li className="footer-link-container">
-          <a href="#">Privacy Policy</a>
+          <NavLink
+            to="/privacy"
+            className={({ isActive }) => `${isActive ? "active-nav-link" : ""}`}
+          >
+            Privacy Policy
+          </NavLink>
         </li>
         <li className="footer-link-container">
           <a href="#">About Us</a>

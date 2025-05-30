@@ -6,6 +6,7 @@ import progress from "../assets/illustrations/progress.png";
 import userOne from "../assets/users/user-one.png";
 import userTwo from "../assets/users/user-two.png";
 import userThree from "../assets/users/user-three.png";
+import Quiz from "./Quiz";
 
 const Home = () => {
   return (
@@ -57,6 +58,8 @@ const Home = () => {
           />
         </div>
       </div>
+
+      <Quiz />
     </>
   );
 };

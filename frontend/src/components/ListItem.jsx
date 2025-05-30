@@ -17,7 +17,7 @@ const ListItem = ({
     padding: "7px",
     width: "150px",
     border: "none",
-    cursor: "spanointer",
+    cursor: "pointer",
     marginRight: "15px",
   };
 
@@ -36,8 +36,6 @@ const ListItem = ({
     <div
       className="rounded p-2"
       style={{
-        // background: "lighCoral",
-        // border: "2px solid linear-gradient(135deg,rgb(145, 192, 236),rgb(179, 233, 242))",
         borderRadius: "6px",
         color: "0A0F2A",
         margin: "30px",

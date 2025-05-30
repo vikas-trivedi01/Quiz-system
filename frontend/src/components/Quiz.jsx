@@ -1,9 +1,9 @@
-import {
-  faArrowRightLong 
-} from "@fortawesome/free-solid-svg-icons";
+import { faArrowRightLong, faTrophy } from "@fortawesome/free-solid-svg-icons";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useEffect } from "react";
+
+import { useNavigate } from "react-router-dom";
 
 const Quiz = () => {
   const nextButtonStyle = {
@@ -18,103 +18,45 @@ const Quiz = () => {
     fontSize: "20px",
   };
 
+  const resultButtonStyle = {
+    backgroundColor: `var(--clr-accent)`,
+    color: "#000",
+    borderRadius: `var(--border-radius)`,
+    padding: "8px",
+    width: "240px",
+    border: "none",
+    cursor: "pointer",
+    marginLeft: "30rem",
+    fontSize: "20px",
+  };
+
   const quizData = [
     {
-      id: Math.floor(Math.random() * 1000) + 1,
+      id: 1,
       question: "What is the capital of France?",
       options: ["Paris", "London", "Berlin", "Rome"],
       rightAnswer: "Paris",
     },
     {
-      id: Math.floor(Math.random() * 1000) + 1,
+      id: 2,
       question: "Which planet is known as the Red Planet?",
       options: ["Earth", "Mars", "Jupiter", "Venus"],
       rightAnswer: "Mars",
     },
     {
-      id: Math.floor(Math.random() * 1000) + 1,
+      id: 3,
       question: "Who wrote 'To Kill a Mockingbird'?",
       options: ["Harper Lee", "Mark Twain", "J.K. Rowling", "Jane Austen"],
       rightAnswer: "Harper Lee",
     },
     {
-      id: Math.floor(Math.random() * 1000) + 1,
+      id: 4,
       question: "What is the smallest prime number?",
       options: ["0", "1", "2", "3"],
       rightAnswer: "2",
     },
     {
-      id: Math.floor(Math.random() * 1000) + 1,
-      question: "What is the value of π (pi) approximately?",
-      options: ["2.14", "3.14", "3.41", "4.13"],
-      rightAnswer: "3.14",
-    },
-    {
-      id: Math.floor(Math.random() * 1000) + 1,
-      question: "Which ocean is the largest?",
-      options: ["Atlantic", "Indian", "Arctic", "Pacific"],
-      rightAnswer: "Pacific",
-    },
-    {
-      id: Math.floor(Math.random() * 1000) + 1,
-      question: "Which language is primarily spoken in Brazil?",
-      options: ["Spanish", "Portuguese", "French", "English"],
-      rightAnswer: "Portuguese",
-    },
-    {
-      id: Math.floor(Math.random() * 1000) + 1,
-      question: "What is the boiling point of water?",
-      options: ["90°C", "100°C", "120°C", "80°C"],
-      rightAnswer: "100°C",
-    },
-    {
-      id: Math.floor(Math.random() * 1000) + 1,
-      question: "What does HTML stand for?",
-      options: [
-        "Hyper Text Markup Language",
-        "Home Tool Markup Language",
-        "Hyperlinks and Text Markup Language",
-        "Highlevel Text Machine Language",
-      ],
-      rightAnswer: "Hyper Text Markup Language",
-    },
-    {
-      id: Math.floor(Math.random() * 1000) + 1,
-      question: "Who painted the Mona Lisa?",
-      options: [
-        "Vincent Van Gogh",
-        "Leonardo da Vinci",
-        "Pablo Picasso",
-        "Michelangelo",
-      ],
-      rightAnswer: "Leonardo da Vinci",
-    },
-    {
-      id: Math.floor(Math.random() * 1000) + 1,
-      question: "Which element has the symbol 'O'?",
-      options: ["Gold", "Oxygen", "Silver", "Hydrogen"],
-      rightAnswer: "Oxygen",
-    },
-    {
-      id: Math.floor(Math.random() * 1000) + 1,
-      question: "What is the square root of 64?",
-      options: ["6", "7", "8", "9"],
-      rightAnswer: "8",
-    },
-    {
-      id: Math.floor(Math.random() * 1000) + 1,
-      question: "Which year did World War II end?",
-      options: ["1945", "1939", "1918", "1950"],
-      rightAnswer: "1945",
-    },
-    {
-      id: Math.floor(Math.random() * 1000) + 1,
-      question: "Which device is used to measure temperature?",
-      options: ["Barometer", "Thermometer", "Hygrometer", "Altimeter"],
-      rightAnswer: "Thermometer",
-    },
-    {
-      id: Math.floor(Math.random() * 1000) + 1,
+      id: 5,
       question: "Which gas do plants absorb from the atmosphere?",
       options: ["Oxygen", "Nitrogen", "Carbon Dioxide", "Hydrogen"],
       rightAnswer: "Carbon Dioxide",
@@ -128,6 +70,8 @@ const Quiz = () => {
   const [timer, setTimer] = useState(0);
   const [isAnswered, setIsAnswered] = useState(false);
   const [selectedOptionId, setSelectedOptionId] = useState(null);
+
+  const navigate = useNavigate();
 
   let interval = null;
   useEffect(() => {
@@ -144,11 +88,14 @@ const Quiz = () => {
 
   const getNextQuestion = () => {
     if (isAnswered) {
-      setQuestionsCounter((prev) => prev + 1);
-      setCurrentQuestionObj(quizData[questionsCounter - 1]);
-      setTimer(0);
-      setIsAnswered(false);
-      setSelectedOptionId(null);
+      const nextIndex = questionsCounter;
+      if (nextIndex < quizData.length) {
+        setCurrentQuestionObj(quizData[nextIndex]);
+        setQuestionsCounter(nextIndex + 1);
+        setTimer(0);
+        setIsAnswered(false);
+        setSelectedOptionId(null);
+      }
     } else {
       alert("Please select an option");
     }
@@ -185,14 +132,11 @@ const Quiz = () => {
         <span
           style={{ marginLeft: "10px", marginTop: "-5px", fontSize: "25px" }}
         >
-
           {questionsCounter} / {quizData.length}
-
         </span>
       </div>
 
       <div style={{ margin: "2%" }}>
-        
         <div
           style={{
             border: "2px solid #000",
@@ -201,9 +145,17 @@ const Quiz = () => {
           }}
           className="p-2 d-flex justify-content-between"
         >
-
           <div>
-            <h5>Question: </h5>{" "}
+            <h5
+              style={{
+                textDecoration: "underline",
+                textDecorationColor: "#fff",
+                textDecorationThickness: "4px",
+                textUnderlineOffset: "7px",
+              }}
+            >
+              Question:{" "}
+            </h5>{" "}
             <span style={{ fontSize: "25px" }}>
               {currentQuestionObj.question}
             </span>
@@ -218,13 +170,10 @@ const Quiz = () => {
           >
             {timer}
           </span>
-
         </div>
 
         <div style={{ border: "2px solid #000" }} className="mt-4">
-          {
-          
-          currentQuestionObj.options.map((option, index) => {
+          {currentQuestionObj.options.map((option, index) => {
             return (
               <div
                 key={index}
@@ -265,26 +214,37 @@ const Quiz = () => {
                     }}
                   />
                 </div>
-
               </div>
             );
-          })
-          
-          }
+          })}
         </div>
 
         <div>
-          <button
-            className="btn mt-3"
-            style={nextButtonStyle}
-            onClick={() => getNextQuestion()}
-          >
+          {isAnswered &&
+          quizData[questionsCounter - 1] == quizData[quizData.length - 1] ? (
+            <button
+              className="btn mt-3"
+              style={resultButtonStyle}
+              onClick={() =>
+                navigate("quizzes/result", { state: { quizData, answers } })
+              }
+            >
+              Result {console.log(answers)}
+              <FontAwesomeIcon icon={faTrophy} style={{ marginLeft: "20px" }} />
+            </button>
+          ) : (
+            <button
+              className="btn mt-3"
+              style={nextButtonStyle}
+              onClick={() => getNextQuestion()}
+            >
               Next Question
-            <FontAwesomeIcon
-              icon={faArrowRightLong}
-              style={{ marginLeft: "20px" }}
-            />
-          </button>
+              <FontAwesomeIcon
+                icon={faArrowRightLong}
+                style={{ marginLeft: "20px" }}
+              />
+            </button>
+          )}
         </div>
       </div>
     </>

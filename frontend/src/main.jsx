@@ -7,6 +7,7 @@ import QuizCode from "./components/QuizCode";
 import QuizList from "./components/QuizList";
 import Terms from "./components/Terms";
 import Privacy from "./components/Privacy";
+import QuizResult from "./components/QuizResult";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -17,6 +18,7 @@ const router = createBrowserRouter(
       <Route path="quizzes">
         <Route path="quizcode" element={ <QuizCode /> } />
         <Route path="quizlist" element={ <QuizList /> } />
+        <Route path="result" element={ <QuizResult /> } />
       </Route>
 
       <Route path="terms" element={ <Terms /> } />

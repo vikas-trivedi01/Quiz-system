@@ -4,16 +4,17 @@
 }
 
 #footer-btn {
-  background-color: black;
+  background-color: rgb(255, 255, 255);
   border-radius: var(--border-radius);
-  color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
   padding: 16px;
   margin-left: 490px;
   margin-bottom: 10px;
 }
 
 #footer-btn:hover {
-  background-color: rgba(0, 0, 0, 0.377);
+  background-color: rgba(0, 63, 253, 0.377);
+  color: #ffffff;
 }
 
 #footer-pages-list {

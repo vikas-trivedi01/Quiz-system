@@ -1,5 +1,5 @@
 import { useState } from "react";
-import quizCodeImg from "../assets/illustrations/quiz-code.png";
+import quizCodeImg from "../assets/illustrations/quiz-code.jpg";
 
 import "../styles/variables.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -33,8 +33,8 @@ const QuizCode = () => {
         <img
           src={quizCodeImg}
           alt="Person illustration"
-          width={500}
-          height={400}
+          width={600}
+          height={500}
           style={{ borderRadius: "15px" }}
         />
       </div>

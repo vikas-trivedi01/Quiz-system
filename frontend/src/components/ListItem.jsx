@@ -36,7 +36,8 @@ const ListItem = ({
     <div
       className="rounded p-2"
       style={{
-        background: "linear-gradient(135deg,rgb(145, 192, 236),rgb(179, 233, 242))",
+        // background: "lighCoral",
+        // border: "2px solid linear-gradient(135deg,rgb(145, 192, 236),rgb(179, 233, 242))",
         borderRadius: "6px",
         color: "0A0F2A",
         margin: "30px",
@@ -102,6 +103,8 @@ const ListItem = ({
           <span style={infoStyle}>{difficulty}</span>
         </span>
       </div>
+
+      <hr style={{ border: "2px solid black", height: "5px" }}/>
     </div>
   );
 };

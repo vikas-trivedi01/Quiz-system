@@ -1,15 +1,16 @@
 import "../styles/footer.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeartCircleCheck } from "@fortawesome/free-solid-svg-icons";
+import { NavLink } from "react-router-dom";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
     <footer id="footer-container">
-      <button className="btn" id="footer-btn">
+      <NavLink to="quizzes/quizlist" id="footer-btn" className="btn">
         Level Up Your Knowledge &gt;
-      </button>
+      </NavLink>
 
       <ul id="footer-pages-list">
         <li className="footer-link-container">

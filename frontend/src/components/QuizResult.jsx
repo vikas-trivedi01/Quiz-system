@@ -1,6 +1,6 @@
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome } from "@fortawesome/free-solid-svg-icons";
+import { faCircleXmark, faHome } from "@fortawesome/free-solid-svg-icons";
 import quizResultImg from "../assets/illustrations/quiz-result.jpg";
 
 import messages from "../assets/quizResultMessages.json";
@@ -18,11 +18,9 @@ const QuizResult = () => {
       alert("Page not available");
       navigate("/");
     }
-  }, [location, navigate]);
+  }, [location.state, navigate]);
 
-  if (location.state == null) {
-    return null;
-  }
+  if (location.state == null) return null;
 
   const { quizData, answers } = location.state;
 
@@ -35,6 +33,18 @@ const QuizResult = () => {
     border: "none",
     cursor: "pointer",
     marginTop: "20px",
+  };
+
+  const reviewButtonStyle = {
+    backgroundColor: "#ff006e",
+    color: "#fff",
+    borderRadius: `var(--border-radius)`,
+    padding: "10px",
+    width: "260px",
+    border: "none",
+    cursor: "pointer",
+    marginTop: "20px",
+    marginLeft: "20px",
   };
 
   const rightAnswers = quizData.filter((question) => {
@@ -74,52 +84,67 @@ const QuizResult = () => {
   }
 
   return (
-    <div className="d-flex justify-content-between">
-      <img
-        src={quizResultImg}
-        alt="Quiz result illustration"
-        height={350}
-        width={600}
-      />
-
-      <div className="text-center mt-5" style={{ marginRight: "200px" }}>
-        <span style={{ fontSize: "28px" }}>Your Score</span>{" "}
-        <h2
-          style={{
-            backgroundColor: "#FF5E9A",
-            color: "#fff",
-            width: "max-content",
-            borderRadius: "6px",
-            marginLeft: "105px",
-          }}
-          className="py-2 px-4"
-        >
-          {rightAnswers.length} / {quizData.length}
-        </h2>
-        <h4 className="mt-4">{message}</h4>
-        <button style={homeButtonStyle}>
-          <NavLink to="/" style={{ color: "#fff", textDecoration: "none" }}>
-            Back to Home
-          </NavLink>
-          <FontAwesomeIcon icon={faHome} style={{ marginLeft: "10px" }} />
-        </button>
-      </div>
+    <>
       <div
         style={{
-          backgroundColor: "#390099",
+          backgroundColor: "#35B0FC",
           fontSize: "20px",
           height: "max-content",
           padding: "13px",
-          marginRight: "30px",
+          marginLeft: "500px",
           borderRadius: "6px",
-          color: "#fff",
           width: "300px",
         }}
         className="text-center"
       >
-        {status}
+        Result Status: {status}
       </div>
-    </div>
+
+      <div className="d-flex justify-content-between">
+        <img
+          src={quizResultImg}
+          alt="Quiz result illustration"
+          height={350}
+          width={600}
+        />
+
+        <div className="text-center mt-5" style={{ marginRight: "200px" }}>
+          <span style={{ fontSize: "28px" }}>Your Score</span>{" "}
+          <h2
+            style={{
+              backgroundColor: "#FF5E9A",
+              color: "#fff",
+              width: "max-content",
+              borderRadius: "6px",
+              marginLeft: "190px",
+            }}
+            className="py-2 px-5"
+          >
+            {rightAnswers.length} / {quizData.length}
+          </h2>
+          <h4 className="mt-4">{message}</h4>
+          <button style={homeButtonStyle}>
+            <NavLink to="/" style={{ color: "#fff", textDecoration: "none" }}>
+              Back to Home
+            </NavLink>
+            <FontAwesomeIcon icon={faHome} style={{ marginLeft: "10px" }} />
+          </button>
+          <button
+            style={reviewButtonStyle}
+            onClick={() =>
+              navigate("/quizzes/review", { state: location.state })
+            }
+          >
+            Review Wrong Answers
+            <FontAwesomeIcon
+              icon={faCircleXmark}
+              style={{ marginLeft: "10px" }}
+            />
+          </button>
+        </div>
+      </div>
+      <div></div>
+    </>
   );
 };
 

@@ -16,7 +16,8 @@ const Quiz = () => {
   const quizData = [
     {
       id: 1,
-      question: "What is the capital of France?",
+      question:
+        "What is the capital of France?What is the capital of France?What is the capital of France?",
       options: ["Paris", "London", "Berlin", "Rome"],
       rightAnswer: "Paris",
     },
@@ -91,8 +92,7 @@ const Quiz = () => {
 
   const getNextQuestion = (flow = null) => {
     if ((flow == "auto" || isAnswered) && questionsCounter < quizData.length) {
-      // const nextIndex = questionsCounter;
-      if (nextIndex < quizData.length) {
+      if (questionsCounter < quizData.length) {
         setCurrentQuestionObj(quizData[questionsCounter]);
         setQuestionsCounter((prev) => prev + 1);
         setTimer(5);
@@ -104,15 +104,13 @@ const Quiz = () => {
     }
   };
 
-  let isCompleted = false;
   const handleAutoNext = () => {
     setIsAnswered(true);
     if (questionsCounter < quizData.length) {
       let next = questionsCounter;
       setQuestionsCounter((prev) => prev + 1);
       setCurrentQuestionObj(quizData[next]);
-    } else {
-      isCompleted = true;
+      selectOption(null, null);
     }
   };
 
@@ -120,7 +118,7 @@ const Quiz = () => {
     clearInterval(intervalRef.current);
     const newAnswer = {
       questionId: currentQuestionObj.id,
-      givenAnswer: e.target.value,
+      givenAnswer: e?.target?.value || null,
     };
 
     setAnswers((prevAnswers) => {
@@ -223,8 +221,7 @@ const Quiz = () => {
         </div>
 
         <div>
-          {isCompleted ||
-          (isAnswered && questionsCounter == quizData.length) ? (
+          {isAnswered && questionsCounter == quizData.length ? (
             <button
               className="btn mt-3"
               style={resultButtonStyle}
@@ -235,7 +232,7 @@ const Quiz = () => {
               Result
               <FontAwesomeIcon icon={faTrophy} style={{ marginLeft: "20px" }} />
             </button>
-          ) : (
+          ) : questionsCounter == quizData.length ? null : (
             <button
               className="btn mt-3"
               style={nextButtonStyle}

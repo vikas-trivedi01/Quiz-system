@@ -1,0 +1,30 @@
+[
+  {
+    "status": "Very Poor",
+    "message": "Oh no!\nBelow 5%—don't give up! Review the basics and try again."
+  },
+  {
+    "status": "Poor",
+    "message": "Keep pushing!\nBelow 20%, there's room to grow. Focus and retry!"
+  },
+  {
+    "status": "Needs Improvement",
+    "message": "You're getting there!\nBelow 35%, keep practicing and learning."
+  },
+  {
+    "status": "Fair",
+    "message": "Good effort!\nBelow 53%, you're more than halfway—stay consistent!"
+  },
+  {
+    "status": "Good",
+    "message": "Nice work!\nBelow 65%, you're improving—keep going strong!"
+  },
+  {
+    "status": "Excellent",
+    "message": "Great job!\nBelow 85%, you've mastered most of it—almost perfect!"
+  },
+  {
+    "status": "Outstanding",
+    "message": "Congratulations!\n95% and above—exceptional work, you nailed it!"
+  }
+]

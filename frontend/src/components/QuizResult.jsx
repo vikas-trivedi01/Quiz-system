@@ -96,27 +96,26 @@ const QuizResult = () => {
         >
           {rightAnswers.length} / {quizData.length}
         </h2>
-
         <h4 className="mt-4">{message}</h4>
-        
         <button style={homeButtonStyle}>
           <NavLink to="/" style={{ color: "#fff", textDecoration: "none" }}>
             Back to Home
           </NavLink>
           <FontAwesomeIcon icon={faHome} style={{ marginLeft: "10px" }} />
         </button>
-
       </div>
       <div
         style={{
           backgroundColor: "#390099",
           fontSize: "20px",
-          height: "50px",
-          padding: "10px",
+          height: "max-content",
+          padding: "13px",
           marginRight: "30px",
           borderRadius: "6px",
           color: "#fff",
+          width: "300px",
         }}
+        className="text-center"
       >
         {status}
       </div>

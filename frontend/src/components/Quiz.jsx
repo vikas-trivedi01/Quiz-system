@@ -1,35 +1,18 @@
 import { faArrowRightLong, faTrophy } from "@fortawesome/free-solid-svg-icons";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import { useNavigate } from "react-router-dom";
 
+import {
+  nextButtonStyle,
+  optionStyle,
+  resultButtonStyle,
+  timerStyle,
+} from "../assets/quizElementsStyles.js";
+
 const Quiz = () => {
-  const nextButtonStyle = {
-    backgroundColor: `var(--clr-primary)`,
-    color: "#fff",
-    borderRadius: `var(--border-radius)`,
-    padding: "8px",
-    width: "230px",
-    border: "none",
-    cursor: "pointer",
-    marginLeft: "30rem",
-    fontSize: "20px",
-  };
-
-  const resultButtonStyle = {
-    backgroundColor: `var(--clr-accent)`,
-    color: "#000",
-    borderRadius: `var(--border-radius)`,
-    padding: "8px",
-    width: "240px",
-    border: "none",
-    cursor: "pointer",
-    marginLeft: "30rem",
-    fontSize: "20px",
-  };
-
   const quizData = [
     {
       id: 1,
@@ -67,40 +50,52 @@ const Quiz = () => {
   const [questionsCounter, setQuestionsCounter] = useState(1);
   const [answers, setAnswers] = useState([]);
 
-  const [timer, setTimer] = useState(20);
+  const [timer, setTimer] = useState(5);
   const [isAnswered, setIsAnswered] = useState(false);
   const [selectedOptionId, setSelectedOptionId] = useState(null);
 
   const navigate = useNavigate();
 
-  let interval = null;
+  let intervalRef = useRef(null);
   useEffect(() => {
-    interval = setInterval(() => {
-      setTimer((prev) => prev - 1);
-    }, 1000);
+    setTimer(5);
+    setIsAnswered(false);
+    clearInterval(intervalRef.current);
 
-    return () => clearInterval(interval);
-  }, []);
+    if (questionsCounter <= quizData.length) {
+      intervalRef.current = setInterval(() => {
+        setTimer((prev) => {
+          if (prev === 1) {
+            clearInterval(intervalRef.current);
+            handleAutoNext();
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      return () => clearInterval(intervalRef.current);
+    }
+  }, [currentQuestionObj]);
 
   useEffect(() => {
     setSelectedOptionId(null);
   }, [currentQuestionObj]);
 
-  setTimeout( () => {
-     clearInterval(interval);
-     setIsAnswered(true);
-     setQuestionsCounter(prev => prev + 1);
-     selectedOptionId(null);
-    getNextQuestion();
-  }, 2000);
+  //   useEffect(() => {
 
-  const getNextQuestion = () => {
-    if (isAnswered) {
-      const nextIndex = questionsCounter;
+  //        intervalRef.current = setInterval(() => {
+  //     }, 1000);
+
+  //   return () => clearInterval(intervalRef.current);
+  // }, [currentQuestionObj]);
+
+  const getNextQuestion = (flow = null) => {
+    if ((flow == "auto" || isAnswered) && questionsCounter < quizData.length) {
+      // const nextIndex = questionsCounter;
       if (nextIndex < quizData.length) {
-        setCurrentQuestionObj(quizData[nextIndex]);
-        setQuestionsCounter(nextIndex + 1);
-        setTimer(200);
+        setCurrentQuestionObj(quizData[questionsCounter]);
+        setQuestionsCounter((prev) => prev + 1);
+        setTimer(5);
         setIsAnswered(false);
         setSelectedOptionId(null);
       }
@@ -109,7 +104,20 @@ const Quiz = () => {
     }
   };
 
+  let isCompleted = false;
+  const handleAutoNext = () => {
+    setIsAnswered(true);
+    if (questionsCounter < quizData.length) {
+      let next = questionsCounter;
+      setQuestionsCounter((prev) => prev + 1);
+      setCurrentQuestionObj(quizData[next]);
+    } else {
+      isCompleted = true;
+    }
+  };
+
   const selectOption = (e, index) => {
+    clearInterval(intervalRef.current);
     const newAnswer = {
       questionId: currentQuestionObj.id,
       givenAnswer: e.target.value,
@@ -169,15 +177,7 @@ const Quiz = () => {
             </span>
           </div>
 
-          <span
-            style={{
-              fontSize: "24px",
-              alignSelf: "center",
-              marginRight: "30px",
-            }}
-          >
-            {timer}
-          </span>
+          <span style={timerStyle}>{timer}</span>
         </div>
 
         <div style={{ border: "2px solid #000" }} className="mt-4">
@@ -211,12 +211,7 @@ const Quiz = () => {
                     name={`option-${currentQuestionObj.id}`}
                     value={option}
                     checked={selectedOptionId === index}
-                    style={{
-                      transform: "scale(2.5)",
-                      accentColor: "#00bbf9",
-                      cursor: "pointer",
-                      width: "100px",
-                    }}
+                    style={optionStyle}
                     onChange={(e) => {
                       selectOption(e, index);
                     }}
@@ -228,8 +223,8 @@ const Quiz = () => {
         </div>
 
         <div>
-          {isAnswered &&
-          quizData[questionsCounter - 1] == quizData[quizData.length - 1] ? (
+          {isCompleted ||
+          (isAnswered && questionsCounter == quizData.length) ? (
             <button
               className="btn mt-3"
               style={resultButtonStyle}
@@ -237,7 +232,7 @@ const Quiz = () => {
                 navigate("quizzes/result", { state: { quizData, answers } })
               }
             >
-              Result {console.log(answers)}
+              Result
               <FontAwesomeIcon icon={faTrophy} style={{ marginLeft: "20px" }} />
             </button>
           ) : (

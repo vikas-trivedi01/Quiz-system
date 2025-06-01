@@ -229,7 +229,7 @@ const Quiz = () => {
                 navigate("quizzes/result", { state: { quizData, answers } })
               }
             >
-              Result
+              Get Result
               <FontAwesomeIcon icon={faTrophy} style={{ marginLeft: "20px" }} />
             </button>
           ) : questionsCounter == quizData.length ? null : (

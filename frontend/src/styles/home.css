@@ -15,10 +15,24 @@
   padding: 12px;
   width: 30%;
   color: white;
+  transition: background-color 1s;
+}
+
+#quiz-btn:hover {
+  background-color: #000;
+  color: white;
+  transition: 0.5s ease-in-out;
 }
 
 #about-btn {
   border-radius: var(--border-radius);
   padding: 12px;
   width: 30%;
+  transition: background-color 1s;
+}
+
+#about-btn:hover {
+  background-color: var(--clr-primary);
+  color: white;
+  transition: 0.5s ease-in-out;
 }

@@ -7,7 +7,7 @@ const Testimonial = ({ userAvatar, userName, feedback, date } = props) => {
   };
 
   return (
-    <div>
+    <div style={{ border: "2px solid #000", borderRadius: "6px"}} className="p-2">
       <img
         src={userAvatar}
         alt="User avatar"

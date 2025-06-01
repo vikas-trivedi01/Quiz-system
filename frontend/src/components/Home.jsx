@@ -6,8 +6,9 @@ import progress from "../assets/illustrations/progress.jpg";
 import userOne from "../assets/users/user-one.png";
 import userTwo from "../assets/users/user-two.png";
 import userThree from "../assets/users/user-three.png";
-import Quiz from "./Quiz";
+
 import { NavLink } from "react-router-dom";
+import QuizCreate from "./QuizCreate";
 
 const Home = () => {
   return (
@@ -60,7 +61,6 @@ const Home = () => {
         </div>
       </div>
 
-      <Quiz />
     </>
   );
 };

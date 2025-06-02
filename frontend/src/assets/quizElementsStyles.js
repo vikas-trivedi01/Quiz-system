@@ -101,3 +101,16 @@ export const addPublishButtonStyle = {
     marginLeft: "24em",
     fontSize: "20px",
 };
+
+
+export const previewShowOptionsStyle = {
+    backgroundColor: "#000",
+    color: "#fff",
+    borderRadius: `var(--border-radius)`,
+    padding: "8px",
+    width: "180px",
+    border: "none",
+    cursor: "pointer",
+    marginLeft: "24em",
+    fontSize: "20px",
+};

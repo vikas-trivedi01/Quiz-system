@@ -8,7 +8,6 @@ import userTwo from "../assets/users/user-two.png";
 import userThree from "../assets/users/user-three.png";
 
 import { NavLink } from "react-router-dom";
-import QuizCreate from "./QuizCreate";
 
 const Home = () => {
   return (

@@ -2,8 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   CreateOptionNumberStyle,
-  previewShowOptionsStyle,
-} from "../assets/quizElementsStyles";
+  previewOptionsStyle,
+  addPublishQuizButtonStyle
+} from "../assets/quizElementsStyles.js";
 
 const QuizPreview = () => {
   const location = useLocation();
@@ -26,14 +27,12 @@ const QuizPreview = () => {
 
   const [optionsShown, setOptionsShown] = useState({});
 
-  const toggleOptionsVisible = index => {
-    setOptionsShown(prev => (
-        {
-            ...prev,
-            [index]: !prev[index],
-        }
-    ));
-  }
+  const toggleOptionsVisible = (index) => {
+    setOptionsShown((prev) => ({
+      ...prev,
+      [index]: !prev[index],
+    }));
+  };
 
   return (
     <>
@@ -43,7 +42,7 @@ const QuizPreview = () => {
           border: "2px solid black",
           borderRadius: "10px 40px 10px 40px",
           width: "45em",
-          margin: "40px 10px 40px 270px",
+          margin: "40px 10px 40px 272px",
         }}
       >
         <h2 className="mb-4">Ready to Launch?</h2>
@@ -58,58 +57,70 @@ const QuizPreview = () => {
           const isShown = optionsShown[index];
           return (
             <div
-              key={index}
+            key={index}
               className="p-2 m-5 d-flex justify-content-between align-items-center flex-wrap"
-              style={{ border: "2px solid black" }}
+              style={{ borderRadius: "6px", border: "2px solid rgb(0, 0, 0)" }}
             >
-              <div className="d-flex">
+              <div
+                className="d-flex"
+                style={{
+                  marginLeft: "50px",
+                  textDecoration: "underline",
+                  textDecorationColor: "#000",
+                  textDecorationThickness: "3px",
+                  textUnderlineOffset: "7px",
+                }}
+              >
                 <h5>Question: </h5>
-                <h5>{question.question}</h5>
+                <h5 className="ms-3">{question.question}</h5>
               </div>
               <div>
-                  <button
-                    style={previewShowOptionsStyle}
-                    onClick={() => toggleOptionsVisible(index)}
-                  >
-                    {isShown ? "Hide Options" : "Show Options"}
-                  </button>
-                
+                <button
+                  style={previewOptionsStyle}
+                  onClick={() => toggleOptionsVisible(index)}
+                >
+                  {isShown ? "Hide Options" : "Show Options"}
+                </button>
               </div>
 
               {isShown && (
-            <div
-              className="py-3 px-5 flex-wrap"
-              style={{ display: "flex", flexDirection: "column" }}
-            >
-              {question.options.map((option, optIndex) => (
                 <div
-                  key={optIndex}
-                  className="d-flex"
-                  style={{ width: "500px" }}
+                  className="py-3 px-5 flex-wrap ms-5"
+                  style={{ display: "flex", gap: "60px" }}
                 >
-                  <span style={CreateOptionNumberStyle}>{optIndex + 1}</span>
-                  <input
-                    value={option.option}
-                    className="w-75 me-5 px-4 py-0 mt-2"
-                    style={{ border: "none", height: "40px" }}
-                    disabled
-                  />
-                  <select
-                    className="m-2 px-3"
-                    defaultValue={option.correct ? "correct" : "incorrect"}
-                    disabled
-                  >
-                    <option value="correct">Correct</option>
-                    <option value="incorrect">Incorrect</option>
-                  </select>
+                  {question.options.map((option, optIndex) => (
+                    <div
+                      key={optIndex}
+                      className="d-flex align-items-center"
+                      style={{ width: "400px" }}
+                    >
+                      <span style={CreateOptionNumberStyle}>
+                        {optIndex + 1}
+                      </span>
+                      <h4
+                        className="w-100 p-2"
+                        style={
+                          option.correct
+                            ? {
+                                backgroundColor: "#98f5e1",
+                                borderRadius: "6px",
+                                border: "none",
+                              }
+                            : { border: "none" }
+                        }
+                      >
+                        {option.option}
+                      </h4>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              )}
             </div>
-          )}
-        </div>
-          )
+          );
         })}
       </div>
+
+      <button style={addPublishQuizButtonStyle} className="mb-4">Publish Quiz</button>
     </>
   );
 };

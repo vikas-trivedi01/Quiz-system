@@ -5,8 +5,9 @@ import {
   createQuizNameStyle,
   addOptionStyle,
   CreateOptionNumberStyle,
-  addPublishButtonStyle,
+  addPublishQuizButtonStyle
 } from "../assets/quizElementsStyles.js";
+import professorImg from "../assets/illustrations/professor.png"
 import { useNavigate } from "react-router-dom";
 
 const QuizCreate = () => {
@@ -108,10 +109,14 @@ const QuizCreate = () => {
 
   return (
     <>
-      <h3 style={createHeadingStyle}>
-        Build quizzes your way — add questions, and options in seconds all in
+    
+    <div className="d-flex align-items-center">
+      <img src={professorImg} alt="Professor illustration" width={900} height={400}/>
+        <h3 style={createHeadingStyle}>
+        Build quizzes your way — <br /> <br />Add questions, and options in seconds all in
         one spot!
       </h3>
+    </div>
 
       <div className="m-5">
         <div style={createQuizNameStyle}>
@@ -161,7 +166,7 @@ const QuizCreate = () => {
             <div>
               <button
                 className="btn"
-                style={addPublishButtonStyle}
+                style={addPublishQuizButtonStyle}
                 onClick={() =>
                   navigate("/quizzes/preview", { state: { questions } })
                 }

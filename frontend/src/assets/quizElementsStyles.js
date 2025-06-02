@@ -48,11 +48,13 @@ export const optionStyle = {
 };
 
 export const createHeadingStyle = {
-    marginLeft: "120px",
+    marginRight: "40px",
     backgroundColor: `var(--clr-accent)`,
     padding: "20px",
     borderRadius: `var(--border-radius)`,
-    width: "37em"
+    width: "37em",
+    height: "max-content",
+    marginBottom: "37px"
 };
 
 export const createQuizNameStyle = {
@@ -90,27 +92,27 @@ export const CreateOptionNumberStyle = {
     height: "43px"
 };
 
-export const addPublishButtonStyle = {
+export const addPublishQuizButtonStyle = {
     backgroundColor: "#00f5d4",
     color: "#000",
     borderRadius: `var(--border-radius)`,
     padding: "8px",
-    width: "180px",
+    width: "200px",
     border: "none",
     cursor: "pointer",
-    marginLeft: "24em",
+    marginLeft: "26em",
     fontSize: "20px",
 };
 
 
-export const previewShowOptionsStyle = {
+export const previewOptionsStyle = {
     backgroundColor: "#000",
     color: "#fff",
     borderRadius: `var(--border-radius)`,
     padding: "8px",
-    width: "180px",
+    width: "170px",
     border: "none",
     cursor: "pointer",
-    marginLeft: "24em",
+    marginRight: "3em",
     fontSize: "20px",
 };

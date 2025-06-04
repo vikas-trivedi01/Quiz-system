@@ -57,5 +57,76 @@ const registerUser = asyncErrorHandler(async (req, res) => {
 
     return res.status(201).json(
         new ApiResponse(createdUser, "User registered successfully", 201)
-    )
+    );
 });
+
+const loginUser = asyncErrorHandler(async (req, res) => {
+
+    const { email, password } = req.body;
+
+    if (!email)
+        throw new ApiError("Email is required", 400);
+
+    const user = await User.findOne({ email });
+
+    if (!user)
+        throw new ApiError("User does not exist", 404);
+
+    const isPasswordValid = await user.isPasswordCorrect(pasword);
+
+    if (!isPasswordValid)
+        throw new ApiError("Invalid user credential", 401);
+
+
+    const { accessToken, refreshToken } = generateAccessAndRefreshTokens(user._id);
+
+    const loggedInUser = await User.findById(user._id).select("-password -refreshToken -accessToken");
+
+    const cookieOptions = {
+        httpOnly: true,
+        secure: true
+    }
+
+    return res.status(200)
+        .cookie("accessToken", accessToken, cookieOptions)
+        .cookie("refreshToken", refreshToken, cookieOptions)
+        .json(
+            new ApiResponse(
+                { user: loggedInUser, accessToken, refreshToken },
+                "User logged In Successfully",
+                200
+            )
+        );
+});
+
+const logoutUser = asyncErrorHandler(async (req, res) => {
+    await User.findByIdAndUpdate(
+        req.user?._id,
+        {
+            $unset: {
+                refreshToken: 1
+            }
+        },
+        {
+            new: true
+        }
+    );
+
+    const options = {
+        httpOnly: true,
+        secure: true
+    }
+
+    return res
+        .status(200)
+        .clearCookie("accessToken", options)
+        .clearCookie("refreshToken", options)
+        .json(new ApiResponse({}, "User loggedout successfully", 200));
+
+});
+
+export {
+    registerUser,
+    loginUser, 
+    logoutUser
+}

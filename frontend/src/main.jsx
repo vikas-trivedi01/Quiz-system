@@ -19,10 +19,18 @@ import QuizResult from "./components/QuizResult";
 import QuizReview from "./components/QuizReview";
 import QuizCreate from "./components/QuizCreate";
 import QuizPreview from "./components/QuizPreview";
+import Signup from "./components/SignUp";
+import Login from "./components/Login";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
+
+      <Route path="users">
+        <Route path="signup" element={<Signup />} />
+        <Route path="login" element={<Login />} />
+      </Route>
+
       <Route path="" element={<Home />} />
 
       <Route path="quizzes">
@@ -35,7 +43,6 @@ const router = createBrowserRouter(
       </Route>
 
       <Route path="terms" element={<Terms />} />
-
       <Route path="privacy" element={<Privacy />} />
     </Route>
   )

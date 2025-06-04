@@ -62,17 +62,18 @@ const registerUser = asyncErrorHandler(async (req, res) => {
 
 const loginUser = asyncErrorHandler(async (req, res) => {
 
-    const { email, password } = req.body;
+    const { email, role, password } = req.body;
 
     if (!email)
         throw new ApiError("Email is required", 400);
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email, role });
+
 
     if (!user)
-        throw new ApiError("User does not exist", 404);
+        throw new ApiError("User does not exist or not authorized for this role", 404);
 
-    const isPasswordValid = await user.isPasswordCorrect(pasword);
+    const isPasswordValid = await user.isPasswordCorrect(password);
 
     if (!isPasswordValid)
         throw new ApiError("Invalid user credential", 401);

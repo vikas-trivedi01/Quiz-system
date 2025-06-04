@@ -68,7 +68,7 @@ const QuizCreate = () => {
   };
 
   const addQuestion = () => {
-    if (options?.length === 4 && options.some((opt) => opt.correct == true)) {
+    if (options?.length === 4 && options.some((opt) => opt.isCorrect == true)) {
       setQuestions((prev) => [...prev, { question, options }]);
       setOptions([]);
       setQuestion("Enter question");
@@ -83,12 +83,12 @@ const QuizCreate = () => {
 
   const handleOptionChange = (index, value) => {
     const updated = [...options];
-    updated[index] = { option: value, correct: false };
+    updated[index] = { option: value, isCorrect: false };
     setOptions(updated);
   };
   const handleCorrectOptionChange = (index, value) => {
     const updated = [...options];
-    updated[index] = { ...updated[index], correct: value };
+    updated[index] = { ...updated[index], isCorrect: value };
     setOptions(updated);
   };
 
@@ -103,7 +103,7 @@ const QuizCreate = () => {
 
     setOptions((prevOptions) => [
       ...prevOptions,
-      { option: "Enter option", correct: false },
+      { option: "Enter option", isCorrect: false },
     ]);
   };
 
@@ -199,7 +199,7 @@ const QuizCreate = () => {
                         e.target.value === "correct"
                       )
                     }
-                    defaultValue={opt.correct ? "correct" : "incorrect"}
+                    defaultValue={opt.isCorrect ? "correct" : "incorrect"}
                   >
                     <option value="incorrect">Incorrect</option>
                     <option value="correct">Correct</option>

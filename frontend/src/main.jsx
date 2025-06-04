@@ -19,6 +19,7 @@ import QuizResult from "./components/QuizResult";
 import QuizReview from "./components/QuizReview";
 import QuizCreate from "./components/QuizCreate";
 import QuizPreview from "./components/QuizPreview";
+
 import Signup from "./components/SignUp";
 import Login from "./components/Login";
 
@@ -49,5 +50,7 @@ const router = createBrowserRouter(
 );
 
 createRoot(document.getElementById("root")).render(
-  <RouterProvider router={router} />
+ <UserAuthenticationContextProvider>
+   <RouterProvider router={router} />
+ </UserAuthenticationContextProvider>
 );

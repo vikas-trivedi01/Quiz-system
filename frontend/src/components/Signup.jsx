@@ -20,7 +20,7 @@ const Signup = () => {
     const { fullName, userName, email, age, role, password } = form;
 
     if (
-      [fullName, userName, email, age, role, password].some(
+      [fullName, userName, email, password].some(
         (field) => field.trim() === ""
       )
     )
@@ -51,11 +51,12 @@ const Signup = () => {
           age,
           role,
           password,
-        });
+        }
+    );
 
         alert(`${data.message} and status: ${data.statusCode}`);
       } catch (error) {
-        alert(`${err.message} and status: ${err.statusCode}`);
+        alert(`${error.message} and status: ${error.statusCode}`);
       }
     }
   };

@@ -5,7 +5,7 @@ import { ApiResponse } from "../utils/ApiResponse.js"
 import jwt from "jsonwebtoken"
 import mongoose from "mongoose"
 
-const generateAccessAndRefreshTokens = async userId => {
+const generateAccessAndRefreshTokens = async (userId) => {
     try {
         const user = await User.findById(userId);
         const accessToken = user.generateAccessToken();
@@ -29,7 +29,7 @@ const registerUser = asyncErrorHandler(async (req, res) => {
     const { fullName, userName, email, age, role, password } = req.body;
 
     if (
-        [fullName, userName, email, age, role, password].some(field => field?.trim() === "")
+        [fullName, userName, email, password].some(field => field?.trim() === "")
     ) {
         throw new ApiError("All fields are required", 400);
     }
@@ -50,7 +50,7 @@ const registerUser = asyncErrorHandler(async (req, res) => {
         role
     });
 
-    const createdUser = await User.select(user._id).select("-password -refreshToken -accessToken");
+    const createdUser = await User.findById(user._id).select("-password -refreshToken -accessToken");
 
     if (!createdUser)
         throw new ApiError("Something went wrong while registering the user", 500);
@@ -79,7 +79,7 @@ const loginUser = asyncErrorHandler(async (req, res) => {
         throw new ApiError("Invalid user credential", 401);
 
 
-    const { accessToken, refreshToken } = generateAccessAndRefreshTokens(user._id);
+    const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(user._id);
 
     const loggedInUser = await User.findById(user._id).select("-password -refreshToken -accessToken");
 
@@ -87,6 +87,10 @@ const loginUser = asyncErrorHandler(async (req, res) => {
         httpOnly: true,
         secure: true
     }
+
+
+    console.log(accessToken)
+    console.log(refreshToken)
 
     return res.status(200)
         .cookie("accessToken", accessToken, cookieOptions)

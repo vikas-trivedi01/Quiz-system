@@ -1,5 +1,7 @@
 import { useState } from "react";
 import "../styles/forms.css";
+import axios from "axios";
+import { BACKEND_URL } from "../assets/constants.js";
 
 const Login = () => {
   const [form, setForm] = useState({ email: "", role: "", password: "" });
@@ -15,6 +17,7 @@ const Login = () => {
     if (!form.email.includes("@")) return alert("Invalid email");
 
     const { email, password, role } = form;
+    
     try {
       const { data } = await axios.post(`${BACKEND_URL}/users/login`, {
         email,
@@ -22,8 +25,8 @@ const Login = () => {
         role,
       });
       alert(`${data.message} and status: ${data.statusCode}`);
-    } catch (err) {
-      alert(`${err.message} and status: ${err.statusCode}`);
+    } catch (error) {
+      alert(`${error.message} and status: ${error.statusCode}`);
     }
   };
 

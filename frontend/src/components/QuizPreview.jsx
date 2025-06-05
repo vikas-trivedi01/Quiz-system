@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   CreateOptionNumberStyle,
@@ -22,8 +22,6 @@ const QuizPreview = () => {
   }
 
   const { questions } = location.state;
-
-  const optionsRef = useRef(null);
 
   const [optionsShown, setOptionsShown] = useState({});
 
@@ -100,7 +98,7 @@ const QuizPreview = () => {
                       <h4
                         className="w-100 p-2"
                         style={
-                          option.correct
+                          option.isCorrect
                             ? {
                                 backgroundColor: "#98f5e1",
                                 borderRadius: "6px",
@@ -126,3 +124,4 @@ const QuizPreview = () => {
 };
 
 export default QuizPreview;
+

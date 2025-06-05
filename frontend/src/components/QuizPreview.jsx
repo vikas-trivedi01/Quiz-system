@@ -3,8 +3,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import {
   CreateOptionNumberStyle,
   previewOptionsStyle,
-  addPublishQuizButtonStyle,
+  addCreateQuizButtonStyle,
 } from "../assets/quizElementsStyles.js";
+import { BACKEND_URL } from "../assets/constants.js";
+
+import axios from "axios";
 
 const QuizPreview = () => {
   const location = useLocation();
@@ -22,13 +25,13 @@ const QuizPreview = () => {
   }
 
   const {
-    questions,
     quizName,
+    numberOfQuestions,
     totalMarks,
     eachQuestionMarks,
     category,
     difficulty,
-    status,
+    questions,
   } = location.state;
 
   const [optionsShown, setOptionsShown] = useState({});
@@ -39,6 +42,31 @@ const QuizPreview = () => {
       [index]: !prev[index],
     }));
   };
+
+  const createQuiz = async () => {
+
+    try {
+        const  response  = await axios.post(`${BACKEND_URL}/quizzes`, {
+          quizName,
+          numberOfQuestions,
+          totalMarks,
+          eachQuestionMarks,
+          category,
+          difficulty,
+          questions,
+      }, {
+        withCredentials: true
+      });
+
+      if(response.data.statusCode == 201) {
+        alert(response.data.data.message);
+        navigate("/quizzes/all");
+      }
+      } catch (error) {
+        alert(`Error: ${error.message}`);
+      } 
+    
+    };
 
   return (
     <>
@@ -91,8 +119,8 @@ const QuizPreview = () => {
 
               {isShown && (
                 <div
-                  className="py-3 px-5 flex-wrap ms-5"
-                  style={{ display: "flex", gap: "60px" }}
+                  className="py-1 px-1 flex-wrap ms-5"
+                  style={{ display: "flex", gap: "20px" }}
                 >
                   {question.options.map((option, optIndex) => (
                     <div
@@ -126,8 +154,8 @@ const QuizPreview = () => {
         })}
       </div>
 
-      <button style={addPublishQuizButtonStyle} className="mb-4">
-        Publish Quiz
+      <button style={addCreateQuizButtonStyle} className="mb-4" onClick={() => createQuiz()}>
+        Create Quiz
       </button>
     </>
   );

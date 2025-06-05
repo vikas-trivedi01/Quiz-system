@@ -15,14 +15,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faXmark } from "@fortawesome/free-solid-svg-icons";
 
 const QuizCreate = () => {
-  const [quizName, setQuizName] = useState("General Quiz");
+  const [quizName, setQuizName] = useState("");
   const [editingQuizName, setEditingQuizName] = useState(false);
   const [editingQuestion, setEditingQuestion] = useState(false);
 
   const [questions, setQuestions] = useState([]);
   const [options, setOptions] = useState([]);
-  const [question, setQuestion] = useState("Enter question");
-  const [option, setOption] = useState("Enter option");
+  const [question, setQuestion] = useState("");
+  const [option, setOption] = useState("");
 
   const [exampleShown, setExampleShown] = useState(true);
   const [numberOfQuestions, setNumberOfQuestions] = useState(1);
@@ -32,13 +32,12 @@ const QuizCreate = () => {
 
   const navigate = useNavigate();
 
-  const [haveNumberOFQuestions, setHaveNumberOfQuestions] = useState(false);
+  const [haveNumberOfQuestions, setHaveNumberOfQuestions] = useState(false);
 
   const [totalMarks, setTotalMarks] = useState(0);
   const [eachQuestionMarks, setEachQuestionMarks] = useState(1);
-  const [category, setCategory] = useState("General");
-  const [difficulty, setDifficulty] = useState("easy");
-  const [status, setStatus] = useState("archived");
+  const [category, setCategory] = useState("");
+  const [difficulty, setDifficulty] = useState("");
 
   const [quizDetailsShown, setQuizDetailsShown] = useState(false);
   const quizDetailsRef = useRef(null);
@@ -47,7 +46,7 @@ const QuizCreate = () => {
     setEditingQuizName(true);
 
     setTimeout(() => {
-      if (!haveNumberOFQuestions) {
+      if (!haveNumberOfQuestions) {
         let validInput = false;
         let numberOfQuestions;
 
@@ -140,7 +139,7 @@ const QuizCreate = () => {
         eachQuestionMarks,
         category,
         difficulty,
-        status,
+        numberOfQuestions,
       },
     });
   };
@@ -236,18 +235,7 @@ const QuizCreate = () => {
                   <option value="hard">Hard</option>
                 </select>
               </div>
-
-              <div className="col-6">
-                <label style={labelStyle}>Status:</label>
-                <select
-                  value={status}
-                  onChange={(e) => setStatus(e.target.value)}
-                  style={{ ...inputStyle, height: "40px" }}
-                >
-                  <option value="archived">Archive</option>
-                  <option value="published">Publish</option>
-                </select>
-              </div>
+              
             </div>
           </div>
         </div>

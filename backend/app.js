@@ -16,6 +16,9 @@ app.use(express.urlencoded({
 app.use(cookieParser());
 
 import userRouter from "./routes/user.routes.js"
+import quizRouter from "./routes/quiz.routes.js"
+
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/quizzes", quizRouter);
 
 export { app }

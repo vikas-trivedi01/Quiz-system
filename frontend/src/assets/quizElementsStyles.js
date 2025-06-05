@@ -110,7 +110,7 @@ export const CreateOptionNumberStyle = {
     height: "43px"
 };
 
-export const addPublishQuizButtonStyle = {
+export const addCreateQuizButtonStyle = {
     backgroundColor: "#00f5d4",
     color: "#000",
     borderRadius: `var(--border-radius)`,
@@ -129,7 +129,7 @@ export const addPreviewQuizButtonStyle = {
     width: "200px",
     border: "none",
     cursor: "pointer",
-    marginLeft: "24em",
+    marginLeft: "23em",
     fontSize: "20px",
 };
 

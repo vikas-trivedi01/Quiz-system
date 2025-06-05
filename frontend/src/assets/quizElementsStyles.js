@@ -58,12 +58,30 @@ export const createHeadingStyle = {
 };
 
 export const createQuizNameStyle = {
-    borderRadius: "6px",
-    marginLeft: "30em",
-    textDecoration: "underline",
-    textDecorationColor: `var(--clr-primary)`,
-    textUnderlineOffset: "10px",
-    textDecorationThickness: "3px"
+  display: "flex",
+  alignItems: "center",       
+  justifyContent: "flex-start",
+  margin: "1em auto",
+  padding: "1em",
+  textDecoration: "underline",
+  textDecorationColor: "var(--clr-primary)",
+  textUnderlineOffset: "10px",
+  textDecorationThickness: "3px",
+};
+
+export const labelStyle = {
+  fontSize: "1.3rem",
+  flexShrink: 0,             
+  width: "220px",             
+};
+
+export const inputStyle = {
+  flex: 1,                    
+  fontSize: "1.1rem",
+  padding: "0.5em 0.6em",
+  border: "1px solid #ccc",
+  borderRadius: "4px",
+  marginTop: "10px"
 };
 
 export const addOptionStyle = {
@@ -101,6 +119,17 @@ export const addPublishQuizButtonStyle = {
     border: "none",
     cursor: "pointer",
     marginLeft: "26em",
+    fontSize: "20px",
+};
+export const addPreviewQuizButtonStyle = {
+    backgroundColor: "#00f5d4",
+    color: "#000",
+    borderRadius: `var(--border-radius)`,
+    padding: "8px",
+    width: "200px",
+    border: "none",
+    cursor: "pointer",
+    marginLeft: "24em",
     fontSize: "20px",
 };
 

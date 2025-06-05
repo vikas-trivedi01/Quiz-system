@@ -32,7 +32,7 @@ const QuizCreate = () => {
 
   const navigate = useNavigate();
 
-  const [haveNumberOFQuestions, setHaveNumberOFQuestions] = useState(false);
+  const [haveNumberOFQuestions, setHaveNumberOfQuestions] = useState(false);
 
   const [totalMarks, setTotalMarks] = useState(0);
   const [eachQuestionMarks, setEachQuestionMarks] = useState(1);
@@ -69,7 +69,7 @@ const QuizCreate = () => {
           }
         }
 
-        setHaveNumberOFQuestions(true);
+        setHaveNumberOfQuestions(true);
 
         setNumberOfQuestions(numberOfQuestions);
       }
@@ -123,6 +123,27 @@ const QuizCreate = () => {
   useEffect(() => {
     setTotalMarks(questions.length * eachQuestionMarks);
   }, [questions, eachQuestionMarks]);
+
+  const previewQuiz = () => {
+    if (
+      [quizName, category, difficulty, status].some(
+        (field) => field.trim() == ""
+      )
+    )
+      return alert("All fields required");
+
+    navigate("/quizzes/preview", {
+      state: {
+        questions,
+        quizName,
+        totalMarks,
+        eachQuestionMarks,
+        category,
+        difficulty,
+        status,
+      },
+    });
+  };
 
   return (
     <>
@@ -178,51 +199,55 @@ const QuizCreate = () => {
         style={{ display: `${quizDetailsShown ? "block" : "none"}` }}
       >
         <div className="mt-4">
-          <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
-            <div>
-              <label style={labelStyle}>Marks per Question:</label>
-              <input
-                type="number"
-                min={1}
-                value={eachQuestionMarks}
-                onChange={(e) => setEachQuestionMarks(Number(e.target.value))}
-                style={inputStyle}
-              />
+          <div>
+            <div className="row m-5">
+              <div className="col-6">
+                <label style={labelStyle}>Marks per Question:</label>
+                <input
+                  type="number"
+                  min={1}
+                  value={eachQuestionMarks}
+                  onChange={(e) => setEachQuestionMarks(Number(e.target.value))}
+                  style={inputStyle}
+                />
+              </div>
+
+              <div className="col-6">
+                <label style={labelStyle}>Category:</label>
+                <input
+                  type="text"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  style={inputStyle}
+                />
+              </div>
             </div>
 
-            <div>
-              <label style={labelStyle}>Category:</label>
-              <input
-                type="text"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                style={inputStyle}
-              />
-            </div>
+            <div className="row m-5">
+              <div className="col-6">
+                <label style={labelStyle}>Difficulty:</label>
+                <select
+                  value={difficulty}
+                  onChange={(e) => setDifficulty(e.target.value)}
+                  style={{ ...inputStyle, height: "40px" }}
+                >
+                  <option value="easy">Easy</option>
+                  <option value="medium">Medium</option>
+                  <option value="hard">Hard</option>
+                </select>
+              </div>
 
-            <div>
-              <label style={labelStyle}>Difficulty:</label>
-              <select
-                value={difficulty}
-                onChange={(e) => setDifficulty(e.target.value)}
-                style={{ ...inputStyle, height: "40px" }}
-              >
-                <option value="easy">Easy</option>
-                <option value="medium">Medium</option>
-                <option value="hard">Hard</option>
-              </select>
-            </div>
-
-            <div>
-              <label style={labelStyle}>Status:</label>
-              <select
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-                style={{ ...inputStyle, height: "40px" }}
-              >
-                <option value="archived">Archive</option>
-                <option value="published">Publish</option>
-              </select>
+              <div className="col-6">
+                <label style={labelStyle}>Status:</label>
+                <select
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                  style={{ ...inputStyle, height: "40px" }}
+                >
+                  <option value="archived">Archive</option>
+                  <option value="published">Publish</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
@@ -239,7 +264,7 @@ const QuizCreate = () => {
               style={{ border: "none", fontSize: "20px", width: "640px" }}
               onClick={editQuestion}
               onChange={(e) => setQuestion(e.target.value)}
-              className="px-4 py-0"
+              className="p-2"
             />
           </div>
         ) : null}
@@ -259,19 +284,7 @@ const QuizCreate = () => {
             <button
               className="btn"
               style={addPreviewQuizButtonStyle}
-              onClick={() =>
-                navigate("/quizzes/preview", {
-                  state: {
-                    questions,
-                    quizName,
-                    totalMarks,
-                    eachQuestionMarks,
-                    category,
-                    difficulty,
-                    status,
-                  },
-                })
-              }
+              onClick={() => previewQuiz()}
             >
               Preview Quiz
             </button>

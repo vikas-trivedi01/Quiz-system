@@ -21,7 +21,7 @@ ul {
 .nav-item a {
   color: rgb(255, 255, 255);
   list-style-type: none;
-  padding: 16px 28px;
+  padding: 16px 30px;
   border-radius: var(--border-radius);
 }
 

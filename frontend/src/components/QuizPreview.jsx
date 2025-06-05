@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import {
   CreateOptionNumberStyle,
   previewOptionsStyle,
-  addPublishQuizButtonStyle
+  addPublishQuizButtonStyle,
 } from "../assets/quizElementsStyles.js";
 
 const QuizPreview = () => {
@@ -21,7 +21,15 @@ const QuizPreview = () => {
     return null;
   }
 
-  const { questions } = location.state;
+  const {
+    questions,
+    quizName,
+    totalMarks,
+    eachQuestionMarks,
+    category,
+    difficulty,
+    status,
+  } = location.state;
 
   const [optionsShown, setOptionsShown] = useState({});
 
@@ -55,7 +63,7 @@ const QuizPreview = () => {
           const isShown = optionsShown[index];
           return (
             <div
-            key={index}
+              key={index}
               className="p-2 m-5 d-flex justify-content-between align-items-center flex-wrap"
               style={{ borderRadius: "6px", border: "2px solid rgb(0, 0, 0)" }}
             >
@@ -118,10 +126,11 @@ const QuizPreview = () => {
         })}
       </div>
 
-      <button style={addPublishQuizButtonStyle} className="mb-4">Publish Quiz</button>
+      <button style={addPublishQuizButtonStyle} className="mb-4">
+        Publish Quiz
+      </button>
     </>
   );
 };
 
 export default QuizPreview;
-

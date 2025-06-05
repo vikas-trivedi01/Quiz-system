@@ -1,21 +1,22 @@
 body {
-  font-family: Arial, sans-serif;
-  background: #fff;
+  background-color: #f9f9f9;
   margin: 0;
   padding: 0;
 }
 
 .form-container {
-  max-width: 400px;
-  margin: 5rem auto;
-  padding: 2rem;
-  text-align: center;
+  max-width: 800px;
+  margin: 1rem auto 0rem auto;
+  padding: 1.5rem;
+  background-color: #fff;
+  border: 2px solid black;
   border-radius: 8px;
+  text-align: center;
 }
 
 h2 {
-  font-size: 1.8rem;
-  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  margin-bottom: 2rem;
   color: #111;
 }
 
@@ -30,8 +31,18 @@ select {
   box-sizing: border-box;
 }
 
+.form-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.form-col {
+  flex: 1;
+}
+
 button {
-  width: 100%;
+  width: 40%;
   padding: 14px;
   font-size: 1rem;
   font-weight: bold;
@@ -47,15 +58,13 @@ button:hover {
   background-color: #333;
 }
 
-.footer {
+.form-footer {
   margin-top: 2rem;
-  font-size: 0.9rem;
-  color: #888;
+  font-size: 0.99rem;
+  color: #000000;
+  font-weight: 700;
 }
 
-hr {
-  margin: 4rem auto;
-  width: 200px;
-  border: none;
-  border-top: 1px solid #ddd;
+.form-footer p {
+  margin-bottom: 0.5rem;
 }

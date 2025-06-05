@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import "../styles/forms.css";
 import axios from "axios";
-import { BACKEND_URL } from "../assets/constants";
+import { BACKEND_URL } from "../assets/constants.js";
+import userContext from "../context/UserContext.js";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const [form, setForm] = useState({
@@ -12,6 +14,9 @@ const Signup = () => {
     role: "",
     password: "",
   });
+
+  const { setIsAuthenticated, setRole } = useContext(userContext);
+  const navigate = useNavigate();
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -50,51 +55,87 @@ const Signup = () => {
           email,
           age,
           role,
-          password,
-        }
-    );
+          password, 
+      });
 
-        alert(`${data.message} and status: ${data.statusCode}`);
+      if(data?.statusCode == 201) {
+        alert("You are registered");
+        setIsAuthenticated(true);
+        setRole(role);
+        navigate("/");
+      }
       } catch (error) {
-        alert(`${error.message} and status: ${error.statusCode}`);
+        alert(`Error: ${error.message}`);
       }
     }
   };
 
   return (
-    <div className="form-container">
+<div className="form-container">
       <h2>Sign Up</h2>
       <form onSubmit={handleSubmit}>
-        <input
-          name="fullName"
-          placeholder="Full Name"
-          onChange={handleChange}
-        />
-        <input name="userName" placeholder="Username" onChange={handleChange} />
-        <input
-          name="email"
-          placeholder="Email"
-          type="email"
-          onChange={handleChange}
-        />
-        <input
-          name="age"
-          placeholder="Age"
-          type="number"
-          onChange={handleChange}
-        />
-        <select name="role" onChange={handleChange}>
-          <option value="">Select Role</option>
-          <option value="user">User</option>
-          <option value="admin">Admin</option>
-        </select>
-        <input
-          name="password"
-          placeholder="Password"
-          type="password"
-          onChange={handleChange}
-        />
+        <div className="form-row">
+          <div className="form-col">
+            <input
+              name="fullName"
+              placeholder="Full Name"
+              onChange={handleChange}
+            />
+          </div>
+          <div className="form-col">
+            <input
+              name="userName"
+              placeholder="Username"
+              onChange={handleChange}
+            />
+          </div>
+        </div>
+
+        <div className="form-row">
+          <div className="form-col">
+            <input
+              name="email"
+              type="email"
+              placeholder="Email"
+              onChange={handleChange}
+            />
+          </div>
+          <div className="form-col">
+            <input
+              name="age"
+              type="number"
+              placeholder="Age"
+              onChange={handleChange}
+            />
+          </div>
+        </div>
+
+        <div className="form-row">
+          <div className="form-col">
+            <select name="role" onChange={handleChange}>
+              <option value="">Select Role</option>
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+          <div className="form-col">
+            <input
+              name="password"
+              type="password"
+              placeholder="Password"
+              onChange={handleChange}
+            />
+          </div>
+        </div>
+
         <button type="submit">Sign Up</button>
+
+        <div className="form-footer">
+          <p>Already have an account?</p>
+          <button type="button" onClick={() => navigate("/users/login")}>
+            Log In
+          </button>
+        </div>
       </form>
     </div>
   );

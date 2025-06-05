@@ -23,25 +23,27 @@ import QuizPreview from "./components/QuizPreview";
 import Signup from "./components/SignUp";
 import Login from "./components/Login";
 
+import UserAuthenticationContextProvider from "./context/UserAuthenticationContextProvider";
+import ProtectedRoute from "./ProtectedRoute";
+
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path="/" element={<Layout />}>
+   <Route path="/" element={<Layout />}>
+  <Route path="" element={<Home />} />
 
-      <Route path="users">
-        <Route path="signup" element={<Signup />} />
-        <Route path="login" element={<Login />} />
-      </Route>
+  <Route path="users">
+    <Route path="signup" element={<Signup />} />
+    <Route path="login" element={<Login />} />
+  </Route>
 
-      <Route path="" element={<Home />} />
-
-      <Route path="quizzes">
-        <Route path="quizcode" element={<QuizCode />} />
-        <Route path="quizlist" element={<QuizList />} />
-        <Route path="result" element={<QuizResult />} />
-        <Route path="review" element={<QuizReview />} />
-        <Route path="preview" element={<QuizPreview />} />
-        <Route path="create" element={<QuizCreate />} />
-      </Route>
+  <Route path="quizzes">
+    <Route path="quizcode" element={<ProtectedRoute role="user" ><QuizCode /></ProtectedRoute>} />
+    <Route path="quizlist" element={<ProtectedRoute role="user" ><QuizList /></ProtectedRoute>} />
+    <Route path="result" element={<ProtectedRoute role="user" ><QuizResult /></ProtectedRoute>} />
+    <Route path="review" element={<ProtectedRoute role="user" ><QuizReview /></ProtectedRoute>} />
+    <Route path="preview" element={<ProtectedRoute role="admin" ><QuizPreview /></ProtectedRoute>} />
+    <Route path="create" element={<ProtectedRoute role="admin" ><QuizCreate /></ProtectedRoute>} />
+  </Route>
 
       <Route path="terms" element={<Terms />} />
       <Route path="privacy" element={<Privacy />} />

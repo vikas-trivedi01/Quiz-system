@@ -44,3 +44,13 @@ ul {
   text-decoration-thickness: 3px;
   text-decoration-skip-ink: none;
 }
+
+#logout {
+  background-color: var(--clr-accent);
+  color: #fff;
+  border-radius: var(--border-radius);
+  width: 120px;
+  border: none;
+  cursor: pointer;
+  margin-top: 3px;
+}

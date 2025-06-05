@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 
 export const authenticateRequest = asyncErrorHandler( async (req, res, next) => {
     try {
-        const token = req.cookies?.acccessToken;
+        const token = req.cookies?.accessToken;
 
         if(!token)
                 throw new ApiError("Unauthorized request", 401);

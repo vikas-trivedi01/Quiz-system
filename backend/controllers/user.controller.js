@@ -69,14 +69,13 @@ const loginUser = asyncErrorHandler(async (req, res) => {
 
     const user = await User.findOne({ email, role });
 
-
     if (!user)
         throw new ApiError("User does not exist or not authorized for this role", 404);
 
     const isPasswordValid = await user.isPasswordCorrect(password);
 
     if (!isPasswordValid)
-        throw new ApiError("Invalid user credential", 401);
+        throw new ApiError("Invalid user credentials", 401);
 
 
     const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(user._id);
@@ -84,17 +83,14 @@ const loginUser = asyncErrorHandler(async (req, res) => {
     const loggedInUser = await User.findById(user._id).select("-password -refreshToken -accessToken");
 
     const cookieOptions = {
-        httpOnly: true,
-        secure: true
+        httpOnly: false,
+        secure: false
     }
-
-
-    console.log(accessToken)
-    console.log(refreshToken)
 
     return res.status(200)
         .cookie("accessToken", accessToken, cookieOptions)
         .cookie("refreshToken", refreshToken, cookieOptions)
+        .cookie("role", role, cookieOptions)
         .json(
             new ApiResponse(
                 { user: loggedInUser, accessToken, refreshToken },
@@ -118,14 +114,15 @@ const logoutUser = asyncErrorHandler(async (req, res) => {
     );
 
     const options = {
-        httpOnly: true,
-        secure: true
+        httpOnly: false,
+        secure: false
     }
 
     return res
         .status(200)
         .clearCookie("accessToken", options)
         .clearCookie("refreshToken", options)
+        .clearCookie("role", options)
         .json(new ApiResponse({}, "User loggedout successfully", 200));
 
 });

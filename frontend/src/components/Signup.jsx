@@ -3,7 +3,7 @@ import "../styles/forms.css";
 import axios from "axios";
 import { BACKEND_URL } from "../assets/constants.js";
 import userContext from "../context/UserContext.js";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const [form, setForm] = useState({
@@ -15,7 +15,8 @@ const Signup = () => {
     password: "",
   });
 
-  const { setIsAuthenticated, setRole } = useContext(userContext);
+  const { setIsAuthenticated, role, setRole } = useContext(userContext);
+  console.log(role)
   const navigate = useNavigate();
 
   const handleChange = (e) =>
@@ -49,16 +50,18 @@ const Signup = () => {
       const { fullName, userName, email, age, role, password } = form;
 
       try {
-        const { data } = await axios.post(`${BACKEND_URL}/users/register`, {
+        const  response  = await axios.post(`${BACKEND_URL}/users/register`, {
           fullName,
           userName,
           email,
           age,
           role,
           password, 
+      }, {
+        withCredentials: true
       });
 
-      if(data?.statusCode == 201) {
+      if(response.data.statusCode == 201) {
         alert("You are registered");
         setIsAuthenticated(true);
         setRole(role);

@@ -8,8 +8,12 @@ import userTwo from "../assets/users/user-two.png";
 import userThree from "../assets/users/user-three.png";
 
 import { NavLink } from "react-router-dom";
+import { useContext } from "react";
+import userContext from "../context/UserContext.js";
 
 const Home = () => {
+  const { role } = useContext(userContext);
+  console.log(role)
   return (
     <>
       <div className="row">

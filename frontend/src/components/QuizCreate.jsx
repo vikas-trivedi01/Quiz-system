@@ -125,11 +125,10 @@ const QuizCreate = () => {
 
   const previewQuiz = () => {
     if (
-      [quizName, category, difficulty, status].some(
+      [quizName, category, difficulty].some(
         (field) => field.trim() == ""
       )
-    )
-      return alert("All fields required");
+    ) return alert("All fields required");
 
     navigate("/quizzes/preview", {
       state: {
@@ -235,7 +234,7 @@ const QuizCreate = () => {
                   <option value="hard">Hard</option>
                 </select>
               </div>
-              
+
             </div>
           </div>
         </div>

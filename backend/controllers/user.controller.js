@@ -20,7 +20,7 @@ const generateAccessAndRefreshTokens = async (userId) => {
         return { accessToken, refreshToken };
 
     } catch (error) {
-        throw new ApiError("Something went wrong while generating referesh and access token", 500);
+        res.status(500).json(new ApiError("Something went wrong while generating referesh and access token", 500));
     }
 }
 
@@ -31,7 +31,7 @@ const registerUser = asyncErrorHandler(async (req, res) => {
     if (
         [fullName, userName, email, password].some(field => field?.trim() === "")
     ) {
-        throw new ApiError("All fields are required", 400);
+         res.status(400).json(new ApiError("All fields are required", 400));
     }
 
     const existedUser = await User.findOne({
@@ -39,7 +39,7 @@ const registerUser = asyncErrorHandler(async (req, res) => {
     });
 
     if (existedUser)
-        throw new ApiError("User with email or username already exists", 409);
+         res.status(409).json(new ApiError("User with email or username already exists", 409));
 
     const user = await User.create({
         fullName,
@@ -53,7 +53,7 @@ const registerUser = asyncErrorHandler(async (req, res) => {
     const createdUser = await User.findById(user._id).select("-password -refreshToken -accessToken");
 
     if (!createdUser)
-        throw new ApiError("Something went wrong while registering the user", 500);
+         res.status(500).json(new ApiError("Something went wrong while registering the user", 500));
 
     return res.status(201).json(
         new ApiResponse(createdUser, "User registered successfully", 201)
@@ -65,17 +65,17 @@ const loginUser = asyncErrorHandler(async (req, res) => {
     const { email, role, password } = req.body;
 
     if (!email)
-        throw new ApiError("Email is required", 400);
+        res.status(400).json(ApiError("Email is required", 400));
 
     const user = await User.findOne({ email, role });
 
     if (!user)
-        throw new ApiError("User does not exist or not authorized for this role", 404);
+         res.status(404).json(new ApiError("User does not exist or not authorized for this role", 404));
 
     const isPasswordValid = await user.isPasswordCorrect(password);
 
     if (!isPasswordValid)
-        throw new ApiError("Invalid user credentials", 401);
+         res.status(401).json(new ApiError("Invalid user credentials", 401));
 
 
     const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(user._id);

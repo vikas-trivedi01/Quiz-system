@@ -4,10 +4,12 @@ import { faUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
 const ListItem = ({
   quizName,
   numberOfQuestions,
+  participants,
   totalMarks,
-  quizTakersCount,
+  eachQuestionMarks,
   category,
   difficulty,
+  status,
   createdBy,
 } = props) => {
   const joinButtonStyle = {
@@ -74,15 +76,15 @@ const ListItem = ({
         </span>
 
         <span>
-          <h5 style={{ display: "inline" }}>Number of questions Name :</h5>{" "}
+          <h5 style={{ display: "inline" }}>Number of questions :</h5>{" "}
           <span style={infoStyle}>{numberOfQuestions}</span>
         </span>
 
         <span>
           <h5 style={{ display: "inline" }}>
-            Number of learners attempted quiz :
+            Learners attempted quiz :
           </h5>{" "}
-          <span style={infoStyle}>{quizTakersCount}</span>
+          <span style={infoStyle}>N/A</span>
         </span>
       </div>
 
@@ -93,8 +95,18 @@ const ListItem = ({
         </span>
 
         <span style={{ marginLeft: "220px" }}>
-          <h5 style={{ display: "inline" }}>Marks:</h5>{" "}
+          <h5 style={{ display: "inline" }}>Each question marks:</h5>{" "}
+          <span style={infoStyle}>{eachQuestionMarks}</span>
+        </span>
+
+        <span style={{ marginLeft: "220px" }}>
+          <h5 style={{ display: "inline" }}>Toal marks:</h5>{" "}
           <span style={infoStyle}>{totalMarks}</span>
+        </span>
+
+        <span style={{ marginLeft: "220px" }}>
+          <h5 style={{ display: "inline" }}>Status:</h5>{" "}
+          <span style={infoStyle}>{status}</span>
         </span>
 
         <span style={{ marginLeft: "240px" }}>

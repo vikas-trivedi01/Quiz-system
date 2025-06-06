@@ -19,6 +19,7 @@ import QuizResult from "./components/QuizResult";
 import QuizReview from "./components/QuizReview";
 import QuizCreate from "./components/QuizCreate";
 import QuizPreview from "./components/QuizPreview";
+import QuizAll from "./components/QuizAll";
 
 import Signup from "./components/SignUp";
 import Login from "./components/Login";
@@ -50,14 +51,7 @@ const router = createBrowserRouter(
               </ProtectedRoute>
             }
           />
-          <Route
-            path="quizlist"
-            element={
-              <ProtectedRoute requiredRole="user">
-                <QuizList />
-              </ProtectedRoute>
-            }
-          />
+
           <Route
             path="result"
             element={
@@ -74,6 +68,16 @@ const router = createBrowserRouter(
               </ProtectedRoute>
             }
           />
+
+           <Route
+            path="quizlist"
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <QuizList />
+              </ProtectedRoute>
+            }
+          />
+          
           <Route
             path="preview"
             element={
@@ -87,6 +91,15 @@ const router = createBrowserRouter(
             element={
               <ProtectedRoute requiredRole="admin">
                 <QuizCreate />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="allquizzes"
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <QuizAll />
               </ProtectedRoute>
             }
           />

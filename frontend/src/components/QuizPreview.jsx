@@ -53,14 +53,15 @@ const QuizPreview = () => {
           eachQuestionMarks,
           category,
           difficulty,
+          status: "archived",
           questions,
       }, {
         withCredentials: true
       });
 
       if(response.data.statusCode == 201) {
-        alert(response.data.data.message);
-        navigate("/quizzes/all");
+        alert(response.data.message);
+        navigate("/quizzes/allquizzes");
       }
       } catch (error) {
         alert(`Error: ${error.message}`);

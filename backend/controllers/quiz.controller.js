@@ -21,7 +21,7 @@ const createQuiz = asyncErrorHandler(async (req, res) => {
     });
 
     if (existedQuiz)
-        throw new ApiError("Quiz already exists", 400);
+         return res.status(400).json(new ApiError("Quiz already exists", 400));
 
     const creator = req.user?._id;
 
@@ -54,12 +54,34 @@ const createQuiz = asyncErrorHandler(async (req, res) => {
     await quiz.save();
 
 
-    res.status(201)
+    return res.status(201)
         .json(new ApiResponse({}, "Quiz created successfully", 201));
 
 });
 
+const getAllQuizzes = asyncErrorHandler(async (req, res) => {
+    
+    const creator = req.user?._id;
+    
+    if(creator) {
+        const quizzes = await Quiz.find({
+            creator
+        });
+
+        if(quizzes) {
+            return res.status(200)
+            .json(new ApiResponse(quizzes, "All quizzes fetched successfully", 200));
+        } else {
+            return res.status(404)
+            .json(new ApiError("No quizzes found", 404));
+        }
+    } else {
+        return res.status(401)
+        .json(new ApiError("Not authorized", 401));
+    }
+});
 
 export {
-    createQuiz
+    createQuiz,
+    getAllQuizzes
 }

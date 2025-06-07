@@ -9,20 +9,20 @@ export const authenticateRequest = asyncErrorHandler( async (req, res, next) => 
         const token = req.cookies?.accessToken;
 
         if(!token)
-                throw new ApiError("Unauthorized request", 401);
+               return res.status(401).json(new ApiError("Unauthorized request", 401));
 
         const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
         const user = await User.findById(decodedToken?._id).select("-password -refreshToken -accessToken");
 
         if(!user) 
-            throw new ApiError("Invalid access token", 401);
+             return res.status(401).json(new ApiError("Invalid access token", 401));
 
         req.user = user;
         next();
             
     } catch (error) {
-        throw new ApiError(error?.message || "Invalid access token", 401);
+         throw new ApiError(error?.message || "Invalid access token", 401);
     }
     
 });

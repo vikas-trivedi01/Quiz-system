@@ -11,108 +11,119 @@ const ListItem = ({
   difficulty,
   status,
   createdBy,
-} = props) => {
+}) => {
   const joinButtonStyle = {
-    backgroundColor: `var(--clr-primary)`,
+    backgroundColor: "var(--clr-primary)",
     color: "#fff",
-    borderRadius: `var(--border-radius)`,
-    padding: "7px",
-    width: "150px",
+    borderRadius: "var(--border-radius)",
+    padding: "10px 20px",
     border: "none",
     cursor: "pointer",
-    marginRight: "15px",
+    display: "flex",
+    alignItems: "center",
+    gap: "22px",
+    fontWeight: "600",
+    width: "150px",
   };
 
-  const infoStyle = {
-    fontSize: "18px",
-    color: "#11ab",
-    textDecoration: "underline",
-    textDecorationColor: "#000",
-    textDecorationThickness: "2px",
-    textDecorationSkipInk: "none",
-    textUnderlineOffset: "10px",
+  const labelStyle = {
+    fontWeight: "500",
+    marginBottom: "4px",
+    color: "#555",
+  };
+
+  const valueStyle = {
     fontWeight: "600",
+    fontSize: "1rem",
+    color: "#0A0F2A",
+    wordBreak: "break-word",
+  };
+
+  const itemBox = {
+    display: "flex",
+    flexDirection: "column",
+    minWidth: "180px",
+    flex: "1 1 200px",
+    margin: "10px",
   };
 
   return (
     <div
-      className="rounded p-2"
       style={{
-        borderRadius: "6px",
-        color: "0A0F2A",
-        margin: "30px",
-        border: "2px solid black"
+        border: "2px solid #ddd",
+        borderRadius: "12px",
+        padding: "24px",
+        margin: "24px auto",
+        maxWidth: "1000px",
+        backgroundColor: "#fafafa",
+        boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
       }}
     >
-      <div className="d-flex justify-content-between py-3 px-5">
-        
-        <span
-          style={{
-            marginLeft: "387px",
-            border: "2px solid black",
-            borderRadius: "6px",
-            padding: "10px 20px",
-          }}
-        >
-          <h5 style={{ display: "inline" }}>Quiz Name :</h5>{" "}
-          <span style={infoStyle}>{quizName}</span>
-        </span>
-
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          flexWrap: "wrap",
+          alignItems: "center",
+          marginBottom: "20px",
+        }}
+      >
+        <div style={{ fontSize: "1.5rem", fontWeight: "700", color: "#333" }}>
+          {quizName}
+        </div>
         <button style={joinButtonStyle}>
-          
           Join Quiz
-          
-          <FontAwesomeIcon
-            icon={faUpRightFromSquare}
-            style={{ marginLeft: "10px" }}
-          />
+          <FontAwesomeIcon icon={faUpRightFromSquare} />
         </button>
-
-      </div>
-      <div className="d-flex p-2 d-flex justify-content-evenly">
-        <span>
-          <h5 style={{ display: "inline" }}>Category of quiz :</h5>{" "}
-          <span style={infoStyle}>{category}</span>
-        </span>
-
-        <span>
-          <h5 style={{ display: "inline" }}>Number of questions :</h5>{" "}
-          <span style={infoStyle}>{numberOfQuestions}</span>
-        </span>
-
-        <span>
-          <h5 style={{ display: "inline" }}>
-            Learners attempted quiz :
-          </h5>{" "}
-          <span style={infoStyle}>N/A</span>
-        </span>
       </div>
 
-      <div className="d-flex p-2">
-        <span style={{ marginLeft: "55px" }}>
-          <h5 style={{ display: "inline" }}>Created by :</h5>{" "}
-          <span style={infoStyle}>{createdBy}</span>
-        </span>
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "16px",
+          justifyContent: "space-between",
+        }}
+      >
+        <div style={itemBox}>
+          <div style={labelStyle}>Category</div>
+          <div style={valueStyle}>{category}</div>
+        </div>
 
-        <span style={{ marginLeft: "220px" }}>
-          <h5 style={{ display: "inline" }}>Each question marks:</h5>{" "}
-          <span style={infoStyle}>{eachQuestionMarks}</span>
-        </span>
+        <div style={itemBox}>
+          <div style={labelStyle}>Questions</div>
+          <div style={valueStyle}>{numberOfQuestions}</div>
+        </div>
 
-        <span style={{ marginLeft: "220px" }}>
-          <h5 style={{ display: "inline" }}>Toal marks:</h5>{" "}
-          <span style={infoStyle}>{totalMarks}</span>
-        </span>
+        <div style={itemBox}>
+          <div style={labelStyle}>Participants</div>
+          <div style={valueStyle}>{participants ?? "N/A"}</div>
+        </div>
 
-        <span style={{ marginLeft: "220px" }}>
-          <h5 style={{ display: "inline" }}>Status:</h5>{" "}
-          <span style={infoStyle}>{status}</span>
-        </span>
+        <div style={itemBox}>
+          <div style={labelStyle}>Each Question Marks</div>
+          <div style={valueStyle}>{eachQuestionMarks}</div>
+        </div>
 
-        <span style={{ marginLeft: "240px" }}>
-          <h5 style={{ display: "inline" }}>Difficulty :</h5>{" "}
-          <span style={infoStyle}>{difficulty}</span>
-        </span>
+        <div style={itemBox}>
+          <div style={labelStyle}>Total Marks</div>
+          <div style={valueStyle}>{totalMarks}</div>
+        </div>
+
+        <div style={itemBox}>
+          <div style={labelStyle}>Difficulty</div>
+          <div style={valueStyle}>{difficulty}</div>
+        </div>
+
+        <div style={itemBox}>
+          <div style={labelStyle}>Status</div>
+          <div style={valueStyle}>{status}</div>
+        </div>
+
+        <div style={itemBox}>
+          <div style={labelStyle}>Created By</div>
+          <div style={valueStyle}>{createdBy}</div>
+        </div>
       </div>
     </div>
   );

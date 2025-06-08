@@ -15,6 +15,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faXmark } from "@fortawesome/free-solid-svg-icons";
 
 const QuizCreate = () => {
+  const navigate = useNavigate();
+
   const [quizName, setQuizName] = useState("");
   const [editingQuizName, setEditingQuizName] = useState(false);
   const [editingQuestion, setEditingQuestion] = useState(false);
@@ -27,11 +29,6 @@ const QuizCreate = () => {
   const [exampleShown, setExampleShown] = useState(true);
   const [numberOfQuestions, setNumberOfQuestions] = useState(1);
 
-  const quizNameInputRef = useRef(null);
-  const questionInputRef = useRef(null);
-
-  const navigate = useNavigate();
-
   const [haveNumberOfQuestions, setHaveNumberOfQuestions] = useState(false);
 
   const [totalMarks, setTotalMarks] = useState(0);
@@ -40,7 +37,14 @@ const QuizCreate = () => {
   const [difficulty, setDifficulty] = useState("");
 
   const [quizDetailsShown, setQuizDetailsShown] = useState(false);
+  
   const quizDetailsRef = useRef(null);
+  const quizNameInputRef = useRef(null);
+  const questionInputRef = useRef(null);
+
+  useEffect(() => {
+    setTotalMarks(questions.length * eachQuestionMarks);
+  }, [questions, eachQuestionMarks]);
 
   const editQuizName = () => {
     setEditingQuizName(true);
@@ -119,16 +123,11 @@ const QuizCreate = () => {
     ]);
   };
 
-  useEffect(() => {
-    setTotalMarks(questions.length * eachQuestionMarks);
-  }, [questions, eachQuestionMarks]);
+  
 
   const previewQuiz = () => {
-    if (
-      [quizName, category, difficulty].some(
-        (field) => field.trim() == ""
-      )
-    ) return alert("All fields required");
+    if ([quizName, category, difficulty].some((field) => field.trim() == ""))
+      return alert("All fields required");
 
     navigate("/quizzes/preview", {
       state: {
@@ -172,6 +171,7 @@ const QuizCreate = () => {
           />
         </div>
       </div>
+      
       <div className="text-center">
         {!quizDetailsShown ? (
           <button
@@ -234,7 +234,6 @@ const QuizCreate = () => {
                   <option value="hard">Hard</option>
                 </select>
               </div>
-
             </div>
           </div>
         </div>

@@ -4,12 +4,12 @@ import Footer from "./Footer";
 
 const Layout = () => {
   return (
-      <>
-        <Navbar />
-        <Outlet />
-        <Footer />
-      </>
-    );
+    <>
+      <Navbar />
+      <Outlet />
+      <Footer />
+    </>
+  );
 };
 
 export default Layout;

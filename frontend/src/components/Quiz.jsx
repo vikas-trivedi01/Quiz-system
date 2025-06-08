@@ -82,14 +82,6 @@ const Quiz = () => {
     setSelectedOptionId(null);
   }, [currentQuestionObj]);
 
-  //   useEffect(() => {
-
-  //        intervalRef.current = setInterval(() => {
-  //     }, 1000);
-
-  //   return () => clearInterval(intervalRef.current);
-  // }, [currentQuestionObj]);
-
   const getNextQuestion = (flow = null) => {
     if ((flow == "auto" || isAnswered) && questionsCounter < quizData.length) {
       if (questionsCounter < quizData.length) {

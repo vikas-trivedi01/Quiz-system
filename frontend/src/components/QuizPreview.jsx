@@ -33,7 +33,7 @@ const QuizPreview = () => {
     category,
     difficulty,
     questions,
-    isAdmin
+    isAdmin,
   } = location.state;
   const [optionsShown, setOptionsShown] = useState({});
 
@@ -45,9 +45,10 @@ const QuizPreview = () => {
   };
 
   const createQuiz = async () => {
-
     try {
-        const  response  = await axios.post(`${BACKEND_URL}/quizzes`, {
+      const response = await axios.post(
+        `${BACKEND_URL}/quizzes`,
+        {
           quizName,
           numberOfQuestions,
           totalMarks,
@@ -56,29 +57,32 @@ const QuizPreview = () => {
           difficulty,
           status: "archived",
           questions,
-      }, {
-        withCredentials: true
-      });
+        },
+        {
+          withCredentials: true,
+        }
+      );
 
-      if(response.data.statusCode == 201) {
+      if (response.data.statusCode == 201) {
         alert(response.data.message);
         navigate("/quizzes/allquizzes");
       }
-      } catch (error) {
-         if(error?.response?.status == 401) {
-                 try {
-                    await refreshAccessToken();
-                    await createQuiz();
-                 } catch (refreshError) {
-                    alert("Please login again");
-                    navigate("/users/login");
-                 }
-                } else {
-                  alert(error?.response?.data?.message);
-                }
-              }
-      } 
-    
+
+    } catch (error) {
+      if (error?.response?.status == 401) {
+        try {
+          await refreshAccessToken();
+          await createQuiz();
+        } catch (refreshError) {
+          alert("Please login again");
+          navigate("/users/login");
+        }
+      } else {
+        alert(error?.message);
+      }
+    }
+  };
+
   return (
     <>
       <div
@@ -90,14 +94,12 @@ const QuizPreview = () => {
           margin: "40px 10px 40px 272px",
         }}
       >
-       
-       {
-        isAdmin ? (
+        {isAdmin ? (
           <>
             <h2 className="mb-4">Your Quiz Questions</h2>
             <p className="mb-6">
-              Here's a preview of your quiz questions and options. Review everything
-              carefully before sharing the quiz!
+              Here's a preview of your quiz questions and options. Review
+              everything carefully before sharing the quiz!
             </p>
           </>
         ) : (
@@ -108,14 +110,12 @@ const QuizPreview = () => {
               options!
             </p>
           </>
-        )
-      }
-
+        )}
       </div>
 
       <div>
         <h3 className="text-center">Quiz: {quizName}</h3>
-        
+
         {questions.map((question, index) => {
           const isShown = optionsShown[index];
           return (
@@ -137,6 +137,7 @@ const QuizPreview = () => {
                 <h5>Question: </h5>
                 <h5 className="ms-3">{question.question}</h5>
               </div>
+              
               <div>
                 <button
                   style={previewOptionsStyle}
@@ -183,7 +184,11 @@ const QuizPreview = () => {
         })}
       </div>
 
-      <button style={addCreateQuizButtonStyle} className="mb-4" onClick={() => createQuiz()}>
+      <button
+        style={addCreateQuizButtonStyle}
+        className="mb-4"
+        onClick={() => createQuiz()}
+      >
         Create Quiz
       </button>
     </>

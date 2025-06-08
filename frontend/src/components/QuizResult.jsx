@@ -123,12 +123,14 @@ const QuizResult = () => {
             {rightAnswers.length} / {quizData.length}
           </h2>
           <h4 className="mt-4">{message}</h4>
+
           <button style={homeButtonStyle}>
             <NavLink to="/" style={{ color: "#fff", textDecoration: "none" }}>
               Back to Home
             </NavLink>
             <FontAwesomeIcon icon={faHome} style={{ marginLeft: "10px" }} />
           </button>
+
           <button
             style={reviewButtonStyle}
             onClick={() =>
@@ -141,9 +143,9 @@ const QuizResult = () => {
               style={{ marginLeft: "10px" }}
             />
           </button>
+
         </div>
       </div>
-      <div></div>
     </>
   );
 };

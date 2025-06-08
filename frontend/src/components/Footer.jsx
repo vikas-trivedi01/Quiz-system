@@ -24,9 +24,7 @@ const Footer = () => {
         <li className="footer-link-container">
           <NavLink
             to="/terms"
-            className={({ isActive }) =>
-              `${isActive ? "active-nav-link" : ""}`
-            }
+            className={({ isActive }) => `${isActive ? "active-nav-link" : ""}`}
           >
             Terms
           </NavLink>

@@ -21,16 +21,16 @@ const QuizAll = () => {
         setQuizzes(response?.data?.data);
         setAreQuizzesFetched(true);
       } catch (error) {
-        if(error?.response?.status == 401) {
-         try {
+        if (error?.response?.status == 401) {
+          try {
             await refreshAccessToken();
             await getQuizzes();
-         } catch (refreshError) {
+          } catch (refreshError) {
             alert("Please login again");
             navigate("/users/login");
-         }
+          }
         } else {
-          alert(error?.response?.data?.message);
+          alert(error?.message);
         }
       }
     };
@@ -45,6 +45,7 @@ const QuizAll = () => {
           <h2 className="text-center mt-5">Your Quizzes</h2>
           {quizzes?.map((quiz, index) => {
             return (
+
               <ListItem
                 key={index}
                 quizName={quiz.quizName}
@@ -59,11 +60,12 @@ const QuizAll = () => {
                 isAdmin={true}
                 quizId={quiz._id}
               />
+
             );
           })}
         </>
       ) : (
-        <h4 className="mb-5 mt-5 p-5 text-center">Loading Your Quizzes...</h4>
+        <h4 className="mb-5 mt-5 p-5 text-center">Loading Quizzes Created By You...</h4>
       )}
     </div>
   );

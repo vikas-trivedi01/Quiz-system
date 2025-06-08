@@ -1,7 +1,7 @@
 const LegalInfo = ({
   legalInfoIllustration,
   legalInfoTitle,
-  legalInfoArray
+  legalInfoArray,
 } = props) => {
   return (
     <div className="container">

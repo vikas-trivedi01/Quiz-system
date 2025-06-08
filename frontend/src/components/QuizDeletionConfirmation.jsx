@@ -1,6 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { BACKEND_URL } from "../assets/constants.js";
 import { useEffect } from "react";
+import { refreshAccessToken } from "../assets/tokens.js";
 
 const QuizDeletionConfirmation = () => {
   const navigate = useNavigate();
@@ -87,7 +88,17 @@ const QuizDeletionConfirmation = () => {
         alert(response?.data?.message);
       }
     } catch (error) {
-      alert(error.response?.data?.message);
+      if (error?.response?.status == 401) {
+        try {
+          await refreshAccessToken();
+          await logout();
+        } catch (refreshError) {
+          alert("Please login again");
+          navigate("/users/login");
+        }
+      } else {
+        alert(error?.message);
+      }
     }
 
     navigate("/quizzes/all");
@@ -106,6 +117,7 @@ const QuizDeletionConfirmation = () => {
           <button style={cancelButtonStyle} onClick={handleCancel}>
             Cancel
           </button>
+
           <button style={deleteButtonStyle} onClick={handleDelete}>
             Yes, Delete
           </button>

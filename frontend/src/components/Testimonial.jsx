@@ -1,5 +1,4 @@
 const Testimonial = ({ userAvatar, userName, feedback, date } = props) => {
-
   const dateSectionStyle = {
     display: "inline",
     backgroundColor: "#35B0FC",
@@ -7,7 +6,10 @@ const Testimonial = ({ userAvatar, userName, feedback, date } = props) => {
   };
 
   return (
-    <div style={{ border: "2px solid #000", borderRadius: "6px"}} className="p-2">
+    <div
+      style={{ border: "2px solid #000", borderRadius: "6px" }}
+      className="p-2"
+    >
       <img
         src={userAvatar}
         alt="User avatar"

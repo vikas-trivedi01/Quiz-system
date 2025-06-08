@@ -66,7 +66,7 @@ const getAllQuizzes = asyncErrorHandler(async (req, res) => {
     if (creator) {
         let quizzes = await Quiz.find({
             creator
-        }).populate("creator", "-fullName -email -age -password -accessToken -refreshToken -role -quizzesAttempted -createdAt -updatedAt -__v -_id")
+        }).populate("creator", "-fullName -email -age -password -refreshToken -role -quizzesAttempted -createdAt -updatedAt -__v -_id")
             .populate("questions", "-createdAt -updatedAt -__v -_id");
 
         if (quizzes) {

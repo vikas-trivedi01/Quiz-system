@@ -1,5 +1,8 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTrash,
+  faUpRightFromSquare,
+} from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 
 const ListItem = ({
@@ -31,7 +34,7 @@ const ListItem = ({
     fontWeight: "600",
     width: "200px",
   };
-  
+
   const viewQuestionsButtonStyle = {
     backgroundColor: "var(--clr-primary)",
     color: "#fff",
@@ -43,7 +46,7 @@ const ListItem = ({
     fontWeight: "600",
     width: "100px",
   };
-  
+
   const deleteQuizButtonStyle = {
     backgroundColor: "var(--clr-accent)",
     color: "#000",
@@ -78,9 +81,7 @@ const ListItem = ({
   };
 
   const viewQuestions = () => {
-   
     if (isAdmin) {
-
       navigate("/quizzes/preview", {
         state: {
           questions,
@@ -91,23 +92,19 @@ const ListItem = ({
           difficulty,
           numberOfQuestions,
           isAdmin,
-          quizId
+          quizId,
         },
       });
-
     }
-
   };
 
   const deleteQuiz = () => {
-
     navigate("/delete", {
       state: {
-        quizId
-      }
-    })
-  }
-
+        quizId,
+      },
+    });
+  };
 
   return (
     <div
@@ -134,27 +131,36 @@ const ListItem = ({
           {quizName}
         </div>
 
-       {
-          isAdmin ? (
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
-
-              <button style={viewQuestionsButtonStyle} title="View Question" onClick={() => viewQuestions()}>
-                <FontAwesomeIcon icon={faUpRightFromSquare} />
-              </button>
-              <button style={deleteQuizButtonStyle} title="Delete Quiz" onClick={() => deleteQuiz()}>
-                <FontAwesomeIcon icon={faTrash} />
-              </button>
-
-            </div>
-          ) : (
-            <button style={joinButtonStyle}>
-              Join Quiz
+        {isAdmin ? (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "10px",
+            }}
+          >
+            <button
+              style={viewQuestionsButtonStyle}
+              title="View Question"
+              onClick={() => viewQuestions()}
+            >
               <FontAwesomeIcon icon={faUpRightFromSquare} />
             </button>
-          )
-        }
-
-        
+            <button
+              style={deleteQuizButtonStyle}
+              title="Delete Quiz"
+              onClick={() => deleteQuiz()}
+            >
+              <FontAwesomeIcon icon={faTrash} />
+            </button>
+          </div>
+        ) : (
+          <button style={joinButtonStyle}>
+            Join Quiz
+            <FontAwesomeIcon icon={faUpRightFromSquare} />
+          </button>
+        )}
       </div>
 
       <div

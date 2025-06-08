@@ -26,19 +26,13 @@ const Terms = () => {
   ];
 
   return (
-    
     <LegalInfo
-    
       legalInfoIllustration={termsImg}
-      
       legalInfoTitle={
         "By accessing or using this platform, you agree to the following terms."
       }
-      
       legalInfoArray={terms}
-      
     />
-    
   );
 };
 

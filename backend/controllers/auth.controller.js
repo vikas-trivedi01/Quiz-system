@@ -2,13 +2,14 @@ import { User } from "../models/user.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncErrorHandler } from "../utils/asyncErrorHandler.js";
+import jwt from "jsonwebtoken";
 
 const generateAccessAndRefreshTokens = async (userId) => {
         const user = await User.findById(userId);
         const accessToken = user.generateAccessToken();
         const refreshToken = user.generateRefreshToken();
 
-        user.accessToken = accessToken;
+        user.refreshToken = refreshToken;
         await user.save({
             validateBeforeSave: false
         });
@@ -32,14 +33,9 @@ const refreshAccessToken = asyncErrorHandler(async (req, res) => {
 
      const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(decoded._id);
 
-    const cookieOptions = {
-        httpOnly: true,
-        secure: true
-    }
-
     return res.status(200)
-        .cookie("accessToken", accessToken, cookieOptions)
-        .cookie("refreshToken", refreshToken, cookieOptions)
+        .cookie("accessToken", accessToken)
+        .cookie("refreshToken", refreshToken)
         .json(
             new ApiResponse(
                 {},
@@ -51,5 +47,6 @@ const refreshAccessToken = asyncErrorHandler(async (req, res) => {
 });
 
 export {
+    generateAccessAndRefreshTokens,
     refreshAccessToken
 }

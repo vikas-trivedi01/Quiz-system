@@ -30,7 +30,7 @@ const registerUser = asyncErrorHandler(async (req, res) => {
         role
     });
 
-    const createdUser = await User.findById(user._id).select("-password -refreshToken -accessToken");
+    const createdUser = await User.findById(user._id).select("-password -refreshToken");
 
     if (!createdUser)
          return res.status(500).json(new ApiError("Something went wrong while registering the user", 500));
@@ -60,17 +60,12 @@ const loginUser = asyncErrorHandler(async (req, res) => {
 
     const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(user._id);
 
-    const loggedInUser = await User.findById(user._id).select("-password -refreshToken -accessToken");
-
-    const cookieOptions = {
-        httpOnly: true,
-        secure: true
-    }
+    const loggedInUser = await User.findById(user._id).select("-password -refreshToken");
 
     return res.status(200)
-        .cookie("accessToken", accessToken, cookieOptions)
-        .cookie("refreshToken", refreshToken, cookieOptions)
-        .cookie("role", role, cookieOptions)
+        .cookie("accessToken", accessToken)
+        .cookie("refreshToken", refreshToken)
+        .cookie("role", role)
         .json(
             new ApiResponse(
                 loggedInUser,
@@ -93,16 +88,11 @@ const logoutUser = asyncErrorHandler(async (req, res) => {
         }
     );
 
-    const options = {
-        httpOnly: true,
-        secure: true
-    }
-
     return res
         .status(200)
-        .clearCookie("accessToken", options)
-        .clearCookie("refreshToken", options)
-        .clearCookie("role", options)
+        .clearCookie("accessToken")
+        .clearCookie("refreshToken")
+        .clearCookie("role")
         .json(new ApiResponse({}, "User loggedout successfully", 200));
 
 });

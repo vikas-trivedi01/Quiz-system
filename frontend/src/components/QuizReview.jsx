@@ -15,14 +15,18 @@ const QuizReview = () => {
   if (location.state == null) return null;
 
   const { quizData, answers } = location.state;
+
   const wrongAnswers = quizData.filter((question) => {
+    
     return answers.find((answer) => {
       return answer.questionId == question.id &&
         answer.givenAnswer != question.rightAnswer
         ? true
         : false;
     });
+    
   });
+
   return (
     <div
       style={{

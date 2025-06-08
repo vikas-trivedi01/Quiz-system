@@ -14,7 +14,8 @@ import {
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 import userContext from "../context/UserContext.js";
-import { BACKEND_URL } from "../assets/constants";
+import { BACKEND_URL } from "../assets/constants.js";
+import { refreshAccessToken } from "../assets/tokens.js";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -30,9 +31,13 @@ const Navbar = () => {
 
   const logout = async () => {
     try {
-      const response  = await axios.post(`${BACKEND_URL}/users/logout`,{}, {
-        withCredentials: true
-      });
+      const response = await axios.post(
+        `${BACKEND_URL}/users/logout`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
 
       if (response.data.statusCode == 200) {
         alert("You are logged out");
@@ -40,7 +45,17 @@ const Navbar = () => {
         navigate("/users/login");
       }
     } catch (error) {
-      alert(`Error: ${error.message}`);
+      if (error?.response?.status == 401) {
+        try {
+          await refreshAccessToken();
+          await logout();
+        } catch (refreshError) {
+          alert("Please try logout after login again");
+          navigate("/users/login");
+        }
+      } else {
+        alert(error?.message);
+      }
     }
   };
 
@@ -75,7 +90,11 @@ const Navbar = () => {
             )}
           </NavLink>
 
-          <div className={`dropdown-menu${open ? " show" : ""} bg-dark px-3 py-4 mt-3 ms-5`}>
+          <div
+            className={`dropdown-menu${
+              open ? " show" : ""
+            } bg-dark px-3 py-4 mt-3 ms-5`}
+          >
             {role == "user" ? (
               <>
                 <NavLink
@@ -94,11 +113,7 @@ const Navbar = () => {
                   <FontAwesomeIcon icon={faRectangleList} className="ms-3" />
                 </NavLink>
               </>
-            ) 
-            
-            :
-            
-            (
+            ) : (
               <>
                 <NavLink
                   to="/quizzes/create"
@@ -116,8 +131,7 @@ const Navbar = () => {
                   <FontAwesomeIcon icon={faSquareCheck} className="ms-3" />
                 </NavLink>
               </>
-            )
-    }
+            )}
           </div>
         </li>
 
@@ -154,11 +168,13 @@ const Navbar = () => {
           </NavLink>
         </li>
 
-        <li className="nav-item">
-          <button onClick={() => logout()} id="logout">
-            Logout
-          </button>
-        </li>
+        {role != undefined ? (
+          <li className="nav-item">
+            <button onClick={() => logout()} id="logout">
+              Logout
+            </button>
+          </li>
+        ) : null}
       </ul>
     </nav>
   );

@@ -36,19 +36,13 @@ const Privacy = () => {
   ];
 
   return (
-
     <LegalInfo
-
       legalInfoIllustration={privacyImg}
-
       legalInfoTitle={
         "We value your privacy. By using this service, you trust us with your data, and we are committed to protecting it."
       }
-
       legalInfoArray={privacy}
-
     />
-    
   );
 };
 

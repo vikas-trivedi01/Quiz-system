@@ -8,19 +8,22 @@ import userTwo from "../assets/users/user-two.png";
 import userThree from "../assets/users/user-three.png";
 
 import { NavLink } from "react-router-dom";
-import { useContext } from "react";
-import userContext from "../context/UserContext.js";
 
 const Home = () => {
-  const { role } = useContext(userContext);
-  console.log(role)
+
   return (
     <>
       <div className="row">
         <div className="col-6 py-2 px-5">
-          <img src={progress} alt="Illustration for progress" style={{ borderRadius: "30px", border: "2px solid black"}} width={550} height={450} />
+          <img
+            src={progress}
+            alt="Illustration for progress"
+            style={{ borderRadius: "30px", border: "2px solid black" }}
+            width={550}
+            height={450}
+          />
         </div>
-        <div className="col-6" style={{ marginTop: "93px"}}>
+        <div className="col-6" style={{ marginTop: "93px" }}>
           <h2 id="tag-line">Test Your Knowledge. Track Your Growth</h2>
           <h4>
             Welcome to the smarter way to learn. <br /> Take quizzes across
@@ -28,7 +31,14 @@ const Home = () => {
             all in one place.
           </h4>
           <div id="progress-buttons" className="mt-5">
-            <button id="quiz-btn"><NavLink to="quizzes/quizlist" style={{ color: "#fff", textDecoration: "none" }}>Explore Quizzes</NavLink></button>
+            <button id="quiz-btn">
+              <NavLink
+                to="quizzes/quizlist"
+                style={{ color: "#fff", textDecoration: "none" }}
+              >
+                Explore Quizzes
+              </NavLink>
+            </button>
             <button className="btn btn-dark" id="about-btn">
               About Us
             </button>
@@ -63,7 +73,6 @@ const Home = () => {
           />
         </div>
       </div>
-
     </>
   );
 };

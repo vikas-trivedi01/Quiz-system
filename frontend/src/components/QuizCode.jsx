@@ -17,7 +17,7 @@ const QuizCode = () => {
     }
   };
 
- const joinButtonStyle = {
+  const joinButtonStyle = {
     backgroundColor: `var(--clr-primary)`,
     color: "#fff",
     borderRadius: `var(--border-radius)`,
@@ -34,15 +34,15 @@ const QuizCode = () => {
           src={quizCodeImg}
           alt="Person illustration"
           width={600}
-          height={500}
-          style={{ borderRadius: "15px" }}
+          height={440}
+          style={{ borderRadius: "15px", marginBottom: "10px" }}
         />
       </div>
 
       <div>
-        <h3 className="mt-5">
-          Received a code from your teacher or friend? <br /> Use it here to
-          join the quiz instantly.
+        <h3 className="mt-5" style={{ marginLeft: "60px" }}>
+          Received a code from a known? <br />
+          <br /> Use it here to join the quiz instantly.
         </h3>
 
         <br />
@@ -59,12 +59,12 @@ const QuizCode = () => {
             padding: "10px",
           }}
         />
-        <button
-          disabled={!isValidCode}
-          style={joinButtonStyle}
-        >
+        <button disabled={!isValidCode} style={joinButtonStyle}>
           Join Quiz
-        <FontAwesomeIcon icon={faUpRightFromSquare} style={{ marginLeft: "10px" }}/>
+          <FontAwesomeIcon
+            icon={faUpRightFromSquare}
+            style={{ marginLeft: "10px" }}
+          />
         </button>
       </div>
     </div>

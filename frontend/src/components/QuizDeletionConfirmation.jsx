@@ -1,65 +1,96 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { BACKEND_URL } from "../assets/constants.js";
+import { useEffect } from "react";
 
-const QuizDeletionConfirmation = ({ quizTitle = "Untitled Quiz", onDelete }) => {
+const QuizDeletionConfirmation = () => {
   const navigate = useNavigate();
 
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state == null) {
+      alert("Page not available");
+      navigate("/");
+    }
+  }, [location.state, navigate]);
+
+  if (location.state == null) return null;
+
+  const { quizId } = location.state;
+
   const containerStyle = {
-  minHeight: "81vh",
-  backgroundColor: "#f9f9f9",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-};
+    minHeight: "81vh",
+    backgroundColor: "#f9f9f9",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  };
 
-const cardStyle = {
-  backgroundColor: "#fff",
-  padding: "40px",
-  borderRadius: "12px",
-  boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-  maxWidth: "500px",
-  width: "90%",
-  textAlign: "center",
-};
+  const cardStyle = {
+    backgroundColor: "#fff",
+    padding: "40px",
+    borderRadius: "12px",
+    boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+    maxWidth: "500px",
+    width: "90%",
+    textAlign: "center",
+  };
 
-const headingStyle = {
-  fontSize: "24px",
-  marginBottom: "20px",
-  color: "#d32f2f",
-};
+  const headingStyle = {
+    fontSize: "24px",
+    marginBottom: "20px",
+    color: "#d32f2f",
+  };
 
-const descriptionStyle = {
-  fontSize: "16px",
-  color: "#555",
-  marginBottom: "30px",
-};
+  const descriptionStyle = {
+    fontSize: "16px",
+    color: "#555",
+    marginBottom: "30px",
+  };
 
-const buttonContainerStyle = {
-  display: "flex",
-  justifyContent: "space-around",
-};
+  const buttonContainerStyle = {
+    display: "flex",
+    justifyContent: "space-around",
+  };
 
-const cancelButtonStyle = {
-  padding: "10px 20px",
-  backgroundColor: "var(--clr-primary)",
-  border: "none",
-  borderRadius: "6px",
-  fontWeight: "bold",
-  cursor: "pointer",
-};
+  const cancelButtonStyle = {
+    padding: "10px 20px",
+    backgroundColor: "var(--clr-primary)",
+    border: "none",
+    borderRadius: "6px",
+    fontWeight: "bold",
+    cursor: "pointer",
+  };
 
-const deleteButtonStyle = {
-  padding: "10px 20px",
-  backgroundColor: "var(--clr-accent)",
-  color: "white",
-  border: "none",
-  borderRadius: "6px",
-  fontWeight: "bold",
-  cursor: "pointer",
-};
-
+  const deleteButtonStyle = {
+    padding: "10px 20px",
+    backgroundColor: "var(--clr-accent)",
+    color: "white",
+    border: "none",
+    borderRadius: "6px",
+    fontWeight: "bold",
+    cursor: "pointer",
+  };
 
   const handleCancel = () => {
-    navigate(-1); 
+    navigate("/quizzes/all");
+  };
+
+  const handleDelete = async () => {
+    try {
+      const response = await axios.delete(`${BACKEND_URL}/quizzes`, {
+        params: { quizId },
+        withCredentials: true,
+      });
+
+      if (response?.status == 200) {
+        alert(response?.data?.message);
+      }
+    } catch (error) {
+      alert(error.response?.data?.message);
+    }
+
+    navigate("/quizzes/all");
   };
 
   return (
@@ -75,7 +106,7 @@ const deleteButtonStyle = {
           <button style={cancelButtonStyle} onClick={handleCancel}>
             Cancel
           </button>
-          <button style={deleteButtonStyle} onClick={handleConfirm}>
+          <button style={deleteButtonStyle} onClick={handleDelete}>
             Yes, Delete
           </button>
         </div>

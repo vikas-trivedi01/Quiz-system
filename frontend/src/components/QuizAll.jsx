@@ -39,6 +39,7 @@ const QuizAll = () => {
                 createdBy={quiz.creator.userName}
                 questions={quiz.questions}
                 isAdmin={true}
+                quizId={quiz._id}
               />
             );
           })}

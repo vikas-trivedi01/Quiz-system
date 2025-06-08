@@ -21,7 +21,7 @@ const createQuiz = asyncErrorHandler(async (req, res) => {
     });
 
     if (existedQuiz)
-         return res.status(400).json(new ApiError("Quiz already exists", 400));
+        return res.status(400).json(new ApiError("Quiz already exists", 400));
 
     const creator = req.user?._id;
 
@@ -55,34 +55,58 @@ const createQuiz = asyncErrorHandler(async (req, res) => {
 
 
     return res.status(201)
-        .json(new ApiResponse({}, "Quiz created successfully", 201));
+        .json(new ApiResponse("Quiz created successfully", 201));
 
 });
 
 const getAllQuizzes = asyncErrorHandler(async (req, res) => {
-    
+
     const creator = req.user?._id;
-    
-    if(creator) {
+
+    if (creator) {
         let quizzes = await Quiz.find({
             creator
         }).populate("creator", "-fullName -email -age -password -accessToken -refreshToken -role -quizzesAttempted -createdAt -updatedAt -__v -_id")
-        .populate("questions", "-createdAt -updatedAt -__v -_id");
-        
-        if(quizzes) {
+            .populate("questions", "-createdAt -updatedAt -__v -_id");
+
+        if (quizzes) {
             return res.status(200)
-            .json(new ApiResponse(quizzes, "All quizzes fetched successfully", 200));
+                .json(new ApiResponse(quizzes, "All quizzes fetched successfully", 200));
         } else {
             return res.status(404)
-            .json(new ApiError("No quizzes found", 404));
+                .json(new ApiError("No quizzes found", 404));
         }
     } else {
         return res.status(401)
-        .json(new ApiError("Not authorized", 401));
+            .json(new ApiError("Not authorized", 401));
     }
 });
 
+const deleteQuiz = asyncErrorHandler(async (req, res) => {
+
+    const quizId = req.params.id;
+
+    if (!quizId)
+        return res.status(400).json(new ApiError("Quiz ID is required", 400));
+
+    const quiz = await Quiz.findById(quizId).select("creator");
+
+    if (!quiz)
+        return res.status(404).json(new ApiError("Quiz not found", 404));
+
+    if (quiz.creator.toString() !== req.user._id.toString())
+        return res.status(403).json(new ApiError("You are not authorized to delete this quiz", 403));
+
+    
+    await quiz.deleteOne();
+
+    return res.status(200)
+        .json(new ApiResponse("Quiz deleted successfully", 200));
+});
+
+
 export {
     createQuiz,
-    getAllQuizzes
+    getAllQuizzes,
+    deleteQuiz
 }

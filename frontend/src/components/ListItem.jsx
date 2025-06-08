@@ -90,13 +90,23 @@ const ListItem = ({
           category,
           difficulty,
           numberOfQuestions,
-          isAdmin
+          isAdmin,
+          quizId
         },
       });
 
     }
 
   };
+
+  const deleteQuiz = () => {
+
+    navigate("/delete", {
+      state: {
+        quizId
+      }
+    })
+  }
 
 
   return (

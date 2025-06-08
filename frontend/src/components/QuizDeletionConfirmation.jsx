@@ -2,6 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { BACKEND_URL } from "../assets/constants.js";
 import { useEffect } from "react";
 import { refreshAccessToken } from "../assets/tokens.js";
+import axios from "axios";
 
 const QuizDeletionConfirmation = () => {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ const QuizDeletionConfirmation = () => {
 
   if (location.state == null) return null;
 
-  const { quizId } = location.state;
+  const { quizId, quizName } = location.state;
 
   const containerStyle = {
     minHeight: "81vh",
@@ -79,11 +80,11 @@ const QuizDeletionConfirmation = () => {
 
   const handleDelete = async () => {
     try {
-      const response = await axios.delete(`${BACKEND_URL}/quizzes`, {
-        params: { quizId },
+      const response = await axios.delete(`${BACKEND_URL}/quizzes/${quizId}`, {
         withCredentials: true,
       });
 
+   
       if (response?.status == 200) {
         alert(response?.data?.message);
       }
@@ -101,7 +102,7 @@ const QuizDeletionConfirmation = () => {
       }
     }
 
-    navigate("/quizzes/all");
+    navigate("/quizzes/allquizzes");
   };
 
   return (
@@ -109,7 +110,7 @@ const QuizDeletionConfirmation = () => {
       <div style={cardStyle}>
         <h2 style={headingStyle}>Are you sure you want to delete this quiz?</h2>
         <p style={descriptionStyle}>
-          <strong>{quizTitle}</strong> will be permanently removed. This action
+          <strong>{quizName}</strong> will be permanently removed. This action
           cannot be undone.
         </p>
 

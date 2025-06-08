@@ -48,13 +48,14 @@ export const optionStyle = {
 };
 
 export const createHeadingStyle = {
-    marginRight: "40px",
-    backgroundColor: `var(--clr-accent)`,
+    marginLeft: "100px",
+    marginRight: "50px",
+    backgroundColor: "#000",
     padding: "20px",
     borderRadius: `var(--border-radius)`,
-    width: "37em",
+    width: "42.5em",
+    color: "#fff",
     height: "max-content",
-    marginBottom: "37px"
 };
 
 export const createQuizNameStyle = {

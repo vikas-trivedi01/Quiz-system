@@ -17,6 +17,7 @@ const ListItem = ({
   createdBy,
   questions,
   isAdmin,
+  quizId
 }) => {
   const navigate = useNavigate();
 
@@ -99,9 +100,10 @@ const ListItem = ({
   };
 
   const deleteQuiz = () => {
-    navigate("/delete", {
+    navigate("/quizzes/delete", {
       state: {
         quizId,
+        quizName
       },
     });
   };

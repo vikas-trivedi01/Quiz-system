@@ -89,7 +89,7 @@ const deleteQuiz = asyncErrorHandler(async (req, res) => {
     if (!quizId)
         return res.status(400).json(new ApiError("Quiz ID is required", 400));
 
-    const quiz = await Quiz.findById(quizId).select("creator");
+    const quiz = await Quiz.findById(quizId);
 
     if (!quiz)
         return res.status(404).json(new ApiError("Quiz not found", 404));
@@ -101,7 +101,7 @@ const deleteQuiz = asyncErrorHandler(async (req, res) => {
     await quiz.deleteOne();
 
     return res.status(200)
-        .json(new ApiResponse("Quiz deleted successfully", 200));
+        .json(new ApiResponse({}, "Quiz deleted successfully", 200));
 });
 
 

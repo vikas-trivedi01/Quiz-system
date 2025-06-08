@@ -9,7 +9,7 @@ import {
   inputStyle,
   labelStyle,
 } from "../assets/quizElementsStyles.js";
-import professorImg from "../assets/illustrations/professor.png";
+import professorImg from "../assets/illustrations/professor.jpg";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faXmark } from "@fortawesome/free-solid-svg-icons";
@@ -144,17 +144,19 @@ const QuizCreate = () => {
 
   return (
     <>
-      <div className="d-flex align-items-center">
+      <div>
         <img
           src={professorImg}
           alt="Professor illustration"
-          width={900}
-          height={400}
+          width={660}
+          height={465}
+          style={{ marginLeft: "300px", border: "2px solid #000", borderRadius: `var(--border-radius)`}}
+          className="mb-5"
         />
-        <h3 style={createHeadingStyle}>
+        <h4 style={createHeadingStyle} className="text-center">
           Build quizzes your way — <br /> <br />
           Add questions, and options in seconds all in one spot!
-        </h3>
+        </h4>
       </div>
 
       <div style={{ marginLeft: "350px" }} className="mt-5">
@@ -171,7 +173,7 @@ const QuizCreate = () => {
           />
         </div>
       </div>
-      
+
       <div className="text-center">
         {!quizDetailsShown ? (
           <button
@@ -196,47 +198,44 @@ const QuizCreate = () => {
         ref={quizDetailsRef}
         style={{ display: `${quizDetailsShown ? "block" : "none"}` }}
       >
-        <div className="mt-4">
-          <div>
-            <div className="row m-5">
-              <div className="col-6">
-                <label style={labelStyle}>Marks per Question:</label>
-                <input
-                  type="number"
-                  min={1}
-                  value={eachQuestionMarks}
-                  onChange={(e) => setEachQuestionMarks(Number(e.target.value))}
-                  style={inputStyle}
-                />
-              </div>
-
-              <div className="col-6">
-                <label style={labelStyle}>Category:</label>
-                <input
-                  type="text"
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                  style={inputStyle}
-                />
-              </div>
+        <div className="mt-4 d-flex justify-content-center">
+          <div style={{ maxWidth: '400px', width: '100%' }}>
+            <div className="mb-4">
+              <label style={labelStyle}>Marks per Question:</label>
+              <input
+                type="number"
+                min={1}
+                value={eachQuestionMarks}
+                onChange={(e) => setEachQuestionMarks(Number(e.target.value))}
+                style={inputStyle}
+              />
             </div>
 
-            <div className="row m-5">
-              <div className="col-6">
-                <label style={labelStyle}>Difficulty:</label>
-                <select
-                  value={difficulty}
-                  onChange={(e) => setDifficulty(e.target.value)}
-                  style={{ ...inputStyle, height: "40px" }}
-                >
-                  <option value="easy">Easy</option>
-                  <option value="medium">Medium</option>
-                  <option value="hard">Hard</option>
-                </select>
-              </div>
+            <div className="mb-4">
+              <label style={labelStyle}>Category:</label>
+              <input
+                type="text"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                style={inputStyle}
+              />
+            </div>
+
+            <div className="mb-4">
+              <label style={labelStyle}>Difficulty:</label>
+              <select
+                value={difficulty}
+                onChange={(e) => setDifficulty(e.target.value)}
+                style={{ ...inputStyle, height: "40px" }}
+              >
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+              </select>
             </div>
           </div>
         </div>
+
       </div>
 
       <div className="d-flex" style={{ margin: "80px" }}>
@@ -321,7 +320,7 @@ const QuizCreate = () => {
                   style={{
                     fontSize: "32px",
                     cursor: "pointer",
-                    color: "red",
+                    marginBottom: "20px"
                   }}
                   onClick={() => handleDelete(index)}
                 >

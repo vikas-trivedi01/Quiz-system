@@ -6,7 +6,6 @@ import {
   faChevronDown,
   faChevronUp,
   faRectangleList,
-  faSquareCheck,
   faSquarePlus,
   faTerminal,
 } from "@fortawesome/free-solid-svg-icons";
@@ -101,7 +100,7 @@ const Navbar = () => {
                   to="/quizzes/quizcode"
                   className="dropdown-item bg-light text-dark mb-3 mb-3"
                 >
-                  Join via code{" "}
+                  Join Via Code{" "}
                   <FontAwesomeIcon icon={faTerminal} className="ms-3" />
                 </NavLink>
 
@@ -109,7 +108,7 @@ const Navbar = () => {
                   to="/quizzes/quizlist"
                   className="dropdown-item bg-light text-dark mb-3"
                 >
-                  Join from list{" "}
+                  Join From List{" "}
                   <FontAwesomeIcon icon={faRectangleList} className="ms-3" />
                 </NavLink>
               </>
@@ -119,16 +118,16 @@ const Navbar = () => {
                   to="/quizzes/create"
                   className="dropdown-item bg-light text-dark mb-3"
                 >
-                  Create quiz{" "}
+                  Create Quiz{" "}
                   <FontAwesomeIcon icon={faSquarePlus} className="ms-4" />
                 </NavLink>
 
                 <NavLink
-                  to="/quizzes/preview"
+                  to="/quizzes/allquizzes"
                   className="dropdown-item bg-light text-dark"
                 >
-                  Preview quiz{" "}
-                  <FontAwesomeIcon icon={faSquareCheck} className="ms-3" />
+                  My Quizzes{" "}
+                  <FontAwesomeIcon icon={faRectangleList} className="ms-4" />
                 </NavLink>
               </>
             )}

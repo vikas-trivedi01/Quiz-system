@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faTrash,
   faUpRightFromSquare,
+  faFilePen
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 
@@ -36,7 +37,7 @@ const ListItem = ({
     width: "200px",
   };
 
-  const viewQuestionsButtonStyle = {
+  const editQuestionsButtonStyle = {
     backgroundColor: "var(--clr-primary)",
     color: "#fff",
     borderRadius: "var(--border-radius)",
@@ -81,19 +82,13 @@ const ListItem = ({
     margin: "10px",
   };
 
-  const viewQuestions = () => {
+  const editQuestions = () => {
     if (isAdmin) {
-      navigate("/quizzes/preview", {
+      navigate("/quizzes/edit/questions", {
         state: {
           questions,
           quizName,
-          totalMarks,
-          eachQuestionMarks,
-          category,
-          difficulty,
-          numberOfQuestions,
-          isAdmin,
-          quizId,
+          quizId
         },
       });
     }
@@ -143,11 +138,11 @@ const ListItem = ({
             }}
           >
             <button
-              style={viewQuestionsButtonStyle}
-              title="View Question"
-              onClick={() => viewQuestions()}
+              style={editQuestionsButtonStyle}
+              title="Edit Question"
+              onClick={() => editQuestions()}
             >
-              <FontAwesomeIcon icon={faUpRightFromSquare} />
+              <FontAwesomeIcon icon={faFilePen} />
             </button>
             <button
               style={deleteQuizButtonStyle}
@@ -210,7 +205,7 @@ const ListItem = ({
 
         <div style={itemBox}>
           <div style={labelStyle}>Created By</div>
-          <div style={valueStyle}>{createdBy}</div>
+          <div style={valueStyle}>{createdBy} {isAdmin ? "(You)" : null}</div>
         </div>
       </div>
     </div>

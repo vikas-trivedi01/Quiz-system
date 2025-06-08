@@ -152,7 +152,7 @@ const QuizPreview = () => {
                   className="py-1 px-1 flex-wrap ms-5"
                   style={{ display: "flex", gap: "20px" }}
                 >
-                  {question.options.map((option, optIndex) => (
+                  {question.options.map((optionObj, optIndex) => (
                     <div
                       key={optIndex}
                       className="d-flex align-items-center"
@@ -164,7 +164,7 @@ const QuizPreview = () => {
                       <h4
                         className="w-100 p-2"
                         style={
-                          option.isCorrect
+                          optionObj.isCorrect
                             ? {
                                 backgroundColor: "#98f5e1",
                                 borderRadius: "6px",
@@ -173,7 +173,7 @@ const QuizPreview = () => {
                             : { border: "none" }
                         }
                       >
-                        {option.option}
+                        {optionObj.option}
                       </h4>
                     </div>
                   ))}

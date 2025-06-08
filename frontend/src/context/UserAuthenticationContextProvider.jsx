@@ -3,7 +3,7 @@ import UserContext from "./UserContext.js";
 
 const UserAuthenticationContextProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [role, setRole] = useState("user");
+  const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

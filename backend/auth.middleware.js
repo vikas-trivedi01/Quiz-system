@@ -22,7 +22,10 @@ export const authenticateRequest = asyncErrorHandler( async (req, res, next) => 
         next();
             
     } catch (error) {
-         throw new ApiError(error?.message || "Invalid access token", 401);
+        if(error.name === "TokenExpiredError")
+            return res.status(401).json(new ApiError("Access token expired", 401));
+        
+         return res.status(401).json(new ApiError(error?.message || "Invalid access token", 401));
     }
     
 });

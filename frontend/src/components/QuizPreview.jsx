@@ -8,6 +8,7 @@ import {
 import { BACKEND_URL } from "../assets/constants.js";
 
 import axios from "axios";
+import { refreshAccessToken } from "../assets/tokens.js";
 
 const QuizPreview = () => {
   const location = useLocation();
@@ -64,11 +65,20 @@ const QuizPreview = () => {
         navigate("/quizzes/allquizzes");
       }
       } catch (error) {
-        alert(`Error: ${error.message}`);
+         if(error?.response?.status == 401) {
+                 try {
+                    await refreshAccessToken();
+                    await createQuiz();
+                 } catch (refreshError) {
+                    alert("Please login again");
+                    navigate("/users/login");
+                 }
+                } else {
+                  alert(error?.response?.data?.message);
+                }
+              }
       } 
     
-    };
-
   return (
     <>
       <div

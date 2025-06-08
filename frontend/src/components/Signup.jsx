@@ -68,7 +68,7 @@ const Signup = () => {
         navigate("/");
       }
       } catch (error) {
-        alert(`Error: ${error.message}`);
+        alert(`Error: ${error?.response?.data?.message}`);
       }
     }
   };

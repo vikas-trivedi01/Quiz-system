@@ -2,19 +2,37 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { BACKEND_URL } from "../assets/constants.js";
 import ListItem from "./ListItem";
+import { refreshAccessToken } from "../assets/tokens.js";
+import { useNavigate } from "react-router-dom";
 
 const QuizAll = () => {
   const [quizzes, setQuizzes] = useState([]);
   const [areQuizzesFetched, setAreQuizzesFetched] = useState(false);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const getQuizzes = async () => {
-      const response = await axios.get(`${BACKEND_URL}/quizzes`, {
-        withCredentials: true,
-      });
+      try {
+        const response = await axios.get(`${BACKEND_URL}/quizzes`, {
+          withCredentials: true,
+        });
 
-      setQuizzes(response.data.data);
-      setAreQuizzesFetched(true);
+        setQuizzes(response?.data?.data);
+        setAreQuizzesFetched(true);
+      } catch (error) {
+        if(error?.response?.status == 401) {
+         try {
+            await refreshAccessToken();
+            await getQuizzes();
+         } catch (refreshError) {
+            alert("Please login again");
+            navigate("/users/login");
+         }
+        } else {
+          alert(error?.response?.data?.message);
+        }
+      }
     };
 
     getQuizzes();

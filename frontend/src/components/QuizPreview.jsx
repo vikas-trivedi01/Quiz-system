@@ -32,8 +32,8 @@ const QuizPreview = () => {
     category,
     difficulty,
     questions,
+    isAdmin
   } = location.state;
-
   const [optionsShown, setOptionsShown] = useState({});
 
   const toggleOptionsVisible = (index) => {
@@ -80,14 +80,32 @@ const QuizPreview = () => {
           margin: "40px 10px 40px 272px",
         }}
       >
-        <h2 className="mb-4">Ready to Launch?</h2>
-        <p className="mb-6">
-          Here's how your quiz will appear. Double-check your questions and
-          options!
-        </p>
+       
+       {
+        isAdmin ? (
+          <>
+            <h2 className="mb-4">Your Quiz Questions</h2>
+            <p className="mb-6">
+              Here's a preview of your quiz questions and options. Review everything
+              carefully before sharing the quiz!
+            </p>
+          </>
+        ) : (
+          <>
+            <h2 className="mb-4">Ready to Launch?</h2>
+            <p className="mb-6">
+              Here's how your quiz will appear. Double-check your questions and
+              options!
+            </p>
+          </>
+        )
+      }
+
       </div>
 
       <div>
+        <h3 className="text-center">Quiz: {quizName}</h3>
+        
         {questions.map((question, index) => {
           const isShown = optionsShown[index];
           return (

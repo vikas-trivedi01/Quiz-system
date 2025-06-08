@@ -15,7 +15,6 @@ const QuizAll = () => {
 
       setQuizzes(response.data.data);
       setAreQuizzesFetched(true);
-      console.log(response);
     };
 
     getQuizzes();
@@ -38,6 +37,8 @@ const QuizAll = () => {
                 difficulty={quiz.difficulty}
                 status={quiz.status}
                 createdBy={quiz.creator.userName}
+                questions={quiz.questions}
+                isAdmin={true}
               />
             );
           })}

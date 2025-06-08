@@ -66,8 +66,9 @@ const getAllQuizzes = asyncErrorHandler(async (req, res) => {
     if(creator) {
         let quizzes = await Quiz.find({
             creator
-        }).populate("creator", "-fullName -email -age -password -accessToken -refreshToken -role -quizzesAttempted -createdAt -updatedAt -__v -_id");
-
+        }).populate("creator", "-fullName -email -age -password -accessToken -refreshToken -role -quizzesAttempted -createdAt -updatedAt -__v -_id")
+        .populate("questions", "-createdAt -updatedAt -__v -_id");
+        
         if(quizzes) {
             return res.status(200)
             .json(new ApiResponse(quizzes, "All quizzes fetched successfully", 200));

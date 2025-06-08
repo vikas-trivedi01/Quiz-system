@@ -1,6 +1,8 @@
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+import "../styles/variables.css";
+
 const About = () => {
   return (
     <div
@@ -31,23 +33,54 @@ const About = () => {
         structured learning, and continuous growth.
       </p>
 
-      <h3 className="mt-4" style={{ color: "#333" }}>What We Offer</h3>
-      <ul style={{ paddingLeft: "1.2rem" }}>
-        <li> <FontAwesomeIcon icon={faCircleCheck} style={{ marginRight: "10px",fontSize: "20px" }}/> Easy quiz creation with multiple questions & options</li>
-        <li> <FontAwesomeIcon icon={faCircleCheck} style={{ marginRight: "10px",fontSize: "20px" }}/> Custom scoring: total marks & per-question marks</li>
-        <li> <FontAwesomeIcon icon={faCircleCheck} style={{ marginRight: "10px",fontSize: "20px" }}/> Difficulty levels: Easy, Medium, Hard</li>
-        <li> <FontAwesomeIcon icon={faCircleCheck} style={{ marginRight: "10px",fontSize: "20px" }}/> Organized by categories</li>
-        <li> <FontAwesomeIcon icon={faCircleCheck} style={{ marginRight: "10px",fontSize: "20px" }}/> Quiz preview before publishing</li>
-        <li> <FontAwesomeIcon icon={faCircleCheck} style={{ marginRight: "10px",fontSize: "20px" }}/> Secure login with authentication</li>
-      </ul>
+     <h3 className="mt-4" style={{ color: "#333", fontSize: "1.6rem" }}>What We Offer</h3>
+<ul style={{ paddingLeft: "0", listStyle: "none" }}>
+  <li style={{ display: "flex", alignItems: "center", fontSize: "1.1rem", marginBottom: "0.5rem", color: "#333" }}>
+    <FontAwesomeIcon icon={faCircleCheck} style={{ marginRight: "10px", fontSize: "22px", color: "var(--clr-primary)" }} />
+    Easy quiz creation with multiple questions & options
+  </li>
+  <li style={{ display: "flex", alignItems: "center", fontSize: "1.1rem", marginBottom: "0.5rem", color: "#333" }}>
+    <FontAwesomeIcon icon={faCircleCheck} style={{ marginRight: "10px", fontSize: "22px", color: "var(--clr-primary)" }} />
+    Custom scoring: total marks & per-question marks
+  </li>
+  <li style={{ display: "flex", alignItems: "center", fontSize: "1.1rem", marginBottom: "0.5rem", color: "#333" }}>
+    <FontAwesomeIcon icon={faCircleCheck} style={{ marginRight: "10px", fontSize: "22px", color: "var(--clr-primary)" }} />
+    Difficulty levels: Easy, Medium, Hard
+  </li>
+  <li style={{ display: "flex", alignItems: "center", fontSize: "1.1rem", marginBottom: "0.5rem", color: "#333" }}>
+    <FontAwesomeIcon icon={faCircleCheck} style={{ marginRight: "10px", fontSize: "22px", color: "var(--clr-primary)" }} />
+    Organized by categories
+  </li>
+  <li style={{ display: "flex", alignItems: "center", fontSize: "1.1rem", marginBottom: "0.5rem", color: "#333" }}>
+    <FontAwesomeIcon icon={faCircleCheck} style={{ marginRight: "10px", fontSize: "22px", color: "var(--clr-primary)" }} />
+    Quiz preview before publishing
+  </li>
+  <li style={{ display: "flex", alignItems: "center", fontSize: "1.1rem", marginBottom: "0.5rem", color: "#333" }}>
+    <FontAwesomeIcon icon={faCircleCheck} style={{ marginRight: "10px", fontSize: "22px", color: "var(--clr-primary)" }} />
+    Secure login with authentication
+  </li>
+</ul>
 
-      <h3 className="mt-4" style={{ color: "#333" }}>Why Choose Us?</h3>
-      <ul style={{ paddingLeft: "1.2rem" }}>
-        <li> <FontAwesomeIcon icon={faCircleCheck} style={{ marginRight: "10px",fontSize: "20px" }}/> Clean and user-friendly interface</li>
-        <li> <FontAwesomeIcon icon={faCircleCheck} style={{ marginRight: "10px",fontSize: "20px" }}/> Powerful backend and scalable structure</li>
-        <li> <FontAwesomeIcon icon={faCircleCheck} style={{ marginRight: "10px",fontSize: "20px" }}/> Real-time feedback & publishing control</li>
-        <li> <FontAwesomeIcon icon={faCircleCheck} style={{ marginRight: "10px",fontSize: "20px" }}/> Ideal for schools, colleges, and corporate use</li>
-      </ul>
+<h3 className="mt-4" style={{ color: "#333", fontSize: "1.6rem" }}>Why Choose Us?</h3>
+<ul style={{ paddingLeft: "0", listStyle: "none" }}>
+  <li style={{ display: "flex", alignItems: "center", fontSize: "1.1rem", marginBottom: "0.5rem", color: "#333" }}>
+    <FontAwesomeIcon icon={faCircleCheck} style={{ marginRight: "10px", fontSize: "22px", color: "var(--clr-primary)" }} />
+    Clean and user-friendly interface
+  </li>
+  <li style={{ display: "flex", alignItems: "center", fontSize: "1.1rem", marginBottom: "0.5rem", color: "#333" }}>
+    <FontAwesomeIcon icon={faCircleCheck} style={{ marginRight: "10px", fontSize: "22px", color: "var(--clr-primary)" }} />
+    Powerful backend and scalable structure
+  </li>
+  <li style={{ display: "flex", alignItems: "center", fontSize: "1.1rem", marginBottom: "0.5rem", color: "#333" }}>
+    <FontAwesomeIcon icon={faCircleCheck} style={{ marginRight: "10px", fontSize: "22px", color: "var(--clr-primary)" }} />
+    Real-time feedback & publishing control
+  </li>
+  <li style={{ display: "flex", alignItems: "center", fontSize: "1.1rem", marginBottom: "0.5rem", color: "#333" }}>
+    <FontAwesomeIcon icon={faCircleCheck} style={{ marginRight: "10px", fontSize: "22px", color: "var(--clr-primary)" }} />
+    Ideal for schools, colleges, and corporate use
+  </li>
+</ul>
+
 
 
       <p className="mt-4">

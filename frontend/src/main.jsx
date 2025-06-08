@@ -12,6 +12,7 @@ import Home from "./components/Home";
 import Layout from "./components/Layout";
 import Terms from "./components/Terms";
 import Privacy from "./components/Privacy";
+import About from "./components/About";
 
 import QuizCode from "./components/QuizCode";
 import QuizList from "./components/QuizList";
@@ -20,12 +21,14 @@ import QuizReview from "./components/QuizReview";
 import QuizCreate from "./components/QuizCreate";
 import QuizPreview from "./components/QuizPreview";
 import QuizAll from "./components/QuizAll";
+import QuizDeletionConfirmation from "./components/QuizDeletionConfirmation";
 
 import Signup from "./components/SignUp";
 import Login from "./components/Login";
 
 import UserAuthenticationContextProvider from "./context/UserAuthenticationContextProvider";
 import ProtectedRoute from "./ProtectedRoute";
+
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -34,13 +37,28 @@ const router = createBrowserRouter(
         <Route path="signup" element={<Signup />} />
         <Route path="login" element={<Login />} />
       </Route>
+      <Route
+        path="unauthorized"
+        element={
+                 <div style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100vh",
+                  textAlign: "center"
+                }}>
+                  <h1>403 - Not Authorized</h1>
+                  <button type="button" onClick={() => window.location.href = "/"} style={{width: "300px"}}>
+                    Back to Home
+                  </button>
+                </div>
+
+                }
+      />
 
     <Route path="/" element={<Layout />}>
       <Route path="" element={<Home />} />
-      <Route
-        path="unauthorized"
-        element={<h1 className="text-center">403 - Not Authorized</h1>}
-      />
 
       <Route path="quizzes">
           <Route
@@ -103,10 +121,20 @@ const router = createBrowserRouter(
               </ProtectedRoute>
             }
           />
+
+          <Route
+            path="delete"
+            element={
+              <ProtectedRoute requiredRole="admin">
+                <QuizDeletionConfirmation />
+              </ProtectedRoute>
+            }
+          />
       </Route>
 
       <Route path="terms" element={<Terms />} />
       <Route path="privacy" element={<Privacy />} />
+      <Route path="about" element={<About />} />
     </Route>
 </>
   )

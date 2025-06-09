@@ -52,7 +52,7 @@ const createQuiz = asyncErrorHandler(async (req, res) => {
     quiz.questions = questionIds;
 
     await quiz.save();
-
+    
 
     return res.status(201)
         .json(new ApiResponse("Quiz created successfully", 201));
@@ -102,11 +102,54 @@ const deleteQuiz = asyncErrorHandler(async (req, res) => {
 
     return res.status(200)
         .json(new ApiResponse({}, "Quiz deleted successfully", 200));
-});
+    });
+    
+const editQuizQuestions = asyncErrorHandler(async (req, res) => {
+    const quizId = req.params.id;
+    
+    if (!quizId)
+        return res.status(400).json(new ApiError("Quiz ID is required", 400));
+    
+    const quiz = await Quiz.findById(quizId);
+    
+    if (!quiz)
+        return res.status(404).json(new ApiError("Quiz not found", 404));
 
+    if (quiz.creator.toString() !== req.user._id.toString())
+        return res.status(403).json(new ApiError("You are not authorized to edit questions of this quiz", 403));
+
+    
+    const { questions } = req.body;
+    if(!questions)
+        return res.status(400).json(new ApiError("Quiz questions are required to edit quiz", 400));
+
+    quiz.questions = [];
+
+    await Question.deleteMany({
+        quiz: quiz?._id
+    })
+
+    const questionIds = [];
+    
+    for (const question of questions) {
+        const insertedQuestion = await Question.insertOne({
+            ...question
+        });
+        //  quiz: quiz._id, already present in question object
+    
+        questionIds.push(insertedQuestion._id);
+    }
+    
+    quiz.questions = questionIds;
+    await quiz.save();
+    
+    return res.status(200)
+        .json(new ApiResponse({}, "Quiz's questions edited successfully", 200));
+});
 
 export {
     createQuiz,
     getAllQuizzes,
-    deleteQuiz
+    deleteQuiz,
+    editQuizQuestions,
 }

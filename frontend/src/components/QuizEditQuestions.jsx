@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CreateOptionNumberStyle, previewOptionsStyle } from "../assets/quizElementsStyles.js";
 
+import axios from "axios";
+import { BACKEND_URL } from "../assets/constants.js";
+import { refreshAccessToken } from "../assets/tokens.js";
+
 const QuizEditQuestions = () => {
 
    const navigate = useNavigate();
@@ -23,9 +27,6 @@ const QuizEditQuestions = () => {
   const [optionsShown, setOptionsShown] = useState({});
   const [editedQuestions, setEditedQuestions] = useState(questions);
 
-  console.log(questions);
-
-
   const toggleOptionsVisible = (index) => {
     setIsShown(prev => !prev);
 
@@ -35,11 +36,73 @@ const QuizEditQuestions = () => {
     }));
   };
 
-  const handleQuestionChange = (index, question) => {
-    setEditedQuestions(prev => {
-      [...prev, prev[index].question = question]
-    });
-  }
+  const handleQuestionChange = (index, newQuestion) => {
+  setEditedQuestions(prev =>
+    prev.map((q, i) => i === index ? { ...q, question: newQuestion } : q)
+  );
+};
+
+const handleOptionChange = (questionIndex, optVal) => {
+  setEditedQuestions(prev => (
+    prev.map((q, i) => {
+      if(i !== questionIndex) return q;
+
+      const updatedOptions = q.options.map( opt => ({
+         ...opt, option: optVal
+      }))
+
+      return { ...q, options: updatedOptions };
+    })
+  ))
+};
+
+    const handleCorrectOptionChange = (questionIndex, optionIndex) => {
+      setEditedQuestions(prev =>
+        (
+          prev.map((q, i) => {
+            if (i !== questionIndex) return q;
+
+            const updatedOptions = q.options.map((opt, idx) => ({
+              ...opt,
+              isCorrect: idx === optionIndex,
+            }));
+
+            return { ...q, options: updatedOptions };
+          })
+        )
+      )
+  };
+
+  const saveEditedQuestions = async () => {
+    
+    try {
+      const response = await axios.put(`${BACKEND_URL}/quizzes/questions/${quizId}`,
+        {
+          questions: editedQuestions,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      if (response.data.statusCode == 200) {
+        alert(response.data.message);
+        navigate("/quizzes/allquizzes");
+      }
+
+    } catch (error) {
+      if (error?.response?.status == 401) {
+        try {
+          await refreshAccessToken();
+          await saveEditedQuestions();
+        } catch (refreshError) {
+          alert("Please login again");
+          navigate("/users/login");
+        }
+      } else {
+        alert(error?.message);
+      }
+    }
+  };
 
   return (
       <>
@@ -50,10 +113,10 @@ const QuizEditQuestions = () => {
             </p>
          </div>
 
-          <h3 className="text-center mt-5">Quiz: {quizName}</h3>
+          <h3 className="mt-5" style={{ marginLeft: "19.2em" }}>Quiz: {quizName}</h3>
 
             {
-               questions.map((questionObj, index) => {
+               editedQuestions.map((questionObj, index) => {
                 return (
                    <div
                       key={index}
@@ -87,7 +150,7 @@ const QuizEditQuestions = () => {
                      {isShown && (
                                     <div
                                       className="py-1 px-1 d-flex flex-wrap align-items-center"
-                                      style={{ gap: "30px", marginLeft: "137px" }}
+                                      style={{ gap: "10px", marginLeft: "137px" }}
                                     >
                                       {questionObj.options.map((optionObj, optIndex) => (
                                         <div
@@ -99,7 +162,7 @@ const QuizEditQuestions = () => {
                                             {optIndex + 1}
                                           </span>
                                           <input
-                                            className="w-100 p-2"
+                                            className="w-100 p-2 mt-2"
                                             type="text"
                                             defaultValue={optionObj.option}
                                             style={
@@ -111,8 +174,9 @@ const QuizEditQuestions = () => {
                                                   }
                                                 : { border: "none" }
                                             }
+                                            onChange={e => handleOptionChange(index, e.target.value)}
                                           />
-                                          <input type="radio" name={`${index}-option`} style={{ height: "30px", width: "30px" }}/>
+                                          <input type="radio" name={`${index}-option`} style={{ height: "30px", width: "30px"}} defaultChecked={optionObj.isCorrect ? true : false} className="mt-3" onClick={() => handleCorrectOptionChange(index, optIndex)}/>
                                         </div>
                                       ))}
                                       </div>
@@ -121,6 +185,26 @@ const QuizEditQuestions = () => {
             )
             })
           }
+
+           <div>
+              <button
+                style={{
+                  backgroundColor: "#004e89",
+                  color: "#fff",
+                  borderRadius: "var(--border-radius)",
+                  padding: "8px",
+                  width: "200px",
+                  border: "none",
+                  cursor: "pointer",
+                  marginLeft: "29em",
+                  fontSize: "18px",
+                }}
+                onClick={saveEditedQuestions}
+                className="mb-4"
+              >
+                Save Changes
+              </button>
+            </div>
      </>
   )
 }

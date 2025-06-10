@@ -75,7 +75,7 @@ const QuizDeletionConfirmation = () => {
   };
 
   const handleCancel = () => {
-    navigate("/quizzes/all");
+    navigate("/quizzes/allquizzes");
   };
 
   const handleDelete = async () => {

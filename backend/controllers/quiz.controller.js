@@ -147,9 +147,48 @@ const editQuizQuestions = asyncErrorHandler(async (req, res) => {
         .json(new ApiResponse({}, "Quiz's questions edited successfully", 200));
 });
 
+const editQuiz = asyncErrorHandler(async (req, res) => {
+
+    const quizId = req.params.id;
+
+    if (!quizId)
+        return res.status(400).json(new ApiError("Quiz ID is required", 400));
+
+  const {
+    quizName,
+    totalMarks,
+    eachQuestionMarks,
+    category,
+    difficulty,
+  } = req.body;
+
+  const updatedQuiz = await Quiz.findByIdAndUpdate(
+    quizId,
+    {
+      quizName,
+      totalMarks,
+      eachQuestionMarks,
+      category,
+      difficulty,
+    },
+    { new: true, runValidators: true }
+  );
+
+  if (!updatedQuiz)
+    return res
+      .status(404)
+      .json(new ApiError("Quiz not found or editing failed", 404));
+
+  return res
+    .status(200)
+    .json(new ApiResponse({}, "Quiz edited successfully", 200));
+});
+
+
 export {
     createQuiz,
     getAllQuizzes,
     deleteQuiz,
     editQuizQuestions,
+    editQuiz
 }

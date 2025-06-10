@@ -1,11 +1,11 @@
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { BACKEND_URL } from "../assets/constants";
 import { refreshAccessToken } from "../assets/tokens";
+import { inputStyle, labelStyle } from "../assets/quizElementsStyles";
 
 const QuizEditDetails = () => {
-
   const navigate = useNavigate();
 
   const location = useLocation();
@@ -19,31 +19,30 @@ const QuizEditDetails = () => {
 
   if (location.state == null) return null;
 
-  const {  
-        quizName,
-        totalMarks,
-        eachQuestionMarks,
-        category,
-        difficulty,
-        noOfQuestions,
-        quizId
-      } = location.state;
+  const {
+    quizName,
+    eachQuestionMarks,
+    category,
+    difficulty,
+    noOfQuestions,
+    quizId,
+  } = location.state;
 
   const [editedQuizName, setEditedQuizName] = useState(quizName);
   const [editedEachQuestionMarks, setEditedEachQuestionMarks] = useState(eachQuestionMarks);
   const [editedCategory, setEditedCategory] = useState(category);
   const [editedDifficulty, setEditedDifficulty] = useState(difficulty);
 
-    const saveEditedQuiz = async () => {
-    
+  const saveEditedQuiz = async () => {
     try {
-      const response = await axios.put(`${BACKEND_URL}/quizzes/quiz/${quizId}`,
+      const response = await axios.put(
+        `${BACKEND_URL}/quizzes/quiz/${quizId}`,
         {
-          quizName,
-          totalMarks,
-          eachQuestionMarks,
-          category,
-          difficulty,
+          quizName: editedQuizName,
+          totalMarks: eachQuestionMarks * noOfQuestions,
+          eachQuestionMarks:  editedEachQuestionMarks,
+          category: editedCategory,
+          difficulty: editedDifficulty,
         },
         {
           withCredentials: true,
@@ -53,7 +52,6 @@ const QuizEditDetails = () => {
         alert(response.data.message);
         navigate("/quizzes/allquizzes");
       }
-
     } catch (error) {
       if (error?.response?.status == 401) {
         try {
@@ -70,42 +68,60 @@ const QuizEditDetails = () => {
   };
 
   return (
-    <div>
-       <div>
-        <label>Quiz Name:</label>
-        <input
-          type="text"
-          defaultValue={quizName}
-          onChange={(e) => setEditedQuizName(e.target.value)}
-        />
+
+     <>
+      <div style={{ backgroundColor: "#000", borderRadius: "15px", width: "max-content", marginLeft: "90px"}} className="text-center p-4">
+           <h2 className="mb-4 text-light">Edit Quiz Details</h2>
+            <p className="mb-6 text-light">
+              You can now update the quiz name, marks per question, category, and difficulty level. Once you're done, click "Save Changes" to update the quiz. 
+            </p>
       </div>
 
-      <div>
-        <label>Each Question Marks:</label>
-        <input
-          type="number"
-          defaultValue={eachQuestionMarks}
-          onChange={(e) => setEditedEachQuestionMarks(Number(e.target.value))}
-        />
-      </div>
 
-      <div>
-        <label>Category:</label>
-        <input
-          type="text"
-          defaultValue={category}
-          onChange={(e) => setEditedCategory(e.target.value)}
-        />
-      </div>
+    <div className="mt-4 d-flex justify-content-center">
+      <div style={{ maxWidth: "400px", width: "100%" }}>
+        <div className="mb-4">
+          <label style={labelStyle}>Quiz Name:</label>
+          <input
+            type="text"
+            defaultValue={quizName}
+            onChange={(e) => setEditedQuizName(e.target.value)}
+            style={inputStyle}
+          />
+        </div>
+        <div className="mb-4">
+          <label style={labelStyle}>Marks per Question:</label>
+          <input
+            type="number"
+            min={1}
+            defaultValue={eachQuestionMarks}
+            onChange={(e) => setEditedEachQuestionMarks(Number(e.target.value))}
+            style={inputStyle}
+          />
+        </div>
 
-      <div>
-        <label>Difficulty:</label>
-        <input
-          type="text"
-          defaultValue={difficulty}
-          onChange={(e) => setEditedDifficulty(e.target.value)}
-        />
-      </div>
+        <div className="mb-4">
+          <label style={labelStyle}>Category:</label>
+          <input
+            type="text"
+            defaultValue={category}
+            onChange={(e) => setEditedCategory(e.target.value)}
+            style={inputStyle}
+          />
+        </div>
+
+        <div className="mb-4">
+          <label style={labelStyle}>Difficulty:</label>
+          <select
+            defaultValue={difficulty}
+            onChange={(e) => setEditedDifficulty(e.target.value)}
+            style={{ ...inputStyle, height: "40px" }}
+          >
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+          </select>
+        </div>
 
         <button
           style={{
@@ -116,7 +132,7 @@ const QuizEditDetails = () => {
             width: "200px",
             border: "none",
             cursor: "pointer",
-            marginLeft: "29em",
+            marginLeft: "5em",
             fontSize: "18px",
           }}
           onClick={saveEditedQuiz}
@@ -124,9 +140,10 @@ const QuizEditDetails = () => {
         >
           Save Changes
         </button>
+      </div>
     </div>
-  )
-}
+     </>
+  );
+};
 
-export default QuizEditDetails
-
+export default QuizEditDetails;

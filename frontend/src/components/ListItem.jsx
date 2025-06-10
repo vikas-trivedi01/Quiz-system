@@ -44,7 +44,7 @@ const ListItem = ({
     backgroundColor: "var(--clr-primary)",
     color: "#fff",
     borderRadius: "var(--border-radius)",
-    padding: "5px 15px",
+    padding: "12px",
     border: "none",
     cursor: "pointer",
     fontWeight: "600",
@@ -59,7 +59,7 @@ const ListItem = ({
     backgroundColor: "var(--clr-accent)",
     color: "#fff",
     borderRadius: "var(--border-radius)",
-    padding: "5px 15px",
+    padding: "12px",
     border: "none",
     cursor: "pointer",
     fontWeight: "600",
@@ -108,7 +108,6 @@ const ListItem = ({
   };
 
   const editQuestions = () => {
-    if (isAdmin) {
       navigate("/quizzes/edit/questions", {
         state: {
           questions,
@@ -116,7 +115,20 @@ const ListItem = ({
           quizId
         },
       });
-    }
+    };
+    
+  const editQuiz = () => {
+    navigate("/quizzes/edit/quiz", {
+      state: {
+        quizName,
+        eachQuestionMarks,
+        category,
+        difficulty,
+        noOfQuestions: questions.length,
+        quizId
+      },
+    });
+
   };
 
   const deleteQuiz = () => {
@@ -127,6 +139,7 @@ const ListItem = ({
       },
     });
   };
+
 
   const [actionsOpen, setActionsOpen] = useState(false);
 
@@ -235,7 +248,7 @@ const ListItem = ({
                   <button
                 style={editButtonStyle}
                 title="Edit Questions"
-                onClick={() => editQuestions()}
+                onClick={editQuestions}
               >
                 Edit Questions{" "}
                 <FontAwesomeIcon icon={faFilePen} />
@@ -243,7 +256,7 @@ const ListItem = ({
               <button
                 style={editButtonStyle}
                 title="Edit Quiz Details"
-                onClick={() => deleteQuiz()}
+                onClick={editQuiz}
               >
                 Edit Quiz{" "}
                 <FontAwesomeIcon icon={faUpRightFromSquare} />
@@ -251,7 +264,7 @@ const ListItem = ({
               <button
                 style={deleteQuizButtonStyle}
                 title="Delete Quiz"
-                onClick={() => deleteQuiz()}
+                onClick={deleteQuiz}
               >
                 Delete Quiz{" "}
                 <FontAwesomeIcon icon={faTrash} />

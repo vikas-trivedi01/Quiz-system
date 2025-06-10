@@ -14,7 +14,7 @@ const QuizAll = () => {
   useEffect(() => {
     const getQuizzes = async () => {
       try {
-        const response = await axios.get(`${BACKEND_URL}/quizzes`, {
+        const response = await axios.get(`${BACKEND_URL}/quizzes/admin`, {
           withCredentials: true,
         });
 

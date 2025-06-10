@@ -59,15 +59,16 @@ const createQuiz = asyncErrorHandler(async (req, res) => {
 
 });
 
-const getAllQuizzes = asyncErrorHandler(async (req, res) => {
+const getAdminQuizzes = asyncErrorHandler(async (req, res) => {
 
     const creator = req.user?._id;
 
     if (creator) {
         let quizzes = await Quiz.find({
             creator
-        }).populate("creator", "-fullName -email -age -password -refreshToken -role -quizzesAttempted -createdAt -updatedAt -__v -_id")
-            .populate("questions", "-createdAt -updatedAt -__v -_id");
+        }).populate({ path: "creator", select: "-fullName -email -age -password -refreshToken -role -quizzesAttempted -createdAt -updatedAt -__v -_id" })
+        .populate({ path: "questions", select: "-createdAt -updatedAt -__v -_id" });
+
 
         if (quizzes) {
             return res.status(200)
@@ -184,11 +185,52 @@ const editQuiz = asyncErrorHandler(async (req, res) => {
     .json(new ApiResponse({}, "Quiz edited successfully", 200));
 });
 
+const getQuiz = asyncErrorHandler(async (req, res) => {
+    const quizId = req.params.id;
+    
+    if (!quizId)
+        return res.status(400).json(new ApiError("Quiz ID is required", 400));
+
+    let quiz = await Quiz.findById(quizId);
+
+     if (!quiz)
+        return res.status(404).json(new ApiError("Quiz not found", 404));
+    
+    quiz = await quiz.populate({ path: "questions", select: "-quiz -createdAt -updatedAt -__v" });
+    const questions = quiz.questions;
+    
+    return res.status(200)
+            .json(new ApiResponse(questions, "All questions fetched successfully", 200));
+        
+});
+
+const getListOfQuizzes  = asyncErrorHandler(async (req, res) => {
+
+     const quizzes = await Quiz.find()
+                    .populate({
+                        path: "creator",
+                        select: "-fullName -email -age -password -refreshToken -role -quizzesAttempted -createdAt -updatedAt -__v -_id"
+                    })
+                    .populate({
+                        path: "questions",
+                        select: "-createdAt -updatedAt -__v -_id"
+                    });
+
+        if (quizzes) {
+            return res.status(200)
+                .json(new ApiResponse(quizzes, "All quizzes fetched successfully", 200));
+        } else {
+            return res.status(404)
+                .json(new ApiError("No quizzes found", 404));
+        }
+});
 
 export {
     createQuiz,
-    getAllQuizzes,
+    getAdminQuizzes,
     deleteQuiz,
     editQuizQuestions,
-    editQuiz
+    editQuiz,
+    getQuiz,
+    getListOfQuizzes
 }

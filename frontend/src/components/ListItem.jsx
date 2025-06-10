@@ -140,6 +140,9 @@ const ListItem = ({
     });
   };
 
+  const joinQuiz = () => {
+    navigate(`/quizzes/quiz?quizId=${quizId}`);
+  };
 
   const [actionsOpen, setActionsOpen] = useState(false);
 
@@ -182,7 +185,7 @@ const ListItem = ({
             </div>
             ) :
             (
-                <button style={joinButtonStyle}>
+                <button style={joinButtonStyle} onClick={joinQuiz}>
               Join Quiz
               <FontAwesomeIcon icon={faUpRightFromSquare} />
             </button>

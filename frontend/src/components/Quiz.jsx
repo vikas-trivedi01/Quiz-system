@@ -3,7 +3,7 @@ import { faArrowRightLong, faTrophy } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useEffect, useRef } from "react";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import {
   nextButtonStyle,
@@ -11,9 +11,50 @@ import {
   resultButtonStyle,
   timerStyle,
 } from "../assets/quizElementsStyles.js";
+import axios from "axios";
+import { refreshAccessToken } from "../assets/tokens.js";
+import { BACKEND_URL } from "../assets/constants.js";
 
 const Quiz = () => {
-  const quizData = [
+  const [searchParams] = useSearchParams();
+  const quizId = searchParams.get("quizId");
+  
+  const [quizData, setQuizData] = useState(null);
+
+  
+
+  useEffect(  () => {
+    const getQuizData = async () => {
+      try {
+      const response = await axios.get(`${BACKEND_URL}/quizzes/quiz/${quizId}`, {
+        withCredentials: true,
+      });
+   
+      if (response?.status == 200) {
+        alert(response?.data?.message);
+        console.log(response?.data?.data)
+        setQuizData(response?.data?.data);
+      }
+    } catch (error) {
+      if (error?.response?.status == 401) {
+        try {
+          await refreshAccessToken();
+          await getQuizData();
+        } catch (refreshError) {
+          alert("Please login again");
+          navigate("/users/login");
+        }
+      } else {
+        alert(error?.message);
+      }
+    }
+    };
+
+    getQuizData();
+  }, []);
+
+
+  const quizData2 = [
     {
       id: 1,
       question:
@@ -47,11 +88,13 @@ const Quiz = () => {
     },
   ];
 
+  return;
+
   const [currentQuestionObj, setCurrentQuestionObj] = useState(quizData[0]);
   const [questionsCounter, setQuestionsCounter] = useState(1);
   const [answers, setAnswers] = useState([]);
 
-  const [timer, setTimer] = useState(5);
+  const [timer, setTimer] = useState(20);
   const [isAnswered, setIsAnswered] = useState(false);
   const [selectedOptionId, setSelectedOptionId] = useState(null);
 
@@ -109,13 +152,13 @@ const Quiz = () => {
   const selectOption = (e, index) => {
     clearInterval(intervalRef.current);
     const newAnswer = {
-      questionId: currentQuestionObj.id,
+      questionId: currentQuestionObj._id,
       givenAnswer: e?.target?.value || null,
     };
 
     setAnswers((prevAnswers) => {
       const existingIndex = prevAnswers.findIndex(
-        (answer) => answer.questionId === currentQuestionObj.id
+        (answer) => answer.questionId === currentQuestionObj._id
       );
 
       if (existingIndex !== -1) {
@@ -171,7 +214,7 @@ const Quiz = () => {
         </div>
 
         <div style={{ border: "2px solid #000" }} className="mt-4">
-          {currentQuestionObj.options.map((option, index) => {
+          {currentQuestionObj.options.map((optionObj, index) => {
             return (
               <div
                 key={index}
@@ -192,14 +235,14 @@ const Quiz = () => {
                   >
                     {index + 1}
                   </span>
-                  <span className="py-2 text-light">{option}</span>
+                  <span className="py-2 text-light">{optionObj.option}</span>
                 </div>
 
                 <div>
                   <input
                     type="radio"
-                    name={`option-${currentQuestionObj.id}`}
-                    value={option}
+                    name={`option-${currentQuestionObj._id}`}
+                    value={optionObj.option}
                     checked={selectedOptionId === index}
                     style={optionStyle}
                     onChange={(e) => {

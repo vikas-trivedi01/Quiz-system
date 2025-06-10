@@ -14,6 +14,8 @@ import Terms from "./components/Terms";
 import Privacy from "./components/Privacy";
 import About from "./components/About";
 
+
+import Quiz from "./components/Quiz";
 import QuizCode from "./components/QuizCode";
 import QuizList from "./components/QuizList";
 import QuizResult from "./components/QuizResult";
@@ -39,6 +41,7 @@ const router = createBrowserRouter(
         <Route path="signup" element={<Signup />} />
         <Route path="login" element={<Login />} />
       </Route>
+      
       <Route
         path="unauthorized"
         element={
@@ -63,6 +66,15 @@ const router = createBrowserRouter(
       <Route path="" element={<Home />} />
 
       <Route path="quizzes">
+          <Route
+            path="quiz"
+            element={
+              <ProtectedRoute requiredRole="user">
+                <Quiz />
+              </ProtectedRoute>
+            }
+          />
+
           <Route
             path="quizcode"
             element={
@@ -92,7 +104,7 @@ const router = createBrowserRouter(
            <Route
             path="quizlist"
             element={
-              <ProtectedRoute requiredRole="admin">
+              <ProtectedRoute requiredRole="user">
                 <QuizList />
               </ProtectedRoute>
             }

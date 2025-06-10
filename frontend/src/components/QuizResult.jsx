@@ -1,6 +1,4 @@
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleXmark, faHome } from "@fortawesome/free-solid-svg-icons";
 import quizResultImg from "../assets/illustrations/quiz-result.jpg";
 
 import messages from "../assets/quizResultMessages.json";
@@ -49,8 +47,8 @@ const QuizResult = () => {
 
   const rightAnswers = quizData.filter((question) => {
     return answers.find((answer) => {
-      return answer.questionId == question.id &&
-        answer.givenAnswer == question.rightAnswer
+      return answer.questionId == question._id &&
+        answer.givenAnswer == question.options.find(opt => opt.isCorrect)?.option
         ? true
         : false;
     });
@@ -87,7 +85,7 @@ const QuizResult = () => {
     <>
       <div
         style={{
-          backgroundColor: "#35B0FC",
+          border: "2px solid #00a8e8",
           fontSize: "20px",
           height: "max-content",
           padding: "13px",
@@ -106,17 +104,18 @@ const QuizResult = () => {
           alt="Quiz result illustration"
           height={350}
           width={600}
+          className="m-5"
+          style={{ border: "2px solid #000", borderRadius: "var(--border-radius)"}}
         />
 
         <div className="text-center mt-5" style={{ marginRight: "200px" }}>
           <span style={{ fontSize: "28px" }}>Your Score</span>{" "}
           <h2
             style={{
-              backgroundColor: "#FF5E9A",
-              color: "#fff",
+              border: "2px solid #00a8e8",
               width: "max-content",
               borderRadius: "6px",
-              marginLeft: "190px",
+              marginLeft: "145px",
             }}
             className="py-2 px-5"
           >
@@ -124,24 +123,19 @@ const QuizResult = () => {
           </h2>
           <h4 className="mt-4">{message}</h4>
 
-          <button style={homeButtonStyle}>
+          <button style={homeButtonStyle} className="ms-3">
             <NavLink to="/" style={{ color: "#fff", textDecoration: "none" }}>
               Back to Home
             </NavLink>
-            <FontAwesomeIcon icon={faHome} style={{ marginLeft: "10px" }} />
           </button>
 
           <button
             style={reviewButtonStyle}
             onClick={() =>
-              navigate("/quizzes/review", { state: location.state })
+            navigate("/quizzes/review", { state: location.state })
             }
           >
             Review Wrong Answers
-            <FontAwesomeIcon
-              icon={faCircleXmark}
-              style={{ marginLeft: "10px" }}
-            />
           </button>
 
         </div>

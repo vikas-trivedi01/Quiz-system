@@ -58,6 +58,10 @@ const Navbar = () => {
     }
   };
 
+  const login = () => {
+    navigate("/users/login");
+  }
+
   return (
     <nav>
       <ul id="nav-ul">
@@ -169,11 +173,17 @@ const Navbar = () => {
 
         {role != undefined ? (
           <li className="nav-item">
-            <button onClick={() => logout()} id="logout">
+            <button onClick={() => logout()} className="nav-btn" >
               Logout
             </button>
           </li>
-        ) : null}
+        ) : 
+          <li className="nav-item">
+            <button onClick={() => login()} className="nav-btn">
+              Get Started
+            </button>
+          </li>
+        }
       </ul>
     </nav>
   );

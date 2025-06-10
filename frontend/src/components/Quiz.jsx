@@ -18,41 +18,39 @@ import { BACKEND_URL } from "../assets/constants.js";
 const Quiz = () => {
   const [searchParams] = useSearchParams();
   const quizId = searchParams.get("quizId");
-  
-  const [quizData, setQuizData] = useState(null);
 
-  
+  const [quizData, setQuizData] = useState([]);
 
-  useEffect(  () => {
+  useEffect(() => {
     const getQuizData = async () => {
       try {
-      const response = await axios.get(`${BACKEND_URL}/quizzes/quiz/${quizId}`, {
-        withCredentials: true,
-      });
-   
-      if (response?.status == 200) {
-        alert(response?.data?.message);
-        console.log(response?.data?.data)
-        setQuizData(response?.data?.data);
-      }
-    } catch (error) {
-      if (error?.response?.status == 401) {
-        try {
-          await refreshAccessToken();
-          await getQuizData();
-        } catch (refreshError) {
-          alert("Please login again");
-          navigate("/users/login");
+        const response = await axios.get(
+          `${BACKEND_URL}/quizzes/quiz/${quizId}`,
+          {
+            withCredentials: true,
+          }
+        );
+
+        if (response?.status == 200) {
+          setQuizData(response?.data?.data);
         }
-      } else {
-        alert(error?.message);
+      } catch (error) {
+        if (error?.response?.status == 401) {
+          try {
+            await refreshAccessToken();
+            await getQuizData();
+          } catch (refreshError) {
+            alert("Please login again");
+            navigate("/users/login");
+          }
+        } else {
+          alert(error?.message);
+        }
       }
-    }
     };
 
     getQuizData();
   }, []);
-
 
   const quizData2 = [
     {
@@ -88,9 +86,7 @@ const Quiz = () => {
     },
   ];
 
-  return;
-
-  const [currentQuestionObj, setCurrentQuestionObj] = useState(quizData[0]);
+  const [currentQuestionObj, setCurrentQuestionObj] = useState(null);
   const [questionsCounter, setQuestionsCounter] = useState(1);
   const [answers, setAnswers] = useState([]);
 
@@ -101,6 +97,13 @@ const Quiz = () => {
   const navigate = useNavigate();
 
   let intervalRef = useRef(null);
+
+  useEffect(() => {
+    if (quizData.length > 0) {
+      setCurrentQuestionObj(quizData[0]);
+    }
+  }, [quizData]);
+
   useEffect(() => {
     setTimer(5);
     setIsAnswered(false);
@@ -127,13 +130,11 @@ const Quiz = () => {
 
   const getNextQuestion = (flow = null) => {
     if ((flow == "auto" || isAnswered) && questionsCounter < quizData.length) {
-      if (questionsCounter < quizData.length) {
-        setCurrentQuestionObj(quizData[questionsCounter]);
+       setCurrentQuestionObj(quizData[questionsCounter - 1]);
         setQuestionsCounter((prev) => prev + 1);
         setTimer(5);
         setIsAnswered(false);
         setSelectedOptionId(null);
-      }
     } else {
       alert("Please select an option");
     }
@@ -176,112 +177,130 @@ const Quiz = () => {
 
   return (
     <>
-      <div className="d-flex justify-content-center">
-        <h4>Question: </h4>{" "}
-        <span
-          style={{ marginLeft: "10px", marginTop: "-5px", fontSize: "25px" }}
-        >
-          {questionsCounter} / {quizData.length}
-        </span>
-      </div>
-
-      <div style={{ margin: "2%" }}>
-        <div
-          style={{
-            border: "2px solid #000",
-            backgroundColor: "#00bbf9",
-            borderRadius: "6px",
-          }}
-          className="p-2 d-flex justify-content-between"
-        >
-          <div>
-            <h5
+      {currentQuestionObj ? (
+        <>
+          <div className="d-flex justify-content-center">
+            <h4>Question: </h4>{" "}
+            <span
               style={{
-                textDecoration: "underline",
-                textDecorationColor: "#fff",
-                textDecorationThickness: "4px",
-                textUnderlineOffset: "7px",
+                marginLeft: "10px",
+                marginTop: "-5px",
+                fontSize: "25px",
               }}
             >
-              Question:{" "}
-            </h5>{" "}
-            <span style={{ fontSize: "25px" }}>
-              {currentQuestionObj.question}
+              {questionsCounter} / {quizData.length}
             </span>
           </div>
 
-          <span style={timerStyle}>{timer}</span>
-        </div>
-
-        <div style={{ border: "2px solid #000" }} className="mt-4">
-          {currentQuestionObj.options.map((optionObj, index) => {
-            return (
-              <div
-                key={index}
-                className="d-flex justify-content-between align-items-center p-2 fs-5 m-3 rounded"
-                style={{
-                  backgroundColor: "#000",
-                  cursor: "pointer",
-                  border:
-                    selectedOptionId === index
-                      ? "5px solid rgb(0, 140, 255)"
-                      : "none",
-                }}
-              >
-                <div className="d-flex align-items-center gap-4">
-                  <span
-                    style={{ backgroundColor: "#4895ef", marginLeft: "20px" }}
-                    className="rounded-pill px-3 py-2 text-light"
-                  >
-                    {index + 1}
-                  </span>
-                  <span className="py-2 text-light">{optionObj.option}</span>
-                </div>
-
-                <div>
-                  <input
-                    type="radio"
-                    name={`option-${currentQuestionObj._id}`}
-                    value={optionObj.option}
-                    checked={selectedOptionId === index}
-                    style={optionStyle}
-                    onChange={(e) => {
-                      selectOption(e, index);
-                    }}
-                  />
-                </div>
+          <div style={{ margin: "2%" }}>
+            <div
+              style={{
+                border: "2px solid #000",
+                backgroundColor: "#00bbf9",
+                borderRadius: "6px",
+              }}
+              className="p-2 d-flex justify-content-between"
+            >
+              <div>
+                <h5
+                  style={{
+                    textDecoration: "underline",
+                    textDecorationColor: "#fff",
+                    textDecorationThickness: "4px",
+                    textUnderlineOffset: "7px",
+                  }}
+                >
+                  Question:{" "}
+                </h5>{" "}
+                <span style={{ fontSize: "25px" }}>
+                  {currentQuestionObj.question}
+                </span>
               </div>
-            );
-          })}
-        </div>
 
-        <div>
-          {isAnswered && questionsCounter == quizData.length ? (
-            <button
-              className="btn mt-3"
-              style={resultButtonStyle}
-              onClick={() =>
-                navigate("quizzes/result", { state: { quizData, answers } })
-              }
-            >
-              Get Result
-              <FontAwesomeIcon icon={faTrophy} style={{ marginLeft: "20px" }} />
-            </button>
-          ) : questionsCounter == quizData.length ? null : (
-            <button
-              className="btn mt-3"
-              style={nextButtonStyle}
-              onClick={() => getNextQuestion()}
-            >
-              Next Question
-              <FontAwesomeIcon
-                icon={faArrowRightLong}
-                style={{ marginLeft: "20px" }}
-              />
-            </button>
-          )}
-        </div>
-      </div>
+              <span style={timerStyle}>{timer}</span>
+            </div>
+
+            <div style={{ border: "2px solid #000" }} className="mt-4">
+              {currentQuestionObj.options.map((optionObj, index) => {
+                return (
+                  <div
+                    key={index}
+                    className="d-flex justify-content-between align-items-center p-2 fs-5 m-3 rounded"
+                    style={{
+                      backgroundColor: "#05668d",
+                      cursor: "pointer",
+                      border:
+                        selectedOptionId === index
+                          ? "5px solid rgb(0, 255, 238)"
+                          : "none",
+                    }}
+                  >
+                    <div className="d-flex align-items-center gap-4">
+                      <span
+                        style={{
+                          backgroundColor: "#4895ef",
+                          marginLeft: "20px",
+                        }}
+                        className="rounded-pill px-3 py-2 text-light"
+                      >
+                        {index + 1}
+                      </span>
+                      <span className="py-2 text-light">
+                        {optionObj.option}
+                      </span>
+                    </div>
+
+                    <div>
+                      <input
+                        type="radio"
+                        name={`option-${currentQuestionObj._id}`}
+                        value={optionObj.option}
+                        checked={selectedOptionId === index}
+                        style={optionStyle}
+                        onChange={(e) => {
+                          selectOption(e, index);
+                        }}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div>
+              {isAnswered && questionsCounter == quizData.length ? (
+                <button
+                  className="btn mt-3"
+                  style={resultButtonStyle}
+                  onClick={() =>
+                    navigate("/quizzes/result", { state: { quizData, answers } })
+                  }
+                >
+                  Get Result
+                  <FontAwesomeIcon
+                    icon={faTrophy}
+                    style={{ marginLeft: "20px" }}
+                  />
+                </button>
+              ) : questionsCounter == quizData.length ? null : (
+                <button
+                  className="btn mt-3"
+                  style={nextButtonStyle}
+                  onClick={() => getNextQuestion()}
+                >
+                  Next Question
+                  <FontAwesomeIcon
+                    icon={faArrowRightLong}
+                    style={{ marginLeft: "20px" }}
+                  />
+                </button>
+              )}
+            </div>
+          </div>
+        </>
+      ) : (
+        <h3 className="p-5 m-5 text-center">Loading quiz's questions...</h3>
+      )}
     </>
   );
 };

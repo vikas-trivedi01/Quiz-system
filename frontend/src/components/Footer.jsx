@@ -38,7 +38,12 @@ const Footer = () => {
           </NavLink>
         </li>
         <li className="footer-link-container">
-          <a href="#">About Us</a>
+            <NavLink
+            to="/about"
+            className={({ isActive }) => `${isActive ? "active-nav-link" : ""}`}
+          >
+            About Us
+          </NavLink>
         </li>
       </ul>
 

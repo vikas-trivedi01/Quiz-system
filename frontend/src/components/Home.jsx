@@ -40,7 +40,12 @@ const Home = () => {
               </NavLink>
             </button>
             <button className="btn btn-dark" id="about-btn">
-              About Us
+              <NavLink
+                to="about"
+                style={{ color: "#fff", textDecoration: "none" }}
+              >
+                About Us
+              </NavLink>
             </button>
           </div>
         </div>

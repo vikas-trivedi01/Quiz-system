@@ -45,11 +45,11 @@ ul {
   text-decoration-skip-ink: none;
 }
 
-#logout {
-  background-color: var(--clr-accent);
+.nav-btn {
+  background-color: #000;
   color: #fff;
   border-radius: var(--border-radius);
-  width: 120px;
+  width: 150px;
   border: none;
   cursor: pointer;
   margin-top: 3px;

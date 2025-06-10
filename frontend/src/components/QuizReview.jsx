@@ -16,11 +16,13 @@ const QuizReview = () => {
 
   const { quizData, answers } = location.state;
 
+  console.table([{quizData, answers}])
+
   const wrongAnswers = quizData.filter((question) => {
     
     return answers.find((answer) => {
-      return answer.questionId == question.id &&
-        answer.givenAnswer != question.rightAnswer
+      return answer.questionId == question._id &&
+        answer.givenAnswer != question.options.find(optObj => optObj.isCorrect)?.option
         ? true
         : false;
     });
@@ -31,14 +33,17 @@ const QuizReview = () => {
     <div
       style={{
         marginLeft: "240px",
+        marginBottom: "240px",
       }}
     >
       {wrongAnswers.map((questionObj, index) => {
         const userAnswerObj = answers.find(
-          (answer) => answer.questionId === questionObj.id
+          (answer) => answer.questionId === questionObj._id
         );
 
         return (
+         <>
+           <h3 style={{marginLeft: "160px"}} className="mt-5 mb-5">Review your answered questions easily</h3>
           <div
             key={index}
             style={{
@@ -99,11 +104,12 @@ const QuizReview = () => {
               >
                 <strong>Correct Answer: </strong>
                 <span style={{ fontSize: "20px" }}>
-                  {questionObj.rightAnswer}
+                  {questionObj.options.find(optObj => optObj.isCorrect)?.option}
                 </span>
               </h5>{" "}
             </div>
           </div>
+         </>
         );
       })}
     </div>

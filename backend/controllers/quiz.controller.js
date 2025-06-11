@@ -84,20 +84,10 @@ const getAdminQuizzes = asyncErrorHandler(async (req, res) => {
 });
 
 const deleteQuiz = asyncErrorHandler(async (req, res) => {
-
-    const quizId = req.params.id;
-
-    if (!quizId)
-        return res.status(400).json(new ApiError("Quiz ID is required", 400));
-
-    const quiz = await Quiz.findById(quizId);
-
-    if (!quiz)
-        return res.status(404).json(new ApiError("Quiz not found", 404));
+    const quiz = req.quiz;
 
     if (quiz.creator.toString() !== req.user._id.toString())
         return res.status(403).json(new ApiError("You are not authorized to delete this quiz", 403));
-
     
     await quiz.deleteOne();
 
@@ -106,15 +96,7 @@ const deleteQuiz = asyncErrorHandler(async (req, res) => {
     });
     
 const editQuizQuestions = asyncErrorHandler(async (req, res) => {
-    const quizId = req.params.id;
-    
-    if (!quizId)
-        return res.status(400).json(new ApiError("Quiz ID is required", 400));
-    
-    const quiz = await Quiz.findById(quizId);
-    
-    if (!quiz)
-        return res.status(404).json(new ApiError("Quiz not found", 404));
+    const quiz = req.quiz;
 
     if (quiz.creator.toString() !== req.user._id.toString())
         return res.status(403).json(new ApiError("You are not authorized to edit questions of this quiz", 403));
@@ -149,11 +131,7 @@ const editQuizQuestions = asyncErrorHandler(async (req, res) => {
 });
 
 const editQuiz = asyncErrorHandler(async (req, res) => {
-
-    const quizId = req.params.id;
-
-    if (!quizId)
-        return res.status(400).json(new ApiError("Quiz ID is required", 400));
+    const quizId = req.quiz?._id;
 
   const {
     quizName,
@@ -186,17 +164,8 @@ const editQuiz = asyncErrorHandler(async (req, res) => {
 });
 
 const getQuiz = asyncErrorHandler(async (req, res) => {
-    const quizId = req.params.id;
-    
-    if (!quizId)
-        return res.status(400).json(new ApiError("Quiz ID is required", 400));
-    
-    let quiz = await Quiz.findById(quizId);
 
-     if (!quiz)
-        return res.status(404).json(new ApiError("Quiz not found", 404));
-    
-    quiz = await quiz.populate({ path: "questions", select: "-quiz -createdAt -updatedAt -__v" });
+    const quiz = await req.quiz.populate({ path: "questions", select: "-quiz -createdAt -updatedAt -__v" });
     const questions = quiz.questions;
     
     return res.status(200)
@@ -227,21 +196,13 @@ const getListOfQuizzes  = asyncErrorHandler(async (req, res) => {
 });
 
 const participateInQuiz = asyncErrorHandler(async (req, res) => {
-    const quizId = req.params.id;
-    
-    if (!quizId)
-        return res.status(400).json(new ApiError("Quiz ID is required", 400));
-    
-    const quiz = await Quiz.findById(quizId);
-    
-     if (!quiz)
-        return res.status(404).json(new ApiError("Quiz not found", 404));
+    const quiz = req.quiz;
     
     //  if(quiz.participants.includes(req.user?._id))
     //     return res.status(406).json(new ApiError("Already participated in this quiz", 406));
 
     const updatedQuiz = await Quiz.findByIdAndUpdate(
-      quizId,
+      quiz?._id,
       {
        participants: [...quiz.participants, req.user?._id]
       },

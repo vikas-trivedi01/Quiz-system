@@ -11,6 +11,7 @@ import {
         participateInQuiz,
         attemptQuiz
 } from "../controllers/quiz.controller.js";
+import { validateQuiz } from "../middlewares/quiz.middleware.js";
 
 const router = Router();
 
@@ -19,20 +20,20 @@ router.route("/")
         .get(authenticateRequest, getListOfQuizzes);
 
 router.route("/questions/:id")
-        .put(authenticateRequest, editQuizQuestions);
+        .put(authenticateRequest, validateQuiz, editQuizQuestions);
 
 router.route("/quiz/:id")
-        .put(authenticateRequest, editQuiz)
-        .get(authenticateRequest, getQuiz)
-        .delete(authenticateRequest, deleteQuiz);
+        .put(authenticateRequest, validateQuiz, editQuiz)
+        .get(authenticateRequest, validateQuiz, getQuiz)
+        .delete(authenticateRequest, validateQuiz, deleteQuiz);
 
 router.route("/admin")
         .get(authenticateRequest, getAdminQuizzes);
 
 router.route("/participate/:id")
-        .post(authenticateRequest, participateInQuiz);
+        .post(authenticateRequest, validateQuiz, participateInQuiz);
 
 router.route("/attempt/:id")
-        .post(authenticateRequest, attemptQuiz);
+        .post(authenticateRequest, validateQuiz, attemptQuiz);
 
 export default router;

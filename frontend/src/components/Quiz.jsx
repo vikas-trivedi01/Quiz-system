@@ -52,40 +52,6 @@ const Quiz = () => {
     getQuizData();
   }, []);
 
-  const quizData2 = [
-    {
-      id: 1,
-      question:
-        "What is the capital of France?What is the capital of France?What is the capital of France?",
-      options: ["Paris", "London", "Berlin", "Rome"],
-      rightAnswer: "Paris",
-    },
-    {
-      id: 2,
-      question: "Which planet is known as the Red Planet?",
-      options: ["Earth", "Mars", "Jupiter", "Venus"],
-      rightAnswer: "Mars",
-    },
-    {
-      id: 3,
-      question: "Who wrote 'To Kill a Mockingbird'?",
-      options: ["Harper Lee", "Mark Twain", "J.K. Rowling", "Jane Austen"],
-      rightAnswer: "Harper Lee",
-    },
-    {
-      id: 4,
-      question: "What is the smallest prime number?",
-      options: ["0", "1", "2", "3"],
-      rightAnswer: "2",
-    },
-    {
-      id: 5,
-      question: "Which gas do plants absorb from the atmosphere?",
-      options: ["Oxygen", "Nitrogen", "Carbon Dioxide", "Hydrogen"],
-      rightAnswer: "Carbon Dioxide",
-    },
-  ];
-
   const [currentQuestionObj, setCurrentQuestionObj] = useState(null);
   const [questionsCounter, setQuestionsCounter] = useState(1);
   const [answers, setAnswers] = useState([]);
@@ -96,7 +62,9 @@ const Quiz = () => {
 
   const navigate = useNavigate();
 
-  let intervalRef = useRef(null);
+  const intervalRef = useRef(null);
+  const lastSelectedRef = useRef(null);
+
 
   useEffect(() => {
     if (quizData.length > 0) {
@@ -132,30 +100,52 @@ const Quiz = () => {
     if ((flow == "auto" || isAnswered) && questionsCounter < quizData.length) {
        setCurrentQuestionObj(quizData[questionsCounter - 1]);
         setQuestionsCounter((prev) => prev + 1);
-        setTimer(5);
         setIsAnswered(false);
         setSelectedOptionId(null);
-    } else {
+        setTimer(5);
+      } else {
       alert("Please select an option");
     }
   };
 
   const handleAutoNext = () => {
+      const autoAnswer = {
+    questionId: currentQuestionObj._id,
+    givenAnswer: null,
+  };
+
+  setAnswers((prevAnswers) => {
+    const exists = prevAnswers.some(
+      (ans) => ans.questionId === currentQuestionObj._id
+    );
+    return exists ? prevAnswers : [...prevAnswers, autoAnswer];
+  });
+
+
     setIsAnswered(true);
+     setTimeout(() => {
     if (questionsCounter < quizData.length) {
-      let next = questionsCounter;
+      setCurrentQuestionObj(quizData[questionsCounter]);
       setQuestionsCounter((prev) => prev + 1);
-      setCurrentQuestionObj(quizData[next]);
-      selectOption(null, null);
     }
+  }, 100);
+    // if (questionsCounter < quizData.length) {
+    //   setCurrentQuestionObj(quizData[questionsCounter - 1]);
+    //   setQuestionsCounter((prev) => prev + 1);
+    //   if (selectedOptionId === null) {
+    //   // selectOption(null, null);
+    // }
+    // }
   };
 
   const selectOption = (e, index) => {
     clearInterval(intervalRef.current);
-    const newAnswer = {
-      questionId: currentQuestionObj._id,
-      givenAnswer: e?.target?.value || null,
-    };
+  const givenAnswer = e?.target?.value || null;
+
+  const newAnswer = {
+    questionId: currentQuestionObj._id,
+    givenAnswer,
+  };
 
     setAnswers((prevAnswers) => {
       const existingIndex = prevAnswers.findIndex(
@@ -170,9 +160,57 @@ const Quiz = () => {
         return [...prevAnswers, newAnswer];
       }
     });
-
-    setIsAnswered(true);
+    
     setSelectedOptionId(index);
+    setIsAnswered(true);
+
+     setTimeout(() => {
+    if (questionsCounter < quizData.length) {
+      setCurrentQuestionObj(quizData[questionsCounter]);
+      setQuestionsCounter((prev) => prev + 1);
+    }
+  }, 100);
+  };
+  useEffect(() => {
+  console.log("Answers updated:", answers);
+}, [answers]);
+
+
+
+  const getResult = async () => {
+  
+    try {
+        const response = await axios.post(
+          `${BACKEND_URL}/quizzes/participate/${quizId}`,
+          {},
+          {
+            withCredentials: true,
+          }
+        );
+
+        if (response?.status == 200) {
+          navigate("/quizzes/result", { state: { quizData, answers, quizId } });
+        }
+      } catch (error) {
+        if (error?.response?.status == 401) {
+          try {
+            await refreshAccessToken();
+            await getResult();
+          } catch (refreshError) {
+            alert("Please login again");
+            navigate("/users/login");
+          }
+        } else {
+          alert(error?.message);
+        }
+      }          
+  };
+
+  const handleSubmit = () => {
+    setTimeout(async () => {
+      await getResult();
+    }, 2000);
+
   };
 
   return (
@@ -272,9 +310,7 @@ const Quiz = () => {
                 <button
                   className="btn mt-3"
                   style={resultButtonStyle}
-                  onClick={() =>
-                    navigate("/quizzes/result", { state: { quizData, answers } })
-                  }
+                  onClick={handleSubmit}
                 >
                   Get Result
                   <FontAwesomeIcon
@@ -299,7 +335,7 @@ const Quiz = () => {
           </div>
         </>
       ) : (
-        <h3 className="p-5 m-5 text-center">Loading quiz's questions...</h3>
+        <h3 className="p-5 m-5 text-center">Loading questions...</h3>
       )}
     </>
   );

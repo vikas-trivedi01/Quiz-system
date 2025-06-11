@@ -16,34 +16,32 @@ const QuizReview = () => {
 
   const { quizData, answers } = location.state;
 
-  console.table([{quizData, answers}])
-
   const wrongAnswers = quizData.filter((question) => {
-    
-    return answers.find((answer) => {
-      return answer.questionId == question._id &&
-        answer.givenAnswer != question.options.find(optObj => optObj.isCorrect)?.option
-        ? true
-        : false;
-    });
+    const answerObj = answers.find((ans) => ans.questionId === question._id);
+
+    return (
+    !answerObj || 
+    answerObj.givenAnswer == null || 
+    answerObj.givenAnswer !== question.options.find(opt => opt.isCorrect)?.option
+  );
+
     
   });
 
   return (
     <div
-      style={{
-        marginLeft: "240px",
+    style={{
+      marginLeft: "240px",
         marginBottom: "240px",
       }}
     >
+      <h3 style={{marginLeft: "20px"}} className="mt-5 mb-5">Review your wrong answered / unanswered questions easily</h3>
       {wrongAnswers.map((questionObj, index) => {
         const userAnswerObj = answers.find(
           (answer) => answer.questionId === questionObj._id
         );
 
         return (
-         <>
-           <h3 style={{marginLeft: "160px"}} className="mt-5 mb-5">Review your answered questions easily</h3>
           <div
             key={index}
             style={{
@@ -89,9 +87,10 @@ const QuizReview = () => {
               >
                 <strong>Your Answer:</strong>{" "}
                 <span style={{ fontSize: "20px" }}>
-                  {userAnswerObj.givenAnswer != null
-                    ? userAnswerObj.givenAnswer
-                    : "Not Answered"}
+                  {userAnswerObj
+                  ? userAnswerObj.givenAnswer || "Not Answered"
+                  : "Not Answered"}
+
                 </span>
               </h5>
             </div>
@@ -109,7 +108,6 @@ const QuizReview = () => {
               </h5>{" "}
             </div>
           </div>
-         </>
         );
       })}
     </div>

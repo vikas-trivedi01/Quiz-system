@@ -190,7 +190,7 @@ const getQuiz = asyncErrorHandler(async (req, res) => {
     
     if (!quizId)
         return res.status(400).json(new ApiError("Quiz ID is required", 400));
-
+    
     let quiz = await Quiz.findById(quizId);
 
      if (!quiz)
@@ -200,9 +200,10 @@ const getQuiz = asyncErrorHandler(async (req, res) => {
     const questions = quiz.questions;
     
     return res.status(200)
-            .json(new ApiResponse(questions, "All questions fetched successfully", 200));
+    .json(new ApiResponse(questions, "All questions fetched successfully", 200));
         
 });
+
 
 const getListOfQuizzes  = asyncErrorHandler(async (req, res) => {
 
@@ -216,13 +217,50 @@ const getListOfQuizzes  = asyncErrorHandler(async (req, res) => {
                         select: "-createdAt -updatedAt -__v -_id"
                     });
 
-        if (quizzes) {
+                    if (quizzes) {
             return res.status(200)
                 .json(new ApiResponse(quizzes, "All quizzes fetched successfully", 200));
         } else {
             return res.status(404)
                 .json(new ApiError("No quizzes found", 404));
         }
+});
+
+const participateInQuiz = asyncErrorHandler(async (req, res) => {
+    const quizId = req.params.id;
+    
+    if (!quizId)
+        return res.status(400).json(new ApiError("Quiz ID is required", 400));
+    
+    const quiz = await Quiz.findById(quizId);
+    
+     if (!quiz)
+        return res.status(404).json(new ApiError("Quiz not found", 404));
+    
+    //  if(quiz.participants.includes(req.user?._id))
+    //     return res.status(406).json(new ApiError("Already participated in this quiz", 406));
+
+    const updatedQuiz = await Quiz.findByIdAndUpdate(
+      quizId,
+      {
+       participants: [...quiz.participants, req.user?._id]
+      },
+      { new: true, runValidators: true }
+    );
+    
+    if (!updatedQuiz)
+      return res
+        .status(404)
+        .json(new ApiError("Failed to participate in quiz", 404));
+    
+    return res
+      .status(200)
+      .json(new ApiResponse({}, "Participated in quiz successfully", 200));
+
+});
+
+const attemptQuiz = asyncErrorHandler(async (req, res) => {
+    
 });
 
 export {
@@ -232,5 +270,7 @@ export {
     editQuizQuestions,
     editQuiz,
     getQuiz,
-    getListOfQuizzes
+    getListOfQuizzes,
+    participateInQuiz,
+    attemptQuiz
 }

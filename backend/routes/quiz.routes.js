@@ -1,6 +1,16 @@
 import { Router } from "express";
 import { authenticateRequest } from "../auth.middleware.js";
-import { createQuiz, deleteQuiz, editQuiz, editQuizQuestions, getAdminQuizzes, getListOfQuizzes, getQuiz } from "../controllers/quiz.controller.js";
+import { 
+        createQuiz, 
+        deleteQuiz, 
+        editQuiz, 
+        editQuizQuestions, 
+        getAdminQuizzes, 
+        getListOfQuizzes, 
+        getQuiz, 
+        participateInQuiz,
+        attemptQuiz
+} from "../controllers/quiz.controller.js";
 
 const router = Router();
 
@@ -18,5 +28,11 @@ router.route("/quiz/:id")
 
 router.route("/admin")
         .get(authenticateRequest, getAdminQuizzes);
+
+router.route("/participate/:id")
+        .post(authenticateRequest, participateInQuiz);
+
+router.route("/attempt/:id")
+        .post(authenticateRequest, attemptQuiz);
 
 export default router;

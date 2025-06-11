@@ -38,10 +38,9 @@ const attemptSchema = new mongoose.Schema({
     },
     completedAt: {
         type: Date,
-        required: true,
         default: Date.now,
     },
-    status: {
+    performanceStatus: {
         type: String,
         required: true,
         enum: ["very_poor", "poor", "needs_improvement", "fair", "good", "excellent", "outstanding"],

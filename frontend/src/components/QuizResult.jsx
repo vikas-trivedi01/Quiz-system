@@ -5,10 +5,12 @@ import messages from "../assets/quizResultMessages.json";
 import { useEffect } from "react";
 
 import "../styles/variables.css";
+import axios from "axios";
+import { BACKEND_URL } from "../assets/constants.js";
+import { refreshAccessToken } from "../assets/tokens.js";
 
 const QuizResult = () => {
   const navigate = useNavigate();
-
   const location = useLocation();
 
   useEffect(() => {
@@ -20,7 +22,7 @@ const QuizResult = () => {
 
   if (location.state == null) return null;
 
-  const { quizData, answers } = location.state;
+  const { quizData, answers, quizId } = location.state;
 
   const homeButtonStyle = {
     backgroundColor: "#000",
@@ -48,7 +50,8 @@ const QuizResult = () => {
   const rightAnswers = quizData.filter((question) => {
     return answers.find((answer) => {
       return answer.questionId == question._id &&
-        answer.givenAnswer == question.options.find(opt => opt.isCorrect)?.option
+        answer.givenAnswer ==
+          question.options.find((opt) => opt.isCorrect)?.option
         ? true
         : false;
     });
@@ -81,6 +84,59 @@ const QuizResult = () => {
     message = messages[0].message;
   }
 
+  const statusToEnum = {
+    "Very Poor": "very_poor",
+    Poor: "poor",
+    "Needs Improvement": "needs_improvement",
+    Fair: "fair",
+    Good: "good",
+    Excellent: "excellent",
+    Outstanding: "outstanding",
+  };
+
+  const attempt = answers.map((answerObj, index) => {
+    return {
+      question: quizData[index].question,
+      selectedOption: answerObj.givenAnswer,
+      isAnswerCorrect:
+        answerObj.givenAnswer ===
+        quizData[index].options.find((opt) => opt.isCorrect)?.option,
+    };
+  });
+
+  if (attempt) {
+    const postAttempt = async () => {
+      try {
+        const response = await axios.post(
+          `${BACKEND_URL}/quizzes/attempt/${quizId}`,
+          {
+            answers: attempt,
+            score: rightAnswers.length / quizData.length,
+            performanceStatus: statusToEnum[status],
+          },
+          {
+            withCredentials: true,
+          }
+        );
+        if (response?.status == 200) {
+          alert("Your answers submitted successfully");
+        }
+      } catch (error) {
+        if (error?.response?.status == 401) {
+          try {
+            await refreshAccessToken();
+            await postAttempt();
+          } catch (refreshError) {
+            alert("Please login again");
+            navigate("/users/login");
+          }
+        } else {
+          alert(error?.message);
+        }
+      }
+    };
+  }
+
   return (
     <>
       <div
@@ -105,7 +161,10 @@ const QuizResult = () => {
           height={350}
           width={600}
           className="m-5"
-          style={{ border: "2px solid #000", borderRadius: "var(--border-radius)"}}
+          style={{
+            border: "2px solid #000",
+            borderRadius: "var(--border-radius)",
+          }}
         />
 
         <div className="text-center mt-5" style={{ marginRight: "200px" }}>
@@ -122,21 +181,23 @@ const QuizResult = () => {
             {rightAnswers.length} / {quizData.length}
           </h2>
           <h4 className="mt-4">{message}</h4>
-
+         
           <button style={homeButtonStyle} className="ms-3">
             <NavLink to="/" style={{ color: "#fff", textDecoration: "none" }}>
               Back to Home
             </NavLink>
           </button>
 
-          <button
-            style={reviewButtonStyle}
-            onClick={() =>
-            navigate("/quizzes/review", { state: location.state })
-            }
-          >
-            Review Wrong Answers
-          </button>
+          {rightAnswers.length != quizData.length ? (
+            <button
+              style={reviewButtonStyle}
+              onClick={() =>
+                navigate("/quizzes/review", { state: location.state })
+              }
+            >
+              Review Wrong Answers
+            </button>
+          ) : null}
 
         </div>
       </div>

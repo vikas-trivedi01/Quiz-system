@@ -60,6 +60,14 @@ const quizSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true,
+    },
+    quizCode: {
+        type: String,
+        trim: true, 
+        unique: true,
+    },
+    codeExpiresAt: {
+        type: Number,
     }
 }, { timestamps: true });
 

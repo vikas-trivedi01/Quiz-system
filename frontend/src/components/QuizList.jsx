@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import ListItem from "./ListItem";
-import { refreshAccessToken } from "../assets/tokens";
+import { refreshAccessToken } from "../assets/tokens.js";
 import { useEffect } from "react";
 import { useState } from "react";
 import axios from "axios";
-import { BACKEND_URL } from "../assets/constants";
+import { BACKEND_URL } from "../assets/constants.js";
 
 const QuizList = () => {
   const [quizzes, setQuizzes] = useState([]);

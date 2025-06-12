@@ -59,6 +59,8 @@ const QuizAll = () => {
                 questions={quiz.questions}
                 isAdmin={true}
                 quizId={quiz._id}
+                quizCode={quiz.quizCode}
+                codeExpiresAt={quiz.codeExpiresAt}
               />
 
             );

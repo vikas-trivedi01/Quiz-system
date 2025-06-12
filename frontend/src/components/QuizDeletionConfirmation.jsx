@@ -80,7 +80,7 @@ const QuizDeletionConfirmation = () => {
 
   const handleDelete = async () => {
     try {
-      const response = await axios.delete(`${BACKEND_URL}/quizzes/quiz/${quizId}`, {
+      const response = await axios.delete(`${BACKEND_URL}/quizzes/manage/${quizId}`, {
         withCredentials: true,
       });
       

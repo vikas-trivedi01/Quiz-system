@@ -4,18 +4,59 @@ import quizCodeImg from "../assets/illustrations/quiz-code.jpg";
 import "../styles/variables.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
+import { useEffect } from "react";
+import { BACKEND_URL } from "../assets/constants.js";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { refreshAccessToken } from "../assets/tokens.js";
 
-const QuizCode = () => {
+const QuizCode = () => { 
   const [code, setCode] = useState(null);
   const [isValidCode, setIsValidCode] = useState(false);
 
+  const navigate = useNavigate();
+
   const validate = (e) => {
     const userCode = e.target.value;
+    setCode(userCode);
     if (userCode.length == 6) {
-      setCode(userCode);
       setIsValidCode(true);
     }
   };
+
+  useEffect(() => {
+     const checkCode = async () => {
+          try {
+            const response = await axios.post(
+              `${BACKEND_URL}/join-code/participate`,
+              {
+                quizCode: code
+              },
+              {
+                withCredentials: true,
+              }
+            );
+    
+            if (response?.status == 200) {
+              navigate(`/quizzes/quiz?quizId=${response?.data?.data?.quizId}`);
+            }
+          } catch (error) {
+            if (error?.response?.status == 401) {
+              try {
+                await refreshAccessToken();
+                await checkCode();
+              } catch (refreshError) {
+                alert("Please login again");
+                navigate("/users/login");
+              }
+            } else {
+              alert(error?.message);
+            }
+          }
+        };
+    
+        checkCode();
+  }, [code]);
 
   const joinButtonStyle = {
     backgroundColor: `var(--clr-primary)`,
@@ -49,7 +90,6 @@ const QuizCode = () => {
 
         <input
           type="text"
-          name="code"
           placeholder="Enter Quiz Code"
           onChange={(e) => validate(e)}
           style={{

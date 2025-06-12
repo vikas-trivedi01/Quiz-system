@@ -1,9 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { BACKEND_URL } from "../assets/constants";
-import { refreshAccessToken } from "../assets/tokens";
-import { inputStyle, labelStyle } from "../assets/quizElementsStyles";
+import { BACKEND_URL } from "../assets/constants.js";
+import { refreshAccessToken } from "../assets/tokens.js";
+import { inputStyle, labelStyle } from "../assets/quizElementsStyles.js";
 
 const QuizEditDetails = () => {
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ const QuizEditDetails = () => {
   const saveEditedQuiz = async () => {
     try {
       const response = await axios.put(
-        `${BACKEND_URL}/quizzes/quiz/${quizId}`,
+        `${BACKEND_URL}/quizzes/manage/${quizId}`,
         {
           quizName: editedQuizName,
           totalMarks: eachQuestionMarks * noOfQuestions,

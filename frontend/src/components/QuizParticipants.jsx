@@ -1,7 +1,7 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { refreshAccessToken } from "../assets/tokens";
+import { refreshAccessToken } from "../assets/tokens.js";
 import axios from "axios";
-import { BACKEND_URL } from "../assets/constants";
+import { BACKEND_URL } from "../assets/constants.js";
 import user from "../assets/images/user_img.png";
 import { useEffect, useState } from "react";
 
@@ -18,7 +18,7 @@ const QuizParticipants = () => {
     const getParticipants = async () => {
       try {
         const response = await axios.get(
-          `${BACKEND_URL}/quizzes/participants/${quizId}/all`,
+          `${BACKEND_URL}/quizzes/${quizId}/participants`,
 
           {
             withCredentials: true,
@@ -88,7 +88,7 @@ const labelStyle = {
                 minWidth: "300px",
               }}
             >
-              <div className="d-flex justify-content-evenly gap-5 align-items-center mb-3">
+              <div className="d-flex justify-content-center gap-5 align-items-center mb-3">
                 <img src={user} alt="User icon" height={42} width={42} />
                 <h4 style={{
                     textDecoration: "underline",

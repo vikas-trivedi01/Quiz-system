@@ -180,7 +180,7 @@ const getListOfQuizzes = asyncErrorHandler(async (req, res) => {
     const quizzes = await Quiz.find()
         .populate({
             path: "creator",
-            select: "-fullName -email -age -password -refreshToken -role -quizzesAttempted -createdAt -updatedAt -__v -_id"
+            select: "-fullName -email -age -password -refreshToken -role -quizzesAttempted -quizCode -codeExpiresAt -createdAt -updatedAt -__v -_id"
         })
         .populate({
             path: "questions",
@@ -270,6 +270,21 @@ const getAllParticipants = asyncErrorHandler(async (req, res) => {
             .json(new ApiResponse(participants, "Participants fetched successfully", 200));
 });
 
+const joinQuizWithCode = asyncErrorHandler(async (req, res) => {
+    const quiz = await Quiz.findOne({
+        quizCode: req.quizCode
+    });
+
+    if(!quiz)
+        return res.status(404).json(new ApiError("Invalid quiz code", 404));
+    
+    if(Date.now() > quiz.codeExpiresAt)
+        return res.status(404).json(new ApiError("Expired quiz code", 404));
+
+    return res.status(200)
+                .json(new ApiResponse({quizId: quiz._id}, "Quiz code matched successfully", 200));
+});
+
 export {
     createQuiz,
     getAdminQuizzes,
@@ -280,5 +295,6 @@ export {
     getListOfQuizzes,
     participateInQuiz,
     attemptQuiz,
-    getAllParticipants
+    getAllParticipants,
+    joinQuizWithCode
 }

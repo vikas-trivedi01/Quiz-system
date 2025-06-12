@@ -1,15 +1,16 @@
 import { Router } from "express";
-import { 
-        createQuiz, 
-        deleteQuiz, 
-        editQuiz, 
-        editQuizQuestions, 
-        getAdminQuizzes, 
-        getListOfQuizzes, 
-        getQuiz, 
+import {
+        createQuiz,
+        deleteQuiz,
+        editQuiz,
+        editQuizQuestions,
+        getAdminQuizzes,
+        getListOfQuizzes,
+        getQuiz,
         participateInQuiz,
         attemptQuiz,
-        getAllParticipants
+        getAllParticipants,
+        joinQuizWithCode
 } from "../controllers/quiz.controller.js";
 import { validateQuiz } from "../middlewares/quiz.middleware.js";
 import { authenticateRequest } from "../middlewares/auth.middleware.js";
@@ -20,10 +21,10 @@ router.route("/")
         .post(authenticateRequest, createQuiz)
         .get(authenticateRequest, getListOfQuizzes);
 
-router.route("/questions/:id")
+router.route("/:id/questions")
         .put(authenticateRequest, validateQuiz, editQuizQuestions);
 
-router.route("/quiz/:id")
+router.route("/manage/:id")
         .put(authenticateRequest, validateQuiz, editQuiz)
         .get(authenticateRequest, validateQuiz, getQuiz)
         .delete(authenticateRequest, validateQuiz, deleteQuiz);
@@ -31,13 +32,17 @@ router.route("/quiz/:id")
 router.route("/admin")
         .get(authenticateRequest, getAdminQuizzes);
 
-router.route("/participate/:id")
+router.route("/:id/participate")
         .post(authenticateRequest, validateQuiz, participateInQuiz);
 
-router.route("/attempt/:id")
+router.route("/:id/attempt")
         .post(authenticateRequest, validateQuiz, attemptQuiz);
-
-router.route("/participants/:id/all")
+        
+router.route("/:id/participants")
         .get(authenticateRequest, validateQuiz, getAllParticipants);
+
+router.route("/join-code/participate")
+                .post(authenticateRequest, joinQuizWithCode);
+
 
 export default router;

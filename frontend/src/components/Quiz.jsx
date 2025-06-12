@@ -25,7 +25,7 @@ const Quiz = () => {
     const getQuizData = async () => {
       try {
         const response = await axios.get(
-          `${BACKEND_URL}/quizzes/quiz/${quizId}`,
+          `${BACKEND_URL}/quizzes/manage/${quizId}`,
           {
             withCredentials: true,
           }
@@ -171,17 +171,12 @@ const Quiz = () => {
     }
   }, 100);
   };
-  useEffect(() => {
-  console.log("Answers updated:", answers);
-}, [answers]);
-
-
 
   const getResult = async () => {
   
     try {
         const response = await axios.post(
-          `${BACKEND_URL}/quizzes/participate/${quizId}`,
+          `${BACKEND_URL}/quizzes/${quizId}/participate`,
           {},
           {
             withCredentials: true,

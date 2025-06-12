@@ -5,7 +5,8 @@ import {
   faFilePen,
   faSquareXmark,
   faEllipsisVertical,
-  faUsersLine
+  faUsersLine,
+  faQrcode
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -22,7 +23,9 @@ const ListItem = ({
   createdBy,
   questions,
   isAdmin,
-  quizId
+  quizId,
+  quizCode, 
+  codeExpiresAt
 }) => {
   const navigate = useNavigate();
 
@@ -108,6 +111,22 @@ const ListItem = ({
     width: "150px",
   };
 
+  const codeButtonStyle = {
+    backgroundColor: "#000",
+    color: "#fff",
+    borderRadius: "var(--border-radius)",
+    padding: "10px 20px",
+    border: "none",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "25px",
+    fontWeight: "600",
+    marginRight: "80px",
+    width: "200px",
+  };
+
   const editQuestions = () => {
       navigate("/quizzes/edit/questions", {
         state: {
@@ -177,7 +196,16 @@ const ListItem = ({
           </div>
 
           {isAdmin ? (
-            <div>
+            <div className="d-flex justify-content-between">
+            {
+                quizCode && new Date().now() < codeExpiresAt ? 
+                (
+                   <button style={codeButtonStyle}>
+                    Generate Quiz Code{" "} <FontAwesomeIcon icon={faQrcode} className="ms-1" />
+                    </button>
+                ) : null
+            }
+
               <button onClick={() => setActionsOpen(prev => !prev)} style={actionsButtonStyle}>
                 Actions{" "}
               {actionsOpen ? (

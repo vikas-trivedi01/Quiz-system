@@ -108,7 +108,7 @@ useEffect(() => {
   const postAttempt = async () => {
     try {
       const response = await axios.post(
-        `${BACKEND_URL}/quizzes/attempt/${quizId}`,
+        `${BACKEND_URL}/quizzes/${quizId}/attempt`,
         {
           answers: attempt,
           score: rightAnswers.length / quizData.length,

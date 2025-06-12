@@ -76,7 +76,7 @@ const handleOptionChange = (questionIndex, optVal) => {
   const saveEditedQuestions = async () => {
     
     try {
-      const response = await axios.put(`${BACKEND_URL}/quizzes/questions/${quizId}`,
+      const response = await axios.put(`${BACKEND_URL}/quizzes/${quizId}/questions`,
         {
           questions: editedQuestions,
         },

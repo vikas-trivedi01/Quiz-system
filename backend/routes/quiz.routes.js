@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { authenticateRequest } from "../auth.middleware.js";
 import { 
         createQuiz, 
         deleteQuiz, 
@@ -12,6 +11,7 @@ import {
         attemptQuiz
 } from "../controllers/quiz.controller.js";
 import { validateQuiz } from "../middlewares/quiz.middleware.js";
+import { authenticateRequest } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 

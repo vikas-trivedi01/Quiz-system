@@ -96,7 +96,7 @@ const QuizResult = () => {
 
   const attempt = answers.map((answerObj, index) => {
     return {
-      question: quizData[index].question,
+      question: quizData[index]._id,
       selectedOption: answerObj.givenAnswer,
       isAnswerCorrect:
         answerObj.givenAnswer ===
@@ -104,38 +104,44 @@ const QuizResult = () => {
     };
   });
 
-  if (attempt) {
-    const postAttempt = async () => {
-      try {
-        const response = await axios.post(
-          `${BACKEND_URL}/quizzes/attempt/${quizId}`,
-          {
-            answers: attempt,
-            score: rightAnswers.length / quizData.length,
-            performanceStatus: statusToEnum[status],
-          },
-          {
-            withCredentials: true,
-          }
-        );
-        if (response?.status == 200) {
-          alert("Your answers submitted successfully");
+useEffect(() => {
+  const postAttempt = async () => {
+    try {
+      const response = await axios.post(
+        `${BACKEND_URL}/quizzes/attempt/${quizId}`,
+        {
+          answers: attempt,
+          score: rightAnswers.length / quizData.length,
+          performanceStatus: statusToEnum[status],
+        },
+        {
+          withCredentials: true,
         }
-      } catch (error) {
-        if (error?.response?.status == 401) {
-          try {
-            await refreshAccessToken();
-            await postAttempt();
-          } catch (refreshError) {
-            alert("Please login again");
-            navigate("/users/login");
-          }
-        } else {
-          alert(error?.message);
-        }
+      );
+
+      if (response?.status === 200) {
+        alert(response?.data?.message);
       }
-    };
+    } catch (error) {
+      if (error?.response?.status === 401) {
+        try {
+          await refreshAccessToken();
+          await postAttempt(); // Retry
+        } catch (refreshError) {
+          alert("Please login again");
+          navigate("/users/login");
+        }
+      } else {
+        alert(error?.message);
+      }
+    }
+  };
+
+  if (attempt) {
+    postAttempt();
   }
+}, [attempt, quizId, navigate, rightAnswers.length, status]);  
+
 
   return (
     <>

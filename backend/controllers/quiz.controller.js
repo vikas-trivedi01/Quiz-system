@@ -1,3 +1,4 @@
+import { Attempt } from "../models/attempt.model.js";
 import { Question } from "../models/question.model.js";
 import { Quiz } from "../models/quiz.model.js";
 import { ApiError } from "../utils/ApiError.js";
@@ -199,7 +200,7 @@ const participateInQuiz = asyncErrorHandler(async (req, res) => {
     const quiz = req.quiz;
     
     //  if(quiz.participants.includes(req.user?._id))
-    //     return res.status(406).json(new ApiError("Already participated in this quiz", 406));
+    //     return res.status(406).json(new ApiError("Already participated in this quiz", 406, "Already participated in this quiz"));
 
     const updatedQuiz = await Quiz.findByIdAndUpdate(
       quiz?._id,
@@ -221,6 +222,33 @@ const participateInQuiz = asyncErrorHandler(async (req, res) => {
 });
 
 const attemptQuiz = asyncErrorHandler(async (req, res) => {
+    const quiz = req.quiz;
+
+    const {  
+        answers,
+        score,
+        performanceStatus,
+    } = req.body;
+
+     const existedAttempt = await Attempt.findOne({
+        $and: [{user: req.user?._id}, {quizName: quiz.quizName}]
+    });
+
+    if (existedAttempt)
+        return res.status(400).json(new ApiError("Quiz attempted already", 400));
+
+    const userId = req.user?._id;
+
+    await Attempt.insertOne({
+        user: userId,
+        quiz: quiz?._id,
+        answers,
+        score,
+        performanceStatus
+    });
+
+    return res.status(201)
+                .json(new ApiResponse({}, "Quiz attempted successfully", 201));
     
 });
 

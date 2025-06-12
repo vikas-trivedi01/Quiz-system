@@ -272,18 +272,53 @@ const getAllParticipants = asyncErrorHandler(async (req, res) => {
 
 const joinQuizWithCode = asyncErrorHandler(async (req, res) => {
     const quiz = await Quiz.findOne({
-        quizCode: req.quizCode
+        quizCode: req.body.quizCode
     });
 
     if(!quiz)
-        return res.status(404).json(new ApiError("Invalid quiz code", 404));
+        return res.status(400).json(new ApiError("Invalid quiz code", 400));
     
     if(Date.now() > quiz.codeExpiresAt)
         return res.status(404).json(new ApiError("Expired quiz code", 404));
-
+    
     return res.status(200)
                 .json(new ApiResponse({quizId: quiz._id}, "Quiz code matched successfully", 200));
 });
+
+function generateCode() {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let code = "";
+  for (let i = 0; i < 6; i++) {
+    const randomIndex = Math.floor(Math.random() * chars.length);
+    code += chars[randomIndex];
+  }
+  return code;
+}
+
+
+const getQuizCode = asyncErrorHandler(async (req, res) => {
+    const quiz = req.quiz;
+
+    const now = Date.now();
+
+    if (quiz.quizCode && now < new Date(quiz.codeExpiresAt).getTime()) {
+        return res
+            .status(400)
+            .json(new ApiError("Quiz code already exists", 400));
+    }
+
+    const quizCode = generateCode();
+
+    quiz.quizCode = quizCode;
+    quiz.codeExpiresAt = new Date(now + 10 * 60 * 1000);
+
+    await quiz.save();
+
+    return res.status(200).json(
+        new ApiResponse({quizCode}, "Quiz code generated successfully", 200)
+    );
+});
+
 
 export {
     createQuiz,
@@ -296,5 +331,6 @@ export {
     participateInQuiz,
     attemptQuiz,
     getAllParticipants,
-    joinQuizWithCode
+    joinQuizWithCode,
+    getQuizCode
 }

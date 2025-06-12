@@ -32,6 +32,7 @@ import UserAuthenticationContextProvider from "./context/UserAuthenticationConte
 import ProtectedRoute from "./ProtectedRoute";
 import QuizEditQuestions from "./components/QuizEditQuestions";
 import QuizEditDetails from "./components/QuizEditDetails";
+import QuizParticipants from "./components/QuizParticipants";
 
 
 const router = createBrowserRouter(
@@ -159,6 +160,12 @@ const router = createBrowserRouter(
                   }/>
                 
             </Route>
+
+          <Route path="participants" element={
+            <ProtectedRoute requiredRole="admin">
+              <QuizParticipants />
+            </ProtectedRoute>
+          }/>
         </Route>
 
         

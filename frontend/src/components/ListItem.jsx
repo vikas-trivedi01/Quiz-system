@@ -4,7 +4,8 @@ import {
   faUpRightFromSquare,
   faFilePen,
   faSquareXmark,
-  faEllipsisVertical
+  faEllipsisVertical,
+  faUsersLine
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -40,7 +41,7 @@ const ListItem = ({
     width: "200px",
   };
   
-  const editButtonStyle = {
+  const actionButtonStyle = {
     backgroundColor: "var(--clr-primary)",
     color: "#fff",
     borderRadius: "var(--border-radius)",
@@ -143,10 +144,13 @@ const ListItem = ({
   const joinQuiz = () => {
     navigate(`/quizzes/quiz?quizId=${quizId}`);
   };
+  
+  const viewParticipants = () => {
+    navigate(`/quizzes/participants?quizId=${quizId}`);
+  };
 
   const [actionsOpen, setActionsOpen] = useState(false);
 
-  console.log(actionsOpen)
   return (
     <div
       style={{
@@ -243,22 +247,28 @@ const ListItem = ({
         </div>
 
         <div
-              className={`px-3 py-4 mt-3 mb-0 gap-5 ms-5 d-${actionsOpen ? "flex justify-content-between" : "none"}`}
+              className={`px-3 py-4 mt-3 mb-0 gap-4 ms-2 d-${actionsOpen ? "flex justify-content-between" : "none"}`}
               style={{ 
                     borderRadius: "var(--border-radius)",
                     }}
             >
+               <button
+                style={actionButtonStyle}
+                onClick={viewParticipants}
+              >
+                View Participants{" "}
+                <FontAwesomeIcon icon={faUsersLine} />
+              </button>
+              
                   <button
-                style={editButtonStyle}
-                title="Edit Questions"
+                style={actionButtonStyle}
                 onClick={editQuestions}
               >
                 Edit Questions{" "}
                 <FontAwesomeIcon icon={faFilePen} />
               </button>
               <button
-                style={editButtonStyle}
-                title="Edit Quiz Details"
+                style={actionButtonStyle}
                 onClick={editQuiz}
               >
                 Edit Quiz{" "}
@@ -266,7 +276,6 @@ const ListItem = ({
               </button>
               <button
                 style={deleteQuizButtonStyle}
-                title="Delete Quiz"
                 onClick={deleteQuiz}
               >
                 Delete Quiz{" "}

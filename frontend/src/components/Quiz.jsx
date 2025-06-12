@@ -50,7 +50,7 @@ const Quiz = () => {
     };
 
     getQuizData();
-  }, []);
+  }, [quizId]);
 
   const [currentQuestionObj, setCurrentQuestionObj] = useState(null);
   const [questionsCounter, setQuestionsCounter] = useState(1);

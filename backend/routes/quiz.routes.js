@@ -8,7 +8,8 @@ import {
         getListOfQuizzes, 
         getQuiz, 
         participateInQuiz,
-        attemptQuiz
+        attemptQuiz,
+        getAllParticipants
 } from "../controllers/quiz.controller.js";
 import { validateQuiz } from "../middlewares/quiz.middleware.js";
 import { authenticateRequest } from "../middlewares/auth.middleware.js";
@@ -35,5 +36,8 @@ router.route("/participate/:id")
 
 router.route("/attempt/:id")
         .post(authenticateRequest, validateQuiz, attemptQuiz);
+
+router.route("/participants/:id/all")
+        .get(authenticateRequest, validateQuiz, getAllParticipants);
 
 export default router;

@@ -4,7 +4,7 @@ import quizCodeImg from "../assets/illustrations/quiz-code.jpg";
 import "../styles/variables.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpRightFromSquare } from "@fortawesome/free-solid-svg-icons";
-import { useEffect } from "react";
+
 import { BACKEND_URL } from "../assets/constants.js";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -24,16 +24,15 @@ const QuizCode = () => {
     }
   };
 
-  useEffect(() => {
      const checkCode = async () => {
           try {
             const response = await axios.post(
-              `${BACKEND_URL}/join-code/participate`,
+              `${BACKEND_URL}/quizzes/code-participate`,
               {
                 quizCode: code
               },
-              {
-                withCredentials: true,
+             {
+                withCredentials: true
               }
             );
     
@@ -50,14 +49,12 @@ const QuizCode = () => {
                 navigate("/users/login");
               }
             } else {
+              console.log(error)
               alert(error?.message);
             }
           }
         };
     
-        checkCode();
-  }, [code]);
-
   const joinButtonStyle = {
     backgroundColor: `var(--clr-primary)`,
     color: "#fff",
@@ -99,7 +96,7 @@ const QuizCode = () => {
             padding: "10px",
           }}
         />
-        <button disabled={!isValidCode} style={joinButtonStyle}>
+        <button disabled={!isValidCode} style={joinButtonStyle} onClick={checkCode}>
           Join Quiz
           <FontAwesomeIcon
             icon={faUpRightFromSquare}

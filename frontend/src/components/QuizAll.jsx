@@ -50,6 +50,7 @@ const QuizAll = () => {
                 key={index}
                 quizName={quiz.quizName}
                 numberOfQuestions={quiz.numberOfQuestions}
+                participantsCount={quiz.participantsCount}
                 totalMarks={quiz.totalMarks}
                 eachQuestionMarks={quiz.eachQuestionMarks}
                 category={quiz.category}

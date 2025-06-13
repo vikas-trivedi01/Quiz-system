@@ -19,8 +19,7 @@ export const authenticateRequest = asyncErrorHandler( async (req, res, next) => 
              return res.status(401).json(new ApiError("Invalid access token", 401));
 
         req.user = user;
-        next();
-            
+        next();            
     } catch (error) {
         if(error.name === "TokenExpiredError")
             return res.status(401).json(new ApiError("Access token expired", 401));

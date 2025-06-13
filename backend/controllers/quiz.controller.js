@@ -205,7 +205,8 @@ const participateInQuiz = asyncErrorHandler(async (req, res) => {
     const updatedQuiz = await Quiz.findByIdAndUpdate(
         quiz?._id,
         {
-            participants: [...quiz.participants, req.user?._id]
+            participants: [...quiz.participants, req.user?._id],
+            participantsCount: quiz.participantsCount + 1
         },
         { new: true, runValidators: true }
     );
@@ -271,15 +272,17 @@ const getAllParticipants = asyncErrorHandler(async (req, res) => {
 });
 
 const joinQuizWithCode = asyncErrorHandler(async (req, res) => {
+    const { quizCode }  =  req.body;
+
     const quiz = await Quiz.findOne({
-        quizCode: req.body.quizCode
+        quizCode
     });
 
     if(!quiz)
-        return res.status(400).json(new ApiError("Invalid quiz code", 400));
+        return res.status(404).json(new ApiError("Invalid quiz code", 404));
     
-    if(Date.now() > quiz.codeExpiresAt)
-        return res.status(404).json(new ApiError("Expired quiz code", 404));
+    if(Date.now() > new Date(quiz.codeExpiresAt).getTime())
+        return res.status(400).json(new ApiError("Expired quiz code", 400));
     
     return res.status(200)
                 .json(new ApiResponse({quizId: quiz._id}, "Quiz code matched successfully", 200));

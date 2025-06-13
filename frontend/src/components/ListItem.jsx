@@ -10,11 +10,14 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { BACKEND_URL } from "../assets/constants.js";
+import { refreshAccessToken } from "../assets/tokens.js";
+import axios from "axios";
 
 const ListItem = ({
   quizName,
   numberOfQuestions,
-  participants,
+  participantsCount,
   totalMarks,
   eachQuestionMarks,
   category,
@@ -29,6 +32,9 @@ const ListItem = ({
 }) => {
   const navigate = useNavigate();
 
+  const [actionsOpen, setActionsOpen] = useState(false);
+  const [fetchedQuizCode, setFetchedQuizCode] = useState(null);
+  
   const joinButtonStyle = {
     backgroundColor: "var(--clr-primary)",
     color: "#fff",
@@ -124,11 +130,12 @@ const ListItem = ({
     gap: "25px",
     fontWeight: "600",
     marginRight: "80px",
-    width: "200px",
+    width: "250px",
   };
 
+  
   const editQuestions = () => {
-      navigate("/quizzes/edit/questions", {
+    navigate("/quizzes/edit/questions", {
         state: {
           questions,
           quizName,
@@ -168,7 +175,35 @@ const ListItem = ({
     navigate(`/quizzes/participants?quizId=${quizId}`);
   };
 
-  const [actionsOpen, setActionsOpen] = useState(false);
+  console.log(quizCode);
+  console.log(codeExpiresAt);
+  console.log("-------------------------------------------");
+  const getQuizCode = async () => {
+      try {
+        const response = await axios.get(`${BACKEND_URL}/quizzes/${quizId}/quiz-code`,
+            {
+              withCredentials: true,
+            }
+          );
+  
+          if (response?.status == 200) {
+            setFetchedQuizCode(response?.data?.data?.quizCode);
+          }
+        } catch (error) {
+          if (error?.response?.status == 401) {
+            try {
+              await refreshAccessToken();
+              await getQuizCode();
+            } catch (refreshError) {
+              alert("Please login again");
+              navigate("/users/login");
+            }
+          } else {
+            alert(error?.message);
+          }
+        }
+      };
+      
 
   return (
     <div
@@ -195,16 +230,25 @@ const ListItem = ({
             {quizName}
           </div>
 
+          {
+            quizCode && Date.now() < new Date(codeExpiresAt).getTime() ? (
+              <input type="text" value={quizCode} disabled  style={{display: "inline", width: "200px", paddingLeft: "66px", fontSize: "15px" }}/>
+            ) : fetchedQuizCode ? (
+              <input type="text" value={fetchedQuizCode} disabled  style={{display: "inline", width: "200px", paddingLeft: "66px", fontSize: "15px" }}/>
+            ) : null
+          }
+
           {isAdmin ? (
             <div className="d-flex justify-content-between">
             {
-                quizCode && new Date().now() < codeExpiresAt ? 
-                (
-                   <button style={codeButtonStyle}>
-                    Generate Quiz Code{" "} <FontAwesomeIcon icon={faQrcode} className="ms-1" />
-                    </button>
-                ) : null
-            }
+            (!quizCode || Date.now() > new Date(codeExpiresAt).getTime()) && (
+              <button onClick={getQuizCode} style={codeButtonStyle}>
+                Generate Quiz Code{" "}
+                <FontAwesomeIcon icon={faQrcode} className="ms-1" />
+              </button>
+            )
+          }
+
 
               <button onClick={() => setActionsOpen(prev => !prev)} style={actionsButtonStyle}>
                 Actions{" "}
@@ -245,7 +289,7 @@ const ListItem = ({
 
           <div style={itemBox}>
             <div style={labelStyle}>Participants</div>
-            <div style={valueStyle}>{participants ?? "N/A"}</div>
+            <div style={valueStyle}>{participantsCount}</div>
           </div>
 
           <div style={itemBox}>

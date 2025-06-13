@@ -42,11 +42,11 @@ router.route("/:id/attempt")
 router.route("/:id/participants")
         .get(authenticateRequest, validateQuiz, getAllParticipants);
 
-router.route("/join-code/participate")
-                .post(authenticateRequest, joinQuizWithCode);
+router.route("/code-participate") 
+        .post(authenticateRequest, joinQuizWithCode);
 
 router.route("/:id/quiz-code")
-                .get(authenticateRequest, validateQuiz, getQuizCode);
+        .get(authenticateRequest, validateQuiz, getQuizCode);
 
 
 export default router;

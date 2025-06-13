@@ -20,6 +20,10 @@ const quizSchema = new mongoose.Schema({
             ref: "User",
         }
     ],
+    participantsCount: {
+        type: Number,
+        default: 0,
+    },
     totalMarks: {
         type: Number,
         min: 1,
@@ -65,9 +69,11 @@ const quizSchema = new mongoose.Schema({
         type: String,
         trim: true, 
         unique: true,
+        default: null,
     },
     codeExpiresAt: {
-        type: Number,
+        type: Date,
+        default: null,
     }
 }, { timestamps: true });
 

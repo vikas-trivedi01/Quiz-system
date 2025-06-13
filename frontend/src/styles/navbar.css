@@ -11,7 +11,7 @@ ul {
   justify-content: space-around;
   background: var(--clr-primary);
   border-radius: var(--border-radius);
-  padding: 8px;
+  padding: 2px;
 }
 
 .nav-item {
@@ -21,7 +21,7 @@ ul {
 .nav-item a {
   color: rgb(255, 255, 255);
   list-style-type: none;
-  padding: 16px 30px;
+  padding: 25px 30px;
   border-radius: var(--border-radius);
 }
 
@@ -52,5 +52,5 @@ ul {
   width: 150px;
   border: none;
   cursor: pointer;
-  margin-top: 3px;
+  margin-top: 15px;
 }

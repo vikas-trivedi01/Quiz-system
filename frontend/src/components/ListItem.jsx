@@ -175,9 +175,6 @@ const ListItem = ({
     navigate(`/quizzes/participants?quizId=${quizId}`);
   };
 
-  console.log(quizCode);
-  console.log(codeExpiresAt);
-  console.log("-------------------------------------------");
   const getQuizCode = async () => {
       try {
         const response = await axios.get(`${BACKEND_URL}/quizzes/${quizId}/quiz-code`,

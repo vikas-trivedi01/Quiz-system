@@ -13,6 +13,7 @@ import Layout from "./components/Layout";
 import Terms from "./components/Terms";
 import Privacy from "./components/Privacy";
 import About from "./components/About";
+import Profile from "./components/Profile";
 
 
 import Quiz from "./components/Quiz";
@@ -173,6 +174,7 @@ const router = createBrowserRouter(
       <Route path="terms" element={<Terms />} />
       <Route path="privacy" element={<Privacy />} />
       <Route path="about" element={<About />} />
+      <Route path="profile" element={<Profile />} />
     </Route>
   </> 
   )

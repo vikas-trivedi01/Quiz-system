@@ -97,7 +97,7 @@ const QuizResult = () => {
   const attempt = answers.map((answerObj, index) => {
     return {
       question: quizData[index]._id,
-      selectedOption: answerObj.givenAnswer,
+      selectedOption: answerObj.givenAnswer ? answerObj.givenAnswer : "not_answered",
       isAnswerCorrect:
         answerObj.givenAnswer ===
         quizData[index].options.find((opt) => opt.isCorrect)?.option,

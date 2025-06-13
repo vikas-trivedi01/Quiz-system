@@ -3,6 +3,7 @@ import { ApiError } from "../utils/ApiError.js"
 import { User } from "../models/user.model.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import { generateAccessAndRefreshTokens } from "./auth.controller.js";
+import { Quiz } from "../models/quiz.model.js";
 
 const registerUser = asyncErrorHandler(async (req, res) => {
 
@@ -11,7 +12,7 @@ const registerUser = asyncErrorHandler(async (req, res) => {
     if (
         [fullName, userName, email, password].some(field => field?.trim() === "")
     ) {
-         return res.status(400).json(new ApiError("All fields are required", 400));
+        return res.status(400).json(new ApiError("All fields are required", 400));
     }
 
     const existedUser = await User.findOne({
@@ -19,7 +20,7 @@ const registerUser = asyncErrorHandler(async (req, res) => {
     });
 
     if (existedUser)
-         return res.status(409).json(new ApiError("User with email or username already exists", 409));
+        return res.status(409).json(new ApiError("User with email or username already exists", 409));
 
     const user = await User.create({
         fullName,
@@ -33,7 +34,7 @@ const registerUser = asyncErrorHandler(async (req, res) => {
     const createdUser = await User.findById(user._id).select("-password -refreshToken");
 
     if (!createdUser)
-         return res.status(500).json(new ApiError("Something went wrong while registering the user", 500));
+        return res.status(500).json(new ApiError("Something went wrong while registering the user", 500));
 
     return res.status(201).json(
         new ApiResponse(createdUser, "User registered successfully", 201)
@@ -50,12 +51,12 @@ const loginUser = asyncErrorHandler(async (req, res) => {
     const user = await User.findOne({ email, role });
 
     if (!user)
-         return res.status(404).json(new ApiError("User does not exist or not authorized for this role", 404));
+        return res.status(404).json(new ApiError("User does not exist or not authorized for this role", 404));
 
     const isPasswordValid = await user.isPasswordCorrect(password);
 
     if (!isPasswordValid)
-        return  res.status(401).json(new ApiError("Invalid user credentials", 401));
+        return res.status(401).json(new ApiError("Invalid user credentials", 401));
 
 
     const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(user._id);
@@ -97,8 +98,46 @@ const logoutUser = asyncErrorHandler(async (req, res) => {
 
 });
 
+const profileDetails = asyncErrorHandler(async (req, res) => {
+    const userId = req.user?._id;
+
+    const quizzes = await Quiz.find({
+        participants: userId
+    }, {
+        quizName: 1,
+        numberOfQuestions: 1,
+        totalMarks: 1,
+        category: 1,
+        difficulty: 1,
+    });
+
+    const {
+        userName,
+        fullName,
+        email,
+        age,
+        createdAt
+    } = req.user;
+
+    const profile = {
+        userName,
+        fullName,
+        email,
+        age,
+        createdAt,
+        quizzes: quizzes.length ? quizzes : null
+    }
+
+    res.status(200)
+        .json(new ApiResponse({
+            profile
+        }, "Profile fetched successfully", 200));
+});
+
+
 export {
     registerUser,
-    loginUser, 
-    logoutUser
+    loginUser,
+    logoutUser,
+    profileDetails
 }

@@ -119,13 +119,37 @@ const profileDetails = asyncErrorHandler(async (req, res) => {
         createdAt
     } = req.user;
 
+    const quizzzesCreated = await Quiz.find({
+        creator: userId
+    });
+
+
+        const topQuizzes = quizzzesCreated
+        .sort((a, b) => (b.participants?.length || 0) - (a.participants?.length || 0))
+        .slice(0, Math.min(3, quizzzesCreated.length))
+        .map(quiz => ({
+            quizName: quiz.quizName,
+            numberOfQuestions: quiz.numberOfQuestions,
+            totalMarks: quiz.totalMarks,
+            category: quiz.category,
+            difficulty: quiz.difficulty,
+            participantsCount: (quiz.participants?.length || 0)
+        }));
+
+
     const profile = {
         userName,
         fullName,
         email,
         age,
         createdAt,
-        quizzes: quizzes.length ? quizzes : null
+        quizzes: quizzes.length ? quizzes : null,
+        attemptedCount: quizzes.length,
+        quizCreatedCount: Array.isArray(quizzzesCreated)
+        ? quizzzesCreated.length
+        : null,
+        topQuizzes: Array.isArray(topQuizzes)? topQuizzes : null,
+        numberOfTopPerformingQuizzes: Array.isArray(topQuizzes)? topQuizzes.length : null
     }
 
     res.status(200)

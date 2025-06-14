@@ -16,8 +16,6 @@ import userContext from "../context/UserContext.js";
 import { BACKEND_URL } from "../assets/constants.js";
 import { refreshAccessToken } from "../assets/tokens.js";
 
-import user from "../assets/images/user_img.png";
-
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -174,14 +172,14 @@ const Navbar = () => {
           </NavLink>
         </li>
 
-         <li style={{   padding: "25px 30px"}}>
+         <li className="nav-item">
           <NavLink
-            to="/profile"
+            to={"/" + role + "Profile"}
             className={({ isActive }) =>
               `nav-link ${isActive ? "active-nav-link" : ""}`
             }
           >
-            <img src={user} alt="User icon" height={32} width={32} />
+             My Profile
           </NavLink>
         </li>
 

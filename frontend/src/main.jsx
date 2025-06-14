@@ -13,8 +13,6 @@ import Layout from "./components/Layout";
 import Terms from "./components/Terms";
 import Privacy from "./components/Privacy";
 import About from "./components/About";
-import Profile from "./components/Profile";
-
 
 import Quiz from "./components/Quiz";
 import QuizCode from "./components/QuizCode";
@@ -25,15 +23,18 @@ import QuizCreate from "./components/QuizCreate";
 import QuizPreview from "./components/QuizPreview";
 import QuizAll from "./components/QuizAll";
 import QuizDeletionConfirmation from "./components/QuizDeletionConfirmation";
+import QuizEditQuestions from "./components/QuizEditQuestions";
+import QuizEditDetails from "./components/QuizEditDetails";
+import QuizParticipants from "./components/QuizParticipants";
 
 import Signup from "./components/SignUp";
 import Login from "./components/Login";
 
 import UserAuthenticationContextProvider from "./context/UserAuthenticationContextProvider";
 import ProtectedRoute from "./ProtectedRoute";
-import QuizEditQuestions from "./components/QuizEditQuestions";
-import QuizEditDetails from "./components/QuizEditDetails";
-import QuizParticipants from "./components/QuizParticipants";
+
+import UserProfile from "./components/UserProfile";
+import AdminProfile from "./components/AdminProfile";
 
 
 const router = createBrowserRouter(
@@ -170,11 +171,21 @@ const router = createBrowserRouter(
         </Route>
 
         
+      <Route path="userProfile" element={
+        <ProtectedRoute requiredRole="user">
+          <UserProfile />
+        </ProtectedRoute>
+      } />
+
+      <Route path="adminProfile" element={
+        <ProtectedRoute requiredRole="admin">
+          <AdminProfile />
+        </ProtectedRoute>
+      } />
 
       <Route path="terms" element={<Terms />} />
       <Route path="privacy" element={<Privacy />} />
       <Route path="about" element={<About />} />
-      <Route path="profile" element={<Profile />} />
     </Route>
   </> 
   )

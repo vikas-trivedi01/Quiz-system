@@ -172,16 +172,16 @@ const Navbar = () => {
           </NavLink>
         </li>
 
-         <li className="nav-item">
+        {role != undefined ? ( <li className="nav-item">
           <NavLink
-            to={"/" + role + "Profile"}
+            to={"/profile/" + role }
             className={({ isActive }) =>
               `nav-link ${isActive ? "active-nav-link" : ""}`
             }
           >
              My Profile
           </NavLink>
-        </li>
+        </li>) : null }
 
         {role != undefined ? (
           <li className="nav-item">

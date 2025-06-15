@@ -21,8 +21,9 @@ ul {
 .nav-item a {
   color: rgb(255, 255, 255);
   list-style-type: none;
-  padding: 25px 30px;
+  padding: 15px;
   border-radius: var(--border-radius);
+  margin-top: 10px;
 }
 
 .nav-item a:hover {
@@ -52,5 +53,6 @@ ul {
   width: 150px;
   border: none;
   cursor: pointer;
-  margin-top: 15px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }

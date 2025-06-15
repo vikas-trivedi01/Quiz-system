@@ -15,8 +15,7 @@ const Signup = () => {
     password: "",
   });
 
-  const { setIsAuthenticated, role, setRole } = useContext(userContext);
-  console.log(role)
+  const { setIsAuthenticated, setRole } = useContext(userContext);
   const navigate = useNavigate();
 
   const handleChange = (e) =>

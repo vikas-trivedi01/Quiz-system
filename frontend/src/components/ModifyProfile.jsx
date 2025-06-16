@@ -1,4 +1,8 @@
+import { useNavigate } from "react-router-dom";
+
 const ModifyProfile = () => {
+  const navigate = useNavigate();
+  
   const modifyDetailBtnStyle = {
     backgroundColor: "#00509d",
     color: "#fff",

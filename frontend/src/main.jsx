@@ -175,26 +175,28 @@ const router = createBrowserRouter(
         
 
       <Route path="profile" >
-        <Route path="user" element={
-          <ProtectedRoute requiredRole="user">
-            <UserProfile />
-          </ProtectedRoute>
-        } />
+          <Route path="user" element={
+            <ProtectedRoute requiredRole="user">
+              <UserProfile />
+            </ProtectedRoute>
+          } />
 
-        <Route path="admin" element={
-          <ProtectedRoute requiredRole="admin">
-            <AdminProfile />
-          </ProtectedRoute>
-        } />
+          <Route path="admin" element={
+            <ProtectedRoute requiredRole="admin">
+              <AdminProfile />
+            </ProtectedRoute>
+          } />
 
-        <Route path="change-password" element={
-            <ChangePassword />
-        } />
+          <Route path="change-password" element={
+              <ChangePassword />
+          } />
+
+          <Route path="edit-profile" element={
+              <EditProfile />
+          } />
+        
         </Route>
 
-        <Route path="edit-profile" element={
-            <EditProfile />
-        } />
       
       <Route path="terms" element={<Terms />} />
       <Route path="privacy" element={<Privacy />} />

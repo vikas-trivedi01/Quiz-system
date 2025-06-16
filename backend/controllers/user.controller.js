@@ -183,10 +183,15 @@ const changePassword = asyncErrorHandler(async (req, res) => {
 
 });
 
+const editProfile = asyncErrorHandler(async (req, res) => {
+    
+});
+
 export {
     registerUser,
     loginUser,
     logoutUser,
     profileDetails,
-    changePassword
+    changePassword,
+    editProfile
 }

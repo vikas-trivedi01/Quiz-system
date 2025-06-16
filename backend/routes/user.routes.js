@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { loginUser, logoutUser, registerUser, profileDetails } from "../controllers/user.controller.js"
+import { loginUser, logoutUser, registerUser, profileDetails, changePassword } from "../controllers/user.controller.js"
 import { authenticateRequest } from "../middlewares/auth.middleware.js";
 
 const router = Router();
@@ -9,5 +9,6 @@ router.route("/login").post(loginUser);
 router.route("/logout").post(authenticateRequest, logoutUser);
 
 router.route("/profile").get(authenticateRequest, profileDetails);
+router.route("/change-password").put(authenticateRequest, changePassword);
 
 export default router;

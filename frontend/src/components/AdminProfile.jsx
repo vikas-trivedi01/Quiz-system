@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
 import user from "../assets/images/user_profile.png";
 import { fetchProfile } from "../assets/getProfile.js";
+import { useNavigate } from "react-router-dom";
+import ModifyProfile from "./ModifyProfile.jsx";
+
 
 const AdminProfile = () => {
   const [profile, setProfile] = useState(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -13,6 +18,24 @@ const AdminProfile = () => {
 
     fetchData();
   }, []);
+
+  const allQuizzes =  () => {
+    navigate("/quizzes/allquizzes");
+  };
+
+
+  const allQuizzesBtnStyle = {
+      backgroundColor: "#000",
+      color: "#fff",
+      borderRadius: `var(--border-radius)`,
+      padding: "8px",
+      width: "230px",
+      border: "none",
+      cursor: "pointer",
+      marginLeft: "40rem",
+      fontSize: "20px",
+  };
+
 
   return (
     <div className="container mt-4">
@@ -56,7 +79,10 @@ const AdminProfile = () => {
             </div>
           </div>
 
-          <h3 className="mb-3 text-center">Top Quizzes</h3>
+          <div className="d-flex justify-content-center">
+            <h3 className="mb-3 text-center">Top Quizzes</h3>
+            <button style={allQuizzesBtnStyle} onClick={allQuizzes}>All Quizzes</button>
+          </div>
           <div className="row gy-4 gx-5 mb-5 mt-3 ms-3">
             {profile.topQuizzes.map((quiz, index) => (
               <div key={index} className="col-md-6">
@@ -95,6 +121,8 @@ const AdminProfile = () => {
               </div>
             ))}
           </div>
+
+        <ModifyProfile />
         </>
       ) : (
         <h4 className="my-5 py-5 text-center text-muted">

@@ -124,7 +124,7 @@ const profileDetails = asyncErrorHandler(async (req, res) => {
     });
 
 
-        const topQuizzes = quizzzesCreated
+    const topQuizzes = quizzzesCreated
         .sort((a, b) => (b.participants?.length || 0) - (a.participants?.length || 0))
         .slice(0, Math.min(3, quizzzesCreated.length))
         .map(quiz => ({
@@ -146,10 +146,10 @@ const profileDetails = asyncErrorHandler(async (req, res) => {
         quizzes: quizzes.length ? quizzes : null,
         attemptedCount: quizzes.length,
         quizCreatedCount: Array.isArray(quizzzesCreated)
-        ? quizzzesCreated.length
-        : null,
-        topQuizzes: Array.isArray(topQuizzes)? topQuizzes : null,
-        numberOfTopPerformingQuizzes: Array.isArray(topQuizzes)? topQuizzes.length : null
+            ? quizzzesCreated.length
+            : null,
+        topQuizzes: Array.isArray(topQuizzes) ? topQuizzes : null,
+        numberOfTopPerformingQuizzes: Array.isArray(topQuizzes) ? topQuizzes.length : null
     }
 
     res.status(200)
@@ -158,10 +158,35 @@ const profileDetails = asyncErrorHandler(async (req, res) => {
         }, "Profile fetched successfully", 200));
 });
 
+const changePassword = asyncErrorHandler(async (req, res) => {
+    
+    const {
+        email,
+        currentPassword,
+        newPassword
+    } = req.body;
+    
+    const user = await User.findOne({ email }).select("+password");
+
+    const isPasswordCorrect = await user.isPasswordCorrect(currentPassword);
+
+    if (user.email !== email || !isPasswordCorrect)
+        return res.status(400).json(new ApiError("Invalid credentials", 400));
+
+    user.password = newPassword;
+
+    await user.save();
+
+    return res
+        .status(200)
+        .json(new ApiResponse({}, "Password changed successfully", 200));
+
+});
 
 export {
     registerUser,
     loginUser,
     logoutUser,
-    profileDetails
+    profileDetails,
+    changePassword
 }

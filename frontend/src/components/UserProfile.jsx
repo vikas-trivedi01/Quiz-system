@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import user from "../assets/images/user_profile.png";
 import { fetchProfile } from "../assets/getProfile.js";
+import ModifyProfile from "./ModifyProfile.jsx";
 
 const UserProfile = () => {
   const [profile, setProfile] = useState(null);
@@ -79,6 +80,8 @@ return (
             </div>
           ))}
         </div>
+
+        <ModifyProfile />
       </>
     ) : (
       <h4 className="my-5 py-5 text-center text-muted">

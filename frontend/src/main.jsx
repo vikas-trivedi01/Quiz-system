@@ -35,6 +35,8 @@ import ProtectedRoute from "./ProtectedRoute";
 
 import UserProfile from "./components/UserProfile";
 import AdminProfile from "./components/AdminProfile";
+import ChangePassword from "./components/ChangePassword";
+import EditProfile from "./components/EditProfile";
 
 
 const router = createBrowserRouter(
@@ -171,18 +173,29 @@ const router = createBrowserRouter(
         </Route>
 
         
-      <Route path="userProfile" element={
-        <ProtectedRoute requiredRole="user">
-          <UserProfile />
-        </ProtectedRoute>
-      } />
 
-      <Route path="adminProfile" element={
-        <ProtectedRoute requiredRole="admin">
-          <AdminProfile />
-        </ProtectedRoute>
-      } />
+      <Route path="profile" >
+        <Route path="user" element={
+          <ProtectedRoute requiredRole="user">
+            <UserProfile />
+          </ProtectedRoute>
+        } />
 
+        <Route path="admin" element={
+          <ProtectedRoute requiredRole="admin">
+            <AdminProfile />
+          </ProtectedRoute>
+        } />
+
+        <Route path="change-password" element={
+            <ChangePassword />
+        } />
+        </Route>
+
+        <Route path="edit-profile" element={
+            <EditProfile />
+        } />
+      
       <Route path="terms" element={<Terms />} />
       <Route path="privacy" element={<Privacy />} />
       <Route path="about" element={<About />} />

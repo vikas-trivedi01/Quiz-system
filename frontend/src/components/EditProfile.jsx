@@ -19,13 +19,13 @@ const EditProfile = () => {
     const fetchData = async () => {
       try {
         const response = await fetchProfile();
+          setForm({
+            fullName: response.fullName || "",
+            userName: response.userName || "",
+            email: response.email || "",
+            age: response.age || "",
+          });
 
-        setForm({
-          fullName: response.profile.fullName,
-          userName: response.profile.userName,
-          email: response.profile.email,
-          age: response.profile.age,
-        });
       } catch (error) {
         alert("Failed to fetch profile:");
         navigate(-1);
@@ -40,6 +40,16 @@ const EditProfile = () => {
 
   const saveBtnStyle = {
     backgroundColor: "#00f5d4",
+    color: "#000",
+    borderRadius: `var(--border-radius)`,
+    padding: "8px",
+    width: "230px",
+    border: "none",
+    cursor: "pointer",
+    fontSize: "20px",
+  };
+  const cancelBtnStyle = {
+    backgroundColor: "#e63946",
     color: "#000",
     borderRadius: `var(--border-radius)`,
     padding: "8px",
@@ -153,13 +163,16 @@ const EditProfile = () => {
             id="age"
             name="age"
             type="number"
-            placeholder="Age"
+            defaultValue={form.age}
             className="form-control"
             onChange={handleChange}
           />
         </div>
 
-        <div className="text-center">
+        <div className="text-center d-flex mt-5 gap-5">
+          <button  onClick={() => navigate(-1)} style={cancelBtnStyle}>
+            Cancel
+          </button>
           <button type="submit" style={saveBtnStyle}>
             Save
           </button>

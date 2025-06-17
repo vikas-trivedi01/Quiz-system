@@ -2,48 +2,52 @@ import { useNavigate } from "react-router-dom";
 
 const ModifyProfile = () => {
   const navigate = useNavigate();
-  
-  const modifyDetailBtnStyle = {
-    backgroundColor: "#00509d",
+
+  const buttonStyle = {
+    backgroundColor: "var(--clr-primary)",
     color: "#fff",
-    borderRadius: `var(--border-radius)`,
-    padding: "8px",
-    width: "230px",
+    borderRadius: "8px",
+    padding: "10px 24px",
     border: "none",
-    cursor: "pointer",
-    marginLeft: "14rem",
-    fontSize: "20px",
+    fontSize: "16px",
+    fontWeight: "500",
   };
 
-  
-  const changePassword = () => {
-    navigate("/profile/change-password");
-  };
-
-  
-  const editProfile = () => {
-    navigate("/profile/edit-profile");
+  const handleHover = (e, isHover) => {
+    e.target.style.backgroundColor = isHover ? "#003f7d" : "var(--clr-primary)";
   };
 
   return (
-    <div>
+    <div className="p-4 rounded mt-4">
+      <h4 className="text-center mb-4 fw-semibold">Modify Your Profile</h4>
+      <div className="row justify-content-center text-center g-4">
+        <div className="col-md-5">
+          <div className="rounded p-3 h-100">
+            <h5 className="mb-3">Change Password</h5>
+            <button
+              style={buttonStyle}
+              onMouseEnter={(e) => handleHover(e, true)}
+              onMouseLeave={(e) => handleHover(e, false)}
+              onClick={() => navigate("/profile/change-password")}
+            >
+              Change
+            </button>
+          </div>
+        </div>
 
-      <h3 className="text-center">Modify Your Profile</h3>
-      <div className="row text-center ms-5 mt-5">
-        <div className="d-flex justify-content-center align-items-center m-3 col-6">
-        <h5 style={{ display: "inline" }}>Change Password</h5>{" "}
-        <button onClick={changePassword} style={modifyDetailBtnStyle}>
-          Change
-        </button>
-      </div>
-
-      <div className="d-flex justify-content-center align-items-center m-3 col-5">
-        <h5 style={{ display: "inline" }}>Edit Profile</h5>{" "}
-        <button onClick={editProfile} style={modifyDetailBtnStyle}>
-          Edit
-        </button>
-      </div>
-
+        <div className="col-md-5">
+          <div className=" rounded p-3 h-100">
+            <h5 className="mb-3">Edit Profile</h5>
+            <button
+              style={buttonStyle}
+              onMouseEnter={(e) => handleHover(e, true)}
+              onMouseLeave={(e) => handleHover(e, false)}
+              onClick={() => navigate("/profile/edit-profile")}
+            >
+              Edit
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

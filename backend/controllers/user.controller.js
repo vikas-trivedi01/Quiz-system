@@ -184,7 +184,29 @@ const changePassword = asyncErrorHandler(async (req, res) => {
 });
 
 const editProfile = asyncErrorHandler(async (req, res) => {
-    
+    const userId = req.user?._id;
+
+    const { fullName, userName, email, age } = req.body;
+
+    const updatedProfile = await User.findByIdAndUpdate(
+        userId,
+        {
+             fullName, 
+             userName, 
+             email, 
+             age 
+        },
+        {
+            new: true,
+            runValidators: true
+        }
+    );
+
+    if(!updatedProfile)
+        return res.status(404).json(new ApiError("Profile not found or editing failed", 404));
+
+    return res.status(200)
+                .json(new ApiResponse({}, "Profile edited successfully", 200));
 });
 
 export {

@@ -6,10 +6,13 @@ import {
   faSquareXmark,
   faEllipsisVertical,
   faUsersLine,
-  faQrcode
+  faQrcode,
+  faEye,
+  faEyeSlash,
+  faListUl,
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BACKEND_URL } from "../assets/constants.js";
 import { refreshAccessToken } from "../assets/tokens.js";
 import axios from "axios";
@@ -27,14 +30,20 @@ const ListItem = ({
   questions,
   isAdmin,
   quizId,
-  quizCode, 
-  codeExpiresAt
+  quizCode,
+  codeExpiresAt,
 }) => {
   const navigate = useNavigate();
 
   const [actionsOpen, setActionsOpen] = useState(false);
   const [fetchedQuizCode, setFetchedQuizCode] = useState(null);
-  
+
+  const [isArchived, setIsArchived] = useState(null);
+
+  useEffect(() => {
+    setIsArchived(() => (status == "published" ? false : true));
+  }, []);
+
   const joinButtonStyle = {
     backgroundColor: "var(--clr-primary)",
     color: "#fff",
@@ -49,7 +58,7 @@ const ListItem = ({
     fontWeight: "600",
     width: "200px",
   };
-  
+
   const actionButtonStyle = {
     backgroundColor: "var(--clr-primary)",
     color: "#fff",
@@ -133,17 +142,16 @@ const ListItem = ({
     width: "250px",
   };
 
-  
   const editQuestions = () => {
     navigate("/quizzes/edit/questions", {
-        state: {
-          questions,
-          quizName,
-          quizId
-        },
-      });
-    };
-    
+      state: {
+        questions,
+        quizName,
+        quizId,
+      },
+    });
+  };
+
   const editQuiz = () => {
     navigate("/quizzes/edit/quiz", {
       state: {
@@ -152,17 +160,16 @@ const ListItem = ({
         category,
         difficulty,
         noOfQuestions: questions.length,
-        quizId
+        quizId,
       },
     });
-
   };
 
   const deleteQuiz = () => {
     navigate("/quizzes/delete", {
       state: {
         quizId,
-        quizName
+        quizName,
       },
     });
   };
@@ -170,37 +177,73 @@ const ListItem = ({
   const joinQuiz = () => {
     navigate(`/quizzes/quiz?quizId=${quizId}`);
   };
-  
+
   const viewParticipants = () => {
     navigate(`/quizzes/participants?quizId=${quizId}`);
   };
 
   const getQuizCode = async () => {
-      try {
-        const response = await axios.get(`${BACKEND_URL}/quizzes/${quizId}/quiz-code`,
-            {
-              withCredentials: true,
-            }
-          );
-  
-          if (response?.status == 200) {
-            setFetchedQuizCode(response?.data?.data?.quizCode);
-          }
-        } catch (error) {
-          if (error?.response?.status == 401) {
-            try {
-              await refreshAccessToken();
-              await getQuizCode();
-            } catch (refreshError) {
-              alert("Please login again");
-              navigate("/users/login");
-            }
-          } else {
-            alert(error?.message);
-          }
+    try {
+      const response = await axios.get(
+        `${BACKEND_URL}/quizzes/${quizId}/quiz-code`,
+        {
+          withCredentials: true,
         }
-      };
-      
+      );
+
+      if (response?.status == 200) {
+        setFetchedQuizCode(response?.data?.data?.quizCode);
+      }
+    } catch (error) {
+      if (error?.response?.status == 401) {
+        try {
+          await refreshAccessToken();
+          await getQuizCode();
+        } catch (refreshError) {
+          alert("Please login again");
+          navigate("/users/login");
+        }
+      } else {
+        alert(error?.message);
+      }
+    }
+  };
+
+  const viewQuestions = () => {
+    navigate("/quizzes/questions", {
+      state: {
+        questions,
+        quizName,
+      },
+    });
+  };
+  const setArchived = async () => {
+    try {
+      const response = await axios.put(
+        `${BACKEND_URL}/quizzes/${quizId}/status`,
+        {
+          status: isArchived ? "archived" : "published",
+        },
+        {
+          withCredentials: true,
+        }
+      );
+
+      setIsArchived((prev) => !prev);
+    } catch (error) {
+      if (error?.response?.status == 401) {
+        try {
+          await refreshAccessToken();
+          await setArchived();
+        } catch (refreshError) {
+          alert("Please login again");
+          navigate("/users/login");
+        }
+      } else {
+        alert(error?.message);
+      }
+    }
+  };
 
   return (
     <div
@@ -214,57 +257,72 @@ const ListItem = ({
         boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
       }}
     >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            flexWrap: "wrap",
-            alignItems: "center",
-            marginBottom: "20px",
-          }}
-        >
-          <div style={{ fontSize: "1.5rem", fontWeight: "700", color: "#333" }}>
-            {quizName}
-          </div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          flexWrap: "wrap",
+          alignItems: "center",
+          marginBottom: "20px",
+        }}
+      >
+        <div style={{ fontSize: "1.5rem", fontWeight: "700", color: "#333" }}>
+          {quizName}
+        </div>
 
-          {
-            quizCode && Date.now() < new Date(codeExpiresAt).getTime() ? (
-              <input type="text" value={quizCode} disabled  style={{display: "inline", width: "200px", paddingLeft: "66px", fontSize: "15px" }}/>
-            ) : fetchedQuizCode ? (
-              <input type="text" value={fetchedQuizCode} disabled  style={{display: "inline", width: "200px", paddingLeft: "66px", fontSize: "15px" }}/>
-            ) : null
-          }
+        {quizCode && Date.now() < new Date(codeExpiresAt).getTime() ? (
+          <input
+            type="text"
+            value={quizCode}
+            disabled
+            style={{
+              display: "inline",
+              width: "200px",
+              paddingLeft: "66px",
+              fontSize: "15px",
+            }}
+          />
+        ) : fetchedQuizCode ? (
+          <input
+            type="text"
+            value={fetchedQuizCode}
+            disabled
+            style={{
+              display: "inline",
+              width: "200px",
+              paddingLeft: "66px",
+              fontSize: "15px",
+            }}
+          />
+        ) : null}
 
-          {isAdmin ? (
-            <div className="d-flex justify-content-between">
-            {
-            (!quizCode || Date.now() > new Date(codeExpiresAt).getTime()) && (
+        {isAdmin ? (
+          <div className="d-flex justify-content-between">
+            {(!quizCode || Date.now() > new Date(codeExpiresAt).getTime()) && (
               <button onClick={getQuizCode} style={codeButtonStyle}>
                 Generate Quiz Code{" "}
                 <FontAwesomeIcon icon={faQrcode} className="ms-1" />
               </button>
-            )
-          }
+            )}
 
-
-              <button onClick={() => setActionsOpen(prev => !prev)} style={actionsButtonStyle}>
-                Actions{" "}
+            <button
+              onClick={() => setActionsOpen((prev) => !prev)}
+              style={actionsButtonStyle}
+            >
+              Actions{" "}
               {actionsOpen ? (
                 <FontAwesomeIcon icon={faSquareXmark} className="ms-1" />
               ) : (
                 <FontAwesomeIcon icon={faEllipsisVertical} className="ms-1" />
               )}
-              </button>
-            </div>
-            ) :
-            (
-                <button style={joinButtonStyle} onClick={joinQuiz}>
-              Join Quiz
-              <FontAwesomeIcon icon={faUpRightFromSquare} />
             </button>
-            )
-               
-          }
+          </div>
+        ) : (
+          <button style={joinButtonStyle} onClick={joinQuiz}>
+            Join Quiz
+            <FontAwesomeIcon icon={faUpRightFromSquare} />
+          </button>
+        )}
 
         <div
           style={{
@@ -311,46 +369,57 @@ const ListItem = ({
 
           <div style={itemBox}>
             <div style={labelStyle}>Created By</div>
-            <div style={valueStyle}>{createdBy} {isAdmin ? "(You)" : null}</div>
+            <div style={valueStyle}>
+              {createdBy} {isAdmin ? "(You)" : null}
+            </div>
           </div>
         </div>
 
         <div
-              className={`px-3 py-4 mt-3 mb-0 gap-4 ms-2 d-${actionsOpen ? "flex justify-content-between" : "none"}`}
-              style={{ 
-                    borderRadius: "var(--border-radius)",
-                    }}
-            >
-               <button
-                style={actionButtonStyle}
-                onClick={viewParticipants}
-              >
-                View Participants{" "}
-                <FontAwesomeIcon icon={faUsersLine} />
-              </button>
-              
-                  <button
-                style={actionButtonStyle}
-                onClick={editQuestions}
-              >
-                Edit Questions{" "}
-                <FontAwesomeIcon icon={faFilePen} />
-              </button>
-              <button
-                style={actionButtonStyle}
-                onClick={editQuiz}
-              >
-                Edit Quiz{" "}
-                <FontAwesomeIcon icon={faUpRightFromSquare} />
-              </button>
-              <button
-                style={deleteQuizButtonStyle}
-                onClick={deleteQuiz}
-              >
-                Delete Quiz{" "}
-                <FontAwesomeIcon icon={faTrash} />
-              </button>
-            </div>
+          className={`mt-3 px-3 py-4 ${
+            actionsOpen
+              ? "d-flex flex-wrap justify-content-start gap-5"
+              : "d-none"
+          }`}
+          style={{
+            borderRadius: "var(--border-radius)",
+            backgroundColor: "#f9f9f9",
+            marginLeft: "100px",
+          }}
+        >
+          <button style={actionButtonStyle} onClick={viewParticipants}>
+            View Participants{" "}
+            <FontAwesomeIcon icon={faUsersLine} className="ms-2" />
+          </button>
+
+          <button style={actionButtonStyle} onClick={viewQuestions}>
+            View Questions <FontAwesomeIcon icon={faListUl} className="ms-2" />
+          </button>
+
+          <button
+            onClick={setArchived}
+            style={isArchived ? actionButtonStyle : deleteQuizButtonStyle}
+          >
+            {isArchived ? "Publish Quiz" : "Archive Quiz"}
+            <FontAwesomeIcon
+              icon={isArchived ? faEye : faEyeSlash}
+              className="ms-2"
+            />
+          </button>
+
+          <button style={actionButtonStyle} onClick={editQuestions}>
+            Edit Questions <FontAwesomeIcon icon={faFilePen} className="ms-2" />
+          </button>
+
+          <button style={actionButtonStyle} onClick={editQuiz}>
+            Edit Quiz{" "}
+            <FontAwesomeIcon icon={faUpRightFromSquare} className="ms-2" />
+          </button>
+
+          <button style={deleteQuizButtonStyle} onClick={deleteQuiz}>
+            Delete Quiz <FontAwesomeIcon icon={faTrash} className="ms-2" />
+          </button>
+        </div>
       </div>
     </div>
   );

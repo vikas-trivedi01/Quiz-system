@@ -11,7 +11,8 @@ import {
         attemptQuiz,
         getAllParticipants,
         joinQuizWithCode,
-        getQuizCode
+        getQuizCode,
+        changeStatus
 } from "../controllers/quiz.controller.js";
 import { validateQuiz } from "../middlewares/quiz.middleware.js";
 import { authenticateRequest } from "../middlewares/auth.middleware.js";
@@ -48,5 +49,7 @@ router.route("/code-participate")
 router.route("/:id/quiz-code")
         .get(authenticateRequest, validateQuiz, getQuizCode);
 
+router.route("/:id/status")
+        .put(authenticateRequest, validateQuiz, changeStatus);
 
 export default router;

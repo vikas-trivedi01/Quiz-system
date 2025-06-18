@@ -322,6 +322,21 @@ const getQuizCode = asyncErrorHandler(async (req, res) => {
     );
 });
 
+const changeStatus = asyncErrorHandler(async (req, res) => {
+   const { status } = req.body;
+
+   if(!(["published", "archived"].includes))
+        return res.status(400).json(new ApiError("Invalid quiz status", 400));
+
+   const quiz = req.quiz;
+
+   quiz.status = status;
+
+   await quiz.save();
+
+   return res.status(200)
+                .json(new ApiResponse({}, "Status changed successfully", 200));
+});
 
 export {
     createQuiz,
@@ -335,5 +350,6 @@ export {
     attemptQuiz,
     getAllParticipants,
     joinQuizWithCode,
-    getQuizCode
+    getQuizCode,
+    changeStatus
 }

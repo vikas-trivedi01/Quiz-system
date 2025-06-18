@@ -18,15 +18,20 @@ import { refreshAccessToken } from "../assets/tokens.js";
 
 
 const Navbar = () => {
-  const [open, setOpen] = useState(false);
+  const [quizzesOpen, setQuizzesOpen] = useState(false);
+  const [infoOpen, setInfoOpen] = useState(false);
 
   const { setIsAuthenticated, role } = useContext(userContext);
 
   const navigate = useNavigate();
 
-  const toggleDropdown = (e) => {
+  const toggleQuizzesDropdown = (e) => {
     e.preventDefault();
-    setOpen(!open);
+    setQuizzesOpen(!quizzesOpen);
+  };
+  const toggleInfoDropdown = (e) => {
+    e.preventDefault();
+    setInfoOpen(!infoOpen);
   };
 
   const logout = async () => {
@@ -83,11 +88,11 @@ const Navbar = () => {
             className={({ isActive }) =>
               `nav-link ${isActive ? "active-nav-link" : ""}`
             }
-            onClick={toggleDropdown}
+            onClick={toggleQuizzesDropdown}
             data-toggle="dropdown"
           >
             Quizzes{" "}
-            {open ? (
+            {quizzesOpen ? (
               <FontAwesomeIcon icon={faChevronUp} className="ms-1" />
             ) : (
               <FontAwesomeIcon icon={faChevronDown} className="ms-1" />
@@ -96,7 +101,7 @@ const Navbar = () => {
 
           <div
             className={`dropdown-menu${
-              open ? " show" : ""
+              quizzesOpen ? " show" : ""
             } bg-dark px-3 py-4 mt-3 ms-5`}
           >
             {role == "user" ? (
@@ -139,39 +144,61 @@ const Navbar = () => {
           </div>
         </li>
 
-        <li className="nav-item">
+
+        <li className="nav-item dropdown">
           <NavLink
-            to="/about"
+            to="/info"
             className={({ isActive }) =>
               `nav-link ${isActive ? "active-nav-link" : ""}`
             }
+            onClick={toggleInfoDropdown}
+            data-toggle="dropdown"
           >
-            About Us
+            Know More{" "}
+            {infoOpen ? (
+              <FontAwesomeIcon icon={faChevronUp} className="ms-1" />
+            ) : (
+              <FontAwesomeIcon icon={faChevronDown} className="ms-1" />
+            )}
           </NavLink>
-        </li>
 
-        <li className="nav-item">
-          <NavLink
-            to="/terms"
-            className={({ isActive }) =>
-              `nav-link ${isActive ? "active-nav-link" : ""}`
-            }
+          <div
+            className={`text-center dropdown-menu${
+              infoOpen ? " show" : ""
+            } bg-dark px-5 py-2 mt-3 ms-5`}
           >
-            Terms
-          </NavLink>
-        </li>
+              <>
+                <NavLink
+                  to="/info/about"
+                  className="dropdown-item bg-light text-dark mb-3 mb-3"
+                >
+                 About{" "}
+                </NavLink>
 
-        <li className="nav-item">
-          <NavLink
-            to="/privacy"
-            className={({ isActive }) =>
-              `nav-link ${isActive ? "active-nav-link" : ""}`
-            }
-          >
-            Privacy Policy
-          </NavLink>
-        </li>
+                <NavLink
+                  to="/info/terms"
+                  className="dropdown-item bg-light text-dark mb-3 mb-3"
+                >
+                 Terms{" "}
+                </NavLink>
 
+                <NavLink
+                  to="/info/privacy"
+                  className="dropdown-item bg-light text-dark mb-3 mb-3"
+                >
+                 Privacy Policy{" "}
+                </NavLink>
+
+                <NavLink
+                  to="/info/feedback"
+                  className="dropdown-item bg-light text-dark mb-3 mb-3"
+                >
+                 Give Feedback{" "}
+                </NavLink>
+              </>
+            </div>
+          </li>
+        
         {role != undefined ? ( <li className="nav-item">
           <NavLink
             to={"/profile/" + role }

@@ -37,6 +37,7 @@ import UserProfile from "./components/UserProfile";
 import AdminProfile from "./components/AdminProfile";
 import ChangePassword from "./components/ChangePassword";
 import EditProfile from "./components/EditProfile";
+import Feedback from "./components/Feedback";
 
 
 const router = createBrowserRouter(
@@ -198,9 +199,12 @@ const router = createBrowserRouter(
         </Route>
 
       
-      <Route path="terms" element={<Terms />} />
-      <Route path="privacy" element={<Privacy />} />
-      <Route path="about" element={<About />} />
+      <Route path="info">
+        <Route path="terms" element={<Terms />} />
+        <Route path="privacy" element={<Privacy />} />
+        <Route path="about" element={<About />} />
+        <Route path="feedback" element={<Feedback />} />
+      </Route>
     </Route>
   </> 
   )

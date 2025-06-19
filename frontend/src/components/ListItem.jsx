@@ -38,11 +38,8 @@ const ListItem = ({
   const [actionsOpen, setActionsOpen] = useState(false);
   const [fetchedQuizCode, setFetchedQuizCode] = useState(null);
 
-  const [isArchived, setIsArchived] = useState(null);
-
-  useEffect(() => {
-    setIsArchived(() => (status == "published" ? false : true));
-  }, []);
+  const [isArchived, setIsArchived] = useState(status === "archived");
+  const [updatedStatus, setUpdatedStatus] = useState(status);
 
   const joinButtonStyle = {
     backgroundColor: "var(--clr-primary)",
@@ -219,17 +216,16 @@ const ListItem = ({
   };
   const setArchived = async () => {
     try {
-      const response = await axios.put(
-        `${BACKEND_URL}/quizzes/${quizId}/status`,
-        {
-          status: isArchived ? "archived" : "published",
-        },
-        {
-          withCredentials: true,
-        }
-      );
+       const newStatus = isArchived ? "published" : "archived";
 
-      setIsArchived((prev) => !prev);
+    const response = await axios.put(
+      `${BACKEND_URL}/quizzes/${quizId}/status`,
+      { status: newStatus },
+      { withCredentials: true }
+    );
+
+    setIsArchived((prev) => !prev); 
+    setUpdatedStatus(response?.data?.data?.status);
     } catch (error) {
       if (error?.response?.status == 401) {
         try {
@@ -362,10 +358,10 @@ const ListItem = ({
             <div style={valueStyle}>{difficulty}</div>
           </div>
 
-          <div style={itemBox}>
+         { isAdmin ? ( <div style={itemBox}>
             <div style={labelStyle}>Status</div>
-            <div style={valueStyle}>{status}</div>
-          </div>
+            <div style={valueStyle}>{updatedStatus}</div>
+          </div>) : null}
 
           <div style={itemBox}>
             <div style={labelStyle}>Created By</div>

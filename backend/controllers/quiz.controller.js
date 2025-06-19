@@ -177,7 +177,9 @@ const getQuiz = asyncErrorHandler(async (req, res) => {
 
 const getListOfQuizzes = asyncErrorHandler(async (req, res) => {
 
-    const quizzes = await Quiz.find()
+    const quizzes = await Quiz.find({
+        status: "published"
+    })
         .populate({
             path: "creator",
             select: "-fullName -email -age -password -refreshToken -role -quizzesAttempted -quizCode -codeExpiresAt -createdAt -updatedAt -__v -_id"
@@ -335,7 +337,7 @@ const changeStatus = asyncErrorHandler(async (req, res) => {
    await quiz.save();
 
    return res.status(200)
-                .json(new ApiResponse({}, "Status changed successfully", 200));
+                .json(new ApiResponse({status: quiz.status}, "Status changed successfully", 200));
 });
 
 export {

@@ -216,16 +216,16 @@ const ListItem = ({
   };
   const setArchived = async () => {
     try {
-       const newStatus = isArchived ? "published" : "archived";
+      const newStatus = isArchived ? "published" : "archived";
 
-    const response = await axios.put(
-      `${BACKEND_URL}/quizzes/${quizId}/status`,
-      { status: newStatus },
-      { withCredentials: true }
-    );
+      const response = await axios.put(
+        `${BACKEND_URL}/quizzes/${quizId}/status`,
+        { status: newStatus },
+        { withCredentials: true }
+      );
 
-    setIsArchived((prev) => !prev); 
-    setUpdatedStatus(response?.data?.data?.status);
+      setIsArchived((prev) => !prev);
+      setUpdatedStatus(response?.data?.data?.status);
     } catch (error) {
       if (error?.response?.status == 401) {
         try {
@@ -358,10 +358,12 @@ const ListItem = ({
             <div style={valueStyle}>{difficulty}</div>
           </div>
 
-         { isAdmin ? ( <div style={itemBox}>
-            <div style={labelStyle}>Status</div>
-            <div style={valueStyle}>{updatedStatus}</div>
-          </div>) : null}
+          {isAdmin ? (
+            <div style={itemBox}>
+              <div style={labelStyle}>Status</div>
+              <div style={valueStyle}>{updatedStatus}</div>
+            </div>
+          ) : null}
 
           <div style={itemBox}>
             <div style={labelStyle}>Created By</div>

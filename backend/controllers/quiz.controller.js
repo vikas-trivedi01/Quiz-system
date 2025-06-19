@@ -259,45 +259,45 @@ const attemptQuiz = asyncErrorHandler(async (req, res) => {
 const getAllParticipants = asyncErrorHandler(async (req, res) => {
     const quizId = req.quiz?._id;
 
-    const participants = await Quiz.findById(quizId) 
-        .select("participants") 
+    const participants = await Quiz.findById(quizId)
+        .select("participants")
         .populate({
             path: "participants",
             select: "-password -refreshToken -role -quizzesAttempted -createdAt -updatedAt -__v -_id"
         });
 
-    if(participants.length == 0) 
+    if (participants.length == 0)
         return res.status(404).json(new ApiError("No participants found", 404));
-    
+
     return res.status(200)
-            .json(new ApiResponse(participants, "Participants fetched successfully", 200));
+        .json(new ApiResponse(participants, "Participants fetched successfully", 200));
 });
 
 const joinQuizWithCode = asyncErrorHandler(async (req, res) => {
-    const { quizCode }  =  req.body;
+    const { quizCode } = req.body;
 
     const quiz = await Quiz.findOne({
         quizCode
     });
 
-    if(!quiz)
+    if (!quiz)
         return res.status(404).json(new ApiError("Invalid quiz code", 404));
-    
-    if(Date.now() > new Date(quiz.codeExpiresAt).getTime())
+
+    if (Date.now() > new Date(quiz.codeExpiresAt).getTime())
         return res.status(400).json(new ApiError("Expired quiz code", 400));
-    
+
     return res.status(200)
-                .json(new ApiResponse({quizId: quiz._id}, "Quiz code matched successfully", 200));
+        .json(new ApiResponse({ quizId: quiz._id }, "Quiz code matched successfully", 200));
 });
 
 function generateCode() {
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  let code = "";
-  for (let i = 0; i < 6; i++) {
-    const randomIndex = Math.floor(Math.random() * chars.length);
-    code += chars[randomIndex];
-  }
-  return code;
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let code = "";
+    for (let i = 0; i < 6; i++) {
+        const randomIndex = Math.floor(Math.random() * chars.length);
+        code += chars[randomIndex];
+    }
+    return code;
 }
 
 
@@ -320,24 +320,24 @@ const getQuizCode = asyncErrorHandler(async (req, res) => {
     await quiz.save();
 
     return res.status(200).json(
-        new ApiResponse({quizCode}, "Quiz code generated successfully", 200)
+        new ApiResponse({ quizCode }, "Quiz code generated successfully", 200)
     );
 });
 
 const changeStatus = asyncErrorHandler(async (req, res) => {
-   const { status } = req.body;
+    const { status } = req.body;
 
-   if(!(["published", "archived"].includes))
+    if (!(["published", "archived"].includes))
         return res.status(400).json(new ApiError("Invalid quiz status", 400));
 
-   const quiz = req.quiz;
+    const quiz = req.quiz;
 
-   quiz.status = status;
+    quiz.status = status;
 
-   await quiz.save();
+    await quiz.save();
 
-   return res.status(200)
-                .json(new ApiResponse({status: quiz.status}, "Status changed successfully", 200));
+    return res.status(200)
+        .json(new ApiResponse({ status: quiz.status }, "Status changed successfully", 200));
 });
 
 export {

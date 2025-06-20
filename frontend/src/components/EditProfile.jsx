@@ -170,7 +170,10 @@ const EditProfile = () => {
         </div>
 
         <div className="text-center d-flex mt-5 gap-5">
-          <button  onClick={() => navigate(-1)} style={cancelBtnStyle}>
+          <button  onClick={(e) => {
+             e.preventDefault();
+            navigate(-1);
+          }} style={cancelBtnStyle}>
             Cancel
           </button>
           <button type="submit" style={saveBtnStyle}>

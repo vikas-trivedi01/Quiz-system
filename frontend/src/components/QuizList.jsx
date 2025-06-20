@@ -106,6 +106,7 @@ const QuizList = () => {
                   <ListItem
                     key={index}
                     quizName={quiz.quizName}
+                    participantsCount={quiz.participantsCount}
                     numberOfQuestions={quiz.numberOfQuestions}
                     totalMarks={quiz.totalMarks}
                     eachQuestionMarks={quiz.eachQuestionMarks}

@@ -188,13 +188,6 @@ const Navbar = () => {
                 >
                  Privacy Policy{" "}
                 </NavLink>
-
-                <NavLink
-                  to="/info/feedback"
-                  className="dropdown-item bg-light text-dark mb-3 mb-3"
-                >
-                 Give Feedback{" "}
-                </NavLink>
               </>
             </div>
           </li>

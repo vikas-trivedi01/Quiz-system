@@ -4,6 +4,7 @@ import { User } from "../models/user.model.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import { generateAccessAndRefreshTokens } from "./auth.controller.js";
 import { Quiz } from "../models/quiz.model.js";
+import { Attempt } from "../models/attempt.model.js";
 
 const registerUser = asyncErrorHandler(async (req, res) => {
 
@@ -136,6 +137,9 @@ const profileDetails = asyncErrorHandler(async (req, res) => {
             participantsCount: (quiz.participants?.length || 0)
         }));
 
+    const attemptQuizzes = await Attempt.find({
+        user: userId
+    });
 
     const profile = {
         userName,
@@ -149,7 +153,8 @@ const profileDetails = asyncErrorHandler(async (req, res) => {
             ? quizzzesCreated.length
             : null,
         topQuizzes: Array.isArray(topQuizzes) ? topQuizzes : null,
-        numberOfTopPerformingQuizzes: Array.isArray(topQuizzes) ? topQuizzes.length : null
+        numberOfTopPerformingQuizzes: Array.isArray(topQuizzes) ? topQuizzes.length : null,
+        attemptedQuizzes: Array.isArray(attemptQuizzes) ? attemptQuizzes : null,
     }
 
     res.status(200)

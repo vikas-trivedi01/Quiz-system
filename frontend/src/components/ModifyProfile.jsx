@@ -48,6 +48,24 @@ const ModifyProfile = () => {
             </button>
           </div>
         </div>
+
+        <div class="card mb-4">
+          <div class="card-body">
+            <h5 class="card-title">Last Login</h5>
+            <p class="card-text text-muted">Last accessed: <strong>2025-06-06 10:45 AM</strong></p>
+            <a href="/profile/login-history" class="btn btn-sm btn-outline-primary">View Full Login History</a>
+          </div>
+        </div>
+
+        <div class="card border-danger mb-4">
+          <div class="card-body">
+            <h5 class="card-title text-danger">Danger Zone</h5>
+            <p class="card-text">Permanently delete or deactivate your account. This action cannot be undone.</p>
+            <button class="btn btn-sm btn-danger" onclick="confirmDeactivation()">Deactivate Account</button>
+            <button class="btn btn-sm btn-outline-danger ms-2" onclick="confirmDeletion()">Delete Account</button>
+          </div>
+        </div>
+
       </div>
     </div>
   );

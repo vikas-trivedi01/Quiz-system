@@ -1,8 +1,21 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { refreshAccessToken } from "../assets/tokens";
+import axios from "axios";
+import { BACKEND_URL } from "../assets/constants";
+import {
+  faClock,
+  faExclamationTriangle,
+  faHistory,
+  faLock,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const ModifyProfile = () => {
   const navigate = useNavigate();
 
+  const [lastLogin, setLastLogin] = useState();
   const buttonStyle = {
     backgroundColor: "var(--clr-primary)",
     color: "#fff",
@@ -49,23 +62,41 @@ const ModifyProfile = () => {
           </div>
         </div>
 
-        <div class="card mb-4">
+        <div class="card mb-4 shadow-sm">
           <div class="card-body">
-            <h5 class="card-title">Last Login</h5>
-            <p class="card-text text-muted">Last accessed: <strong>2025-06-06 10:45 AM</strong></p>
-            <a href="/profile/login-history" class="btn btn-sm btn-outline-primary">View Full Login History</a>
+            <h5 class="card-title fw-bold">Last Login</h5>
+            <p class="card-text text-muted">
+              Last accessed: <strong>2025-06-06 10:45 AM</strong>
+            </p>
+            <a
+              href="/profile/login-history"
+              class="btn btn-sm btn-outline-primary"
+            >
+              <FontAwesomeIcon
+                icon={faHistory}
+                style={{ marginRight: "10px" }}
+              />
+              View Full Login History
+            </a>
           </div>
         </div>
 
-        <div class="card border-danger mb-4">
+        <div class="card border-danger mb-4 shadow-sm">
           <div class="card-body">
-            <h5 class="card-title text-danger">Danger Zone</h5>
-            <p class="card-text">Permanently delete or deactivate your account. This action cannot be undone.</p>
-            <button class="btn btn-sm btn-danger" onclick="confirmDeactivation()">Deactivate Account</button>
-            <button class="btn btn-sm btn-outline-danger ms-2" onclick="confirmDeletion()">Delete Account</button>
+            <h5 class="card-title text-danger fw-bold">Danger Zone</h5>
+            <p class="card-text text-danger">
+              Permanently delete your account. This action cannot be undone.
+            </p>
+
+            <button
+              class="btn btn-sm btn-outline-danger"
+              onclick="confirmDeletion()"
+            >
+              <FontAwesomeIcon icon={faTrash} style={{ marginRight: "10px" }} />
+              Delete Account
+            </button>
           </div>
         </div>
-
       </div>
     </div>
   );

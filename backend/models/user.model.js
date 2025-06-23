@@ -47,6 +47,9 @@ const userSchema = new mongoose.Schema({
             ref: "Quiz"
         }
     ],
+    lastLogin: {
+        type: String,
+    },
 
 }, { timestamps: true });
 

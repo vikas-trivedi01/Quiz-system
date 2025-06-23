@@ -67,7 +67,7 @@ const getAdminQuizzes = asyncErrorHandler(async (req, res) => {
     if (creator) {
         let quizzes = await Quiz.find({
             creator
-        }).populate({ path: "creator", select: "-fullName -email -age -password -refreshToken -role -quizzesAttempted -createdAt -updatedAt -__v -_id" })
+        }).populate({ path: "creator", select: "-fullName -email -age -password -refreshToken -role -quizzesAttempted  -lastLogin -createdAt -updatedAt -__v -_id" })
             .populate({ path: "questions", select: "-createdAt -updatedAt -__v -_id" });
 
 
@@ -182,7 +182,7 @@ const getListOfQuizzes = asyncErrorHandler(async (req, res) => {
     })
         .populate({
             path: "creator",
-            select: "-fullName -email -age -password -refreshToken -role -quizzesAttempted -quizCode -codeExpiresAt -createdAt -updatedAt -__v -_id"
+            select: "-fullName -email -age -password -refreshToken -role -quizzesAttempted -lastLogin -quizCode -codeExpiresAt -createdAt -updatedAt -__v -_id"
         })
         .populate({
             path: "questions",
@@ -201,8 +201,8 @@ const getListOfQuizzes = asyncErrorHandler(async (req, res) => {
 const participateInQuiz = asyncErrorHandler(async (req, res) => {
     const quiz = req.quiz;
 
-    //  if(quiz.participants.includes(req.user?._id))
-    //     return res.status(406).json(new ApiError("Already participated in this quiz", 406, "Already participated in this quiz"));
+     if(quiz.participants.includes(req.user?._id))
+        return res.status(406).json(new ApiError("Already participated in this quiz", 406, "Already participated in this quiz"));
 
     const updatedQuiz = await Quiz.findByIdAndUpdate(
         quiz?._id,
@@ -263,7 +263,7 @@ const getAllParticipants = asyncErrorHandler(async (req, res) => {
         .select("participants")
         .populate({
             path: "participants",
-            select: "-password -refreshToken -role -quizzesAttempted -createdAt -updatedAt -__v -_id"
+            select: "-password -refreshToken -role -quizzesAttempted  -lastLogin -createdAt -updatedAt -__v -_id"
         });
 
     if (participants.length == 0)

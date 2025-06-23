@@ -42,6 +42,19 @@ const registerUser = asyncErrorHandler(async (req, res) => {
     );
 });
 
+const generateDateTime = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    let hours = now.getHours();
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12 || 12;
+
+    return `${year}-${month}-${day} ${hours}:${minutes} ${ampm}`;
+};
+
 const loginUser = asyncErrorHandler(async (req, res) => {
 
     const { email, role, password } = req.body;
@@ -78,7 +91,7 @@ const loginUser = asyncErrorHandler(async (req, res) => {
 });
 
 const logoutUser = asyncErrorHandler(async (req, res) => {
-    await User.findByIdAndUpdate(
+    const user = await User.findByIdAndUpdate(
         req.user?._id,
         {
             $unset: {
@@ -89,6 +102,12 @@ const logoutUser = asyncErrorHandler(async (req, res) => {
             new: true
         }
     );
+
+    
+    const loginDateTime = generateDateTime();
+    user.lastLogin = loginDateTime;
+
+    await user.save();
 
     return res
         .status(200)
@@ -164,13 +183,13 @@ const profileDetails = asyncErrorHandler(async (req, res) => {
 });
 
 const changePassword = asyncErrorHandler(async (req, res) => {
-    
+
     const {
         email,
         currentPassword,
         newPassword
     } = req.body;
-    
+
     const user = await User.findOne({ email }).select("+password");
 
     const isPasswordCorrect = await user.isPasswordCorrect(currentPassword);
@@ -196,10 +215,10 @@ const editProfile = asyncErrorHandler(async (req, res) => {
     const updatedProfile = await User.findByIdAndUpdate(
         userId,
         {
-             fullName, 
-             userName, 
-             email, 
-             age 
+            fullName,
+            userName,
+            email,
+            age
         },
         {
             new: true,
@@ -207,12 +226,43 @@ const editProfile = asyncErrorHandler(async (req, res) => {
         }
     );
 
-    if(!updatedProfile)
+    if (!updatedProfile)
         return res.status(404).json(new ApiError("Profile not found or editing failed", 404));
 
     return res.status(200)
-                .json(new ApiResponse({}, "Profile edited successfully", 200));
+        .json(new ApiResponse({}, "Profile edited successfully", 200));
 });
+
+const lastLoginDateTime = asyncErrorHandler(async (req, res) => {
+    const userId = req.user?._id;
+    const loginData = await User.findById(userId).select("lastLogin");
+
+    if (!loginData)
+        return res.status(404).json(new ApiError("Last login details not found", 404));
+
+    return res.status(200).json(
+        new ApiResponse({ lastLogin: loginData.lastLogin }, "Last login details found successfully", 200)
+    );
+
+});
+
+const removeAccount = asyncErrorHandler(async (req, res) => {
+  const userId = req.user?._id;
+
+  const result = await User.deleteOne({ _id: userId });
+
+  if (result.deletedCount === 0) {
+    return res.status(404).json(new ApiError("User not found or already deleted", 404));
+  }
+  res.clearCookie("accessToken");
+  res.clearCookie("refreshToken");
+  res.clearCookie("role");
+
+  return res.status(200).json(
+    new ApiResponse({}, "Account deleted successfully", 200)
+  );
+});
+
 
 export {
     registerUser,
@@ -220,5 +270,7 @@ export {
     logoutUser,
     profileDetails,
     changePassword,
-    editProfile
+    editProfile,
+    lastLoginDateTime,
+    removeAccount
 }

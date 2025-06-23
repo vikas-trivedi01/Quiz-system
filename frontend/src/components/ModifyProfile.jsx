@@ -1,21 +1,16 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { refreshAccessToken } from "../assets/tokens";
+import { refreshAccessToken } from "../assets/tokens.js";
 import axios from "axios";
-import { BACKEND_URL } from "../assets/constants";
-import {
-  faClock,
-  faExclamationTriangle,
-  faHistory,
-  faLock,
-  faTrash,
-} from "@fortawesome/free-solid-svg-icons";
+import { BACKEND_URL } from "../assets/constants.js";
+import { faHistory, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const ModifyProfile = () => {
   const navigate = useNavigate();
 
   const [lastLogin, setLastLogin] = useState();
+
   const buttonStyle = {
     backgroundColor: "var(--clr-primary)",
     color: "#fff",
@@ -28,6 +23,59 @@ const ModifyProfile = () => {
 
   const handleHover = (e, isHover) => {
     e.target.style.backgroundColor = isHover ? "#003f7d" : "var(--clr-primary)";
+  };
+
+  useEffect(() => {
+    const getLastLoginDetails = async () => {
+      try {
+        const response = await axios.get(`${BACKEND_URL}/users/last-login`, {
+          withCredentials: true,
+        });
+
+        if (response?.status === 200) {
+          setLastLogin(response?.data?.data?.lastLogin);
+        }
+      } catch (error) {
+        if (error?.response?.status === 401) {
+          try {
+            await refreshAccessToken();
+            await getLastLoginDetails();
+          } catch (refreshError) {
+            alert("Please login again");
+            navigate("/users/login");
+          }
+        } else {
+          alert(error?.message);
+        }
+      }
+    };
+
+    getLastLoginDetails();
+  }, []);
+
+  const removeAccount = async () => {
+    try {
+      const response = await axios.delete(`${BACKEND_URL}/users/profile`, {
+        withCredentials: true,
+      });
+
+      if (response?.status === 200) {
+        alert(response.data.message);
+        navigate("/users/signup");
+      }
+    } catch (error) {
+      if (error?.response?.status === 401) {
+        try {
+          await refreshAccessToken();
+          await removeAccount();
+        } catch (refreshError) {
+          alert("Please login again");
+          navigate("/users/login");
+        }
+      } else {
+        alert(error?.message);
+      }
+    }
   };
 
   return (
@@ -66,18 +114,8 @@ const ModifyProfile = () => {
           <div class="card-body">
             <h5 class="card-title fw-bold">Last Login</h5>
             <p class="card-text text-muted">
-              Last accessed: <strong>2025-06-06 10:45 AM</strong>
+              Last accessed: <strong>{lastLogin}</strong>
             </p>
-            <a
-              href="/profile/login-history"
-              class="btn btn-sm btn-outline-primary"
-            >
-              <FontAwesomeIcon
-                icon={faHistory}
-                style={{ marginRight: "10px" }}
-              />
-              View Full Login History
-            </a>
           </div>
         </div>
 
@@ -90,7 +128,7 @@ const ModifyProfile = () => {
 
             <button
               class="btn btn-sm btn-outline-danger"
-              onclick="confirmDeletion()"
+              onClick={removeAccount}
             >
               <FontAwesomeIcon icon={faTrash} style={{ marginRight: "10px" }} />
               Delete Account

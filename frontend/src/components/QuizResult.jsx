@@ -24,27 +24,30 @@ const QuizResult = () => {
 
   const { quizData, answers, quizId } = location.state;
 
-  const homeButtonStyle = {
-    backgroundColor: "#000",
-    color: "#fff",
-    borderRadius: `var(--border-radius)`,
-    padding: "10px",
-    width: "200px",
-    border: "none",
-    cursor: "pointer",
-    marginTop: "20px",
-  };
-
   const reviewButtonStyle = {
     backgroundColor: "#ff006e",
     color: "#fff",
     borderRadius: `var(--border-radius)`,
     padding: "10px",
-    width: "260px",
+    height: "50px",
+    width: "230px",
     border: "none",
     cursor: "pointer",
-    marginTop: "20px",
+    marginTop: "14px",
     marginLeft: "20px",
+  };
+
+  const leaderboardButtonStyle = {
+    backgroundColor: "#4361ee",
+    color: "#fff",
+    borderRadius: `var(--border-radius)`,
+    padding: "10px",
+    height: "50px",
+    width: "230px",
+    border: "none",
+    cursor: "pointer",
+    marginTop: "14px",
+    // marginLeft: "40px",
   };
 
   const rightAnswers = quizData.filter((question) => {
@@ -145,6 +148,7 @@ useEffect(() => {
 
   return (
     <>
+     
       <div
         style={{
           border: "2px solid #00a8e8",
@@ -159,41 +163,49 @@ useEffect(() => {
       >
         Result Status: {status}
       </div>
-
+     
       <div className="d-flex justify-content-between">
         <img
           src={quizResultImg}
           alt="Quiz result illustration"
           height={350}
           width={600}
-          className="m-5"
+          className="ms-5 me-5 mt-4 mb-3"
           style={{
             border: "2px solid #000",
             borderRadius: "var(--border-radius)",
           }}
         />
 
-        <div className="text-center mt-5" style={{ marginRight: "200px" }}>
-          <span style={{ fontSize: "28px" }}>Your Score</span>{" "}
+        <div className="text-center" style={{ marginRight: "200px", marginTop: "40px" }}>
+          <div className="d-flex flex-col align-items-center justify-content-between">
+          <div style={{ marginLeft: "140px" }}>
+              <span style={{ fontSize: "28px" }} className="text-center">Your Score</span>{" "}
           <h2
             style={{
               border: "2px solid #00a8e8",
               width: "max-content",
               borderRadius: "6px",
-              marginLeft: "145px",
+              marginLeft: "20px"
             }}
             className="py-2 px-5"
           >
             {rightAnswers.length} / {quizData.length}
           </h2>
+          </div>
+           
+          </div>
           <h4 className="mt-4">{message}</h4>
          
-          <button style={homeButtonStyle} className="ms-3">
-            <NavLink to="/" style={{ color: "#fff", textDecoration: "none" }}>
-              Back to Home
-            </NavLink>
+          <div className="d-flex justify-content-between">
+            <button
+              style={leaderboardButtonStyle}
+              onClick={() =>
+                navigate(`/quizzes/leaderboard?quizId=${quizId}`)
+              }
+            >
+              View Leaderboard
           </button>
-
           {rightAnswers.length != quizData.length ? (
             <button
               style={reviewButtonStyle}
@@ -205,6 +217,7 @@ useEffect(() => {
             </button>
           ) : null}
 
+          </div>
         </div>
       </div>
     </>

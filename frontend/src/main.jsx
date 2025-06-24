@@ -38,6 +38,7 @@ import AdminProfile from "./components/AdminProfile";
 import ChangePassword from "./components/ChangePassword";
 import EditProfile from "./components/EditProfile";
 import QuizViewQuestions from "./components/QuizViewQuestions";
+import QuizLeaderboard from "./components/QuizLeaderboard";
 
 
 const router = createBrowserRouter(
@@ -155,6 +156,14 @@ const router = createBrowserRouter(
             element={
               <ProtectedRoute requiredRole="admin">
                 <QuizViewQuestions />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="leaderboard"
+            element={
+              <ProtectedRoute requiredRole="user">
+                <QuizLeaderboard />
               </ProtectedRoute>
             }
           />

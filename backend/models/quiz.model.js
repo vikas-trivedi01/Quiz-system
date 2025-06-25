@@ -74,7 +74,17 @@ const quizSchema = new mongoose.Schema({
     codeExpiresAt: {
         type: Date,
         default: null,
-    }
+    },
+    leaderboard: [
+        {
+            user: { 
+                    type: mongoose.Schema.Types.ObjectId, 
+                    ref: "User" 
+            },
+            score: Number,
+            attemptedAt: String,
+        }
+    ],
 }, { timestamps: true });
 
 export const Quiz = new mongoose.model("Quiz", quizSchema);

@@ -201,8 +201,8 @@ const getListOfQuizzes = asyncErrorHandler(async (req, res) => {
 const participateInQuiz = asyncErrorHandler(async (req, res) => {
     const quiz = req.quiz;
 
-     if(quiz.participants.includes(req.user?._id))
-        return res.status(406).json(new ApiError("Already participated in this quiz", 406, "Already participated in this quiz"));
+    //  if(quiz.participants.includes(req.user?._id))
+    //     return res.status(406).json(new ApiError("Already participated in this quiz", 406, "Already participated in this quiz"));
 
     const updatedQuiz = await Quiz.findByIdAndUpdate(
         quiz?._id,
@@ -223,6 +223,20 @@ const participateInQuiz = asyncErrorHandler(async (req, res) => {
         .json(new ApiResponse({}, "Participated in quiz successfully", 200));
 
 });
+
+const generateDateTime = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    let hours = now.getHours();
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12 || 12;
+
+    return `${year}-${month}-${day} ${hours}:${minutes} ${ampm}`;
+};
+
 
 const attemptQuiz = asyncErrorHandler(async (req, res) => {
     const quiz = req.quiz;
@@ -249,6 +263,14 @@ const attemptQuiz = asyncErrorHandler(async (req, res) => {
         score,
         performanceStatus
     });
+
+    req.quiz.leaderboard.push({
+        user: req.user?._id,
+        score,
+        attemptedAt: generateDateTime(),
+    });
+
+    await req.quiz.save();
 
     return res.status(201)
         .json(new ApiResponse({}, "Quiz attempted successfully", 201));
@@ -340,6 +362,26 @@ const changeStatus = asyncErrorHandler(async (req, res) => {
         .json(new ApiResponse({ status: quiz.status }, "Status changed successfully", 200));
 });
 
+const quizLeaderboard = asyncErrorHandler(async (req, res) => {
+    const quiz = await Quiz.findById(req.quiz?._id)
+                            .select("leaderboard")
+                            .populate({
+                                path: "leaderboard.user",
+                                select: "userName"
+                            });
+
+    const leaderBoard = quiz.leaderboard.sort((a, b) => b.score - a.score);
+
+    const userRank = quiz.leaderboard.findIndex(
+    (userObj) => userObj.user._id.toString() === req.user._id.toString()
+    );
+
+    return res.status(200).json(
+    new ApiResponse({ leaderBoard, userRank }, "Leaderboard fetched successfully", 200)
+    );
+
+});
+
 export {
     createQuiz,
     getAdminQuizzes,
@@ -353,5 +395,6 @@ export {
     getAllParticipants,
     joinQuizWithCode,
     getQuizCode,
-    changeStatus
+    changeStatus,
+    quizLeaderboard
 }

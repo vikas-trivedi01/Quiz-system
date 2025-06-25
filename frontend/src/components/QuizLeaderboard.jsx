@@ -1,7 +1,8 @@
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { refreshAccessToken } from "../assets/tokens.js";
+import { BACKEND_URL } from "../assets/constants.js";
 
 const QuizLeaderboard = () => {
     const [searchParams] = useSearchParams();
@@ -11,6 +12,9 @@ const QuizLeaderboard = () => {
 
 
   const [leaderboard, setLeaderboard] = useState([]);
+  const [userRank, setUserRank] = useState(null);
+
+  let hasRank = false;
 
   useEffect(() => {
     const getLeaderboard = async () => {
@@ -23,7 +27,8 @@ const QuizLeaderboard = () => {
         );
 
         if (response?.status == 200) {
-          setLeaderboard(response?.data?.data);
+          setLeaderboard(response?.data?.data?.leaderBoard);
+          setUserRank(response?.data?.data?.userRank);
         }
       } catch (error) {
         if (error?.response?.status == 401) {
@@ -45,22 +50,35 @@ const QuizLeaderboard = () => {
 
 
   return (
-    
-    <div>
-      <table>
-        {
-            leaderboard?.map((userObj, index) => {
-                return (
-                    <tr key={index}>
-                        <td>{userObj.user}</td>
-                        <td>{userObj.score}</td>
-                        <td>{userObj.attemptedAt}</td>
-                    </tr>
-                )
-            })
-        }
-      </table>
-    </div>
+   leaderboard?.length > 0 ? (
+  <div className="table-responsive" style={{ marginLeft: "15%"}}>
+    <table className="table table-hover border rounded shadow-sm m-5 w-75">
+      <thead className="table-primary text-center">
+        <tr>
+          <th>Rank</th>
+          <th>User</th>
+          <th>Score</th>
+          <th>Attempted At</th>
+        </tr>
+      </thead>
+      <tbody className="text-center">
+        {leaderboard.map((entry, index) => (
+          <tr key={entry._id}
+              className={index === userRank ? "table-success fw-bold" : ""}
+          >
+            <td>{index + 1}</td>
+            <td>{entry.user?.userName || "Unknown"}</td>
+            <td>{entry.score}</td>
+            <td>{entry.attemptedAt}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+) : (
+  <h5 className="text-center m-5 p-5 fs-2">No leaderboard data available.</h5>
+)
+
   )
 }
 

@@ -14,8 +14,6 @@ const QuizLeaderboard = () => {
   const [leaderboard, setLeaderboard] = useState([]);
   const [userRank, setUserRank] = useState(null);
 
-  let hasRank = false;
-
   useEffect(() => {
     const getLeaderboard = async () => {
       try {
@@ -76,7 +74,7 @@ const QuizLeaderboard = () => {
     </table>
   </div>
 ) : (
-  <h5 className="text-center m-5 p-5 fs-2">No leaderboard data available.</h5>
+  <h5 className="text-center m-5 p-5 fs-2">Fetching Leaderboard Data...</h5>
 )
 
   )

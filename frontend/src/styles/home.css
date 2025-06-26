@@ -36,3 +36,16 @@
   color: white;
   transition: 0.5s ease-in-out;
 }
+
+.feature-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  transition: transform 0.3s;
+}
+.feature-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+}
+.cta {
+  background: radial-gradient(circle at center, #005a92, #000000);
+}

@@ -5,7 +5,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronDown,
   faChevronUp,
+  faFileContract,
+  faInfoCircle,
   faRectangleList,
+  faShieldAlt,
   faSquarePlus,
   faTerminal,
 } from "@fortawesome/free-solid-svg-icons";
@@ -65,7 +68,7 @@ const Navbar = () => {
   };
 
   const login = () => {
-    navigate("/users/login");
+    navigate("/users/signup");
   }
 
   return (
@@ -165,14 +168,15 @@ const Navbar = () => {
           <div
             className={`text-center dropdown-menu${
               infoOpen ? " show" : ""
-            } bg-dark px-5 py-2 mt-3 ms-5`}
+            } bg-dark px-3 py-2 mt-3 ms-5`}
           >
               <>
                 <NavLink
                   to="/info/about"
                   className="dropdown-item bg-light text-dark mb-3 mb-3"
                 >
-                 About{" "}
+                 About{" "} 
+                 <FontAwesomeIcon icon={faInfoCircle} className="ms-3" />
                 </NavLink>
 
                 <NavLink
@@ -180,6 +184,7 @@ const Navbar = () => {
                   className="dropdown-item bg-light text-dark mb-3 mb-3"
                 >
                  Terms{" "}
+                 <FontAwesomeIcon icon={faFileContract} className="ms-3" />
                 </NavLink>
 
                 <NavLink
@@ -187,6 +192,7 @@ const Navbar = () => {
                   className="dropdown-item bg-light text-dark mb-3 mb-3"
                 >
                  Privacy Policy{" "}
+                 <FontAwesomeIcon icon={faShieldAlt} className="ms-4" />
                 </NavLink>
               </>
             </div>

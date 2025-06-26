@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { refreshAccessToken } from "../assets/tokens.js";
 import axios from "axios";
 import { BACKEND_URL } from "../assets/constants.js";
-import { faHistory, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const ModifyProfile = () => {

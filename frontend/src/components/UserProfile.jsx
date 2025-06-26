@@ -112,7 +112,7 @@ return (
                               <strong>Completed At:</strong>{" "}
                               {new Date(matchedAttempt.completedAt).toLocaleDateString()}
                             </div>
-                            <div className="col-6 mt-2">
+                            <div className="col-12 ms-5 mt-2">
                               <strong>Performance Status:</strong>{" "}
                               {matchedAttempt.performanceStatus.replace(/_/g, " ")}
                             </div>

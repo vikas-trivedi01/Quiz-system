@@ -49,3 +49,13 @@
 .cta {
   background: radial-gradient(circle at center, #005a92, #000000);
 }
+
+.counter-section {
+  background-color: #f8f9fa;
+}
+.counter-section h1 {
+  font-weight: bold;
+}
+.counter-section p {
+  color: #333;
+}

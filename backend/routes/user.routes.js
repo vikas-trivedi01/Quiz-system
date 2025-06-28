@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { loginUser, logoutUser, registerUser, profileDetails, changePassword, editProfile, lastLoginDateTime, removeAccount } from "../controllers/user.controller.js"
+import { loginUser, logoutUser, registerUser, profileDetails, changePassword, editProfile, lastLoginDateTime, removeAccount, toggleBookmark, bookmarkedQuizzes } from "../controllers/user.controller.js"
 import { authenticateRequest } from "../middlewares/auth.middleware.js";
 
 const router = Router();
@@ -18,6 +18,9 @@ router.route("/profile")
 router.route("/change-password").put(authenticateRequest, changePassword);
 
 router.route("/last-login").get(authenticateRequest, lastLoginDateTime);
+
+router.route("/bookmarks").post(authenticateRequest, toggleBookmark)
+                            .get(authenticateRequest, bookmarkedQuizzes);
 
 
 export default router;

@@ -50,7 +50,12 @@ const userSchema = new mongoose.Schema({
     lastLogin: {
         type: String,
     },
-
+    bookmarkedQuizzes: [
+        { 
+            type: mongoose.Schema.Types.ObjectId, 
+            ref: "Quiz"
+        }
+    ]
 }, { timestamps: true });
 
 

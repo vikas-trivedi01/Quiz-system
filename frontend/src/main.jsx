@@ -39,6 +39,7 @@ import ChangePassword from "./components/ChangePassword";
 import EditProfile from "./components/EditProfile";
 import QuizViewQuestions from "./components/QuizViewQuestions";
 import QuizLeaderboard from "./components/QuizLeaderboard";
+import Bookmarks from "./components/Bookmarks";
 
 
 const router = createBrowserRouter(
@@ -213,6 +214,11 @@ const router = createBrowserRouter(
               <EditProfile />
           } />
         
+          <Route path="bookmarks" element={
+            <ProtectedRoute requiredRole="user">
+              <Bookmarks />
+            </ProtectedRoute>
+          } />
         </Route>
 
       

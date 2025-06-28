@@ -263,6 +263,24 @@ const removeAccount = asyncErrorHandler(async (req, res) => {
   );
 });
 
+const toggleBookmark = asyncErrorHandler(async (req, res) => {
+    const { quizId } = req.body.quizId;
+
+    req.user.bookmarkedQuizzes.includes(quizId) ? user.bookmarkedQuizzes.pull(quizId) : user.bookmarkedQuizzes.push(quizId);
+    await req.user.save();
+
+    return res.status(200)
+                .json(new ApiResponse({}, "Bookmark toggled successfully", 200));
+});
+
+const bookmarkedQuizzes = asyncErrorHandler(async (req, res) => {
+    const bookmarkedQuizzes = User.findById(req.user._id).populate("bookmarkedQuizzes").select("bookmarkedQuizzes");
+
+    res.status(200)
+        .json(new ApiResponse({ bookmarkedQuizzes }, "Bookmarked quizzes fetched successfully", 200));
+
+});
+
 
 export {
     registerUser,
@@ -272,5 +290,7 @@ export {
     changePassword,
     editProfile,
     lastLoginDateTime,
-    removeAccount
+    removeAccount,
+    toggleBookmark,
+    bookmarkedQuizzes
 }

@@ -3,10 +3,15 @@ import { useState } from "react";
 import user from "../assets/images/user_profile.png";
 import { fetchProfile } from "../assets/getProfile.js";
 import ModifyProfile from "./ModifyProfile.jsx";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBookmark } from "@fortawesome/free-regular-svg-icons";
+import { useNavigate } from "react-router-dom";
 
 const UserProfile = () => {
   const [profile, setProfile] = useState(null);
   const [attemptedQuizzes, setAttemptedQuizzes] = useState([]);
+
+  const navigate = useNavigate();
 
  useEffect(() => {
   const fetchData = async () => {
@@ -73,7 +78,13 @@ return (
             </div>
           </div>
 
-          <h3 className="mb-3 text-center">Quizzes Attempted</h3>
+          <div className="d-flex justify-content-evenly">
+            <h3 className="mb-3 text-center">Quizzes Attempted</h3>
+            <span onClick={() => {
+              navigate("/profile/bookmarks");
+            }}><FontAwesomeIcon icon={faBookmark} size="2xl" style={{color: "#0182e4", cursor: "pointer" }} /></span>
+          </div>
+
           <div className="row gy-4 mb-5 mt-3">
             {profile.quizzes.map((quiz, index) => {
                   const matchedAttempt = attemptedQuizzes.find( 

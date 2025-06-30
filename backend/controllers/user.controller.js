@@ -266,7 +266,7 @@ const removeAccount = asyncErrorHandler(async (req, res) => {
 const toggleBookmark = asyncErrorHandler(async (req, res) => {
     const { quizId } = req.body.quizId;
 
-    req.user.bookmarkedQuizzes.includes(quizId) ? user.bookmarkedQuizzes.pull(quizId) : user.bookmarkedQuizzes.push(quizId);
+    req.user.bookmarkedQuizzes.includes(quizId) ? req.user.bookmarkedQuizzes.pull(quizId) : req.user.bookmarkedQuizzes.push(quizId);
     await req.user.save();
 
     return res.status(200)
@@ -274,10 +274,15 @@ const toggleBookmark = asyncErrorHandler(async (req, res) => {
 });
 
 const bookmarkedQuizzes = asyncErrorHandler(async (req, res) => {
-    const bookmarkedQuizzes = User.findById(req.user._id).populate("bookmarkedQuizzes").select("bookmarkedQuizzes");
+
+    const bookmarkedQuizIds = req.user.bookmarkedQuizzes; 
+
+    const bookmarkedQuizzesDetails = await Quiz.find({ _id: { $in: bookmarkedQuizIds } })
+    .select("_id category difficulty totalMarks") 
+    .lean();
 
     res.status(200)
-        .json(new ApiResponse({ bookmarkedQuizzes }, "Bookmarked quizzes fetched successfully", 200));
+        .json(new ApiResponse({ bookmarkedQuizzes : bookmarkedQuizzesDetails }, "Bookmarked quizzes fetched successfully", 200));
 
 });
 

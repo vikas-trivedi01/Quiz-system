@@ -264,7 +264,7 @@ const removeAccount = asyncErrorHandler(async (req, res) => {
 });
 
 const toggleBookmark = asyncErrorHandler(async (req, res) => {
-    const { quizId } = req.body.quizId;
+    const { quizId } = req.body;
 
     req.user.bookmarkedQuizzes.includes(quizId) ? req.user.bookmarkedQuizzes.pull(quizId) : req.user.bookmarkedQuizzes.push(quizId);
     await req.user.save();
@@ -278,7 +278,7 @@ const bookmarkedQuizzes = asyncErrorHandler(async (req, res) => {
     const bookmarkedQuizIds = req.user.bookmarkedQuizzes; 
 
     const bookmarkedQuizzesDetails = await Quiz.find({ _id: { $in: bookmarkedQuizIds } })
-    .select("_id category difficulty totalMarks") 
+    .select("_id quizName category difficulty totalMarks") 
     .lean();
 
     res.status(200)

@@ -10,9 +10,10 @@ import {
   faEye,
   faEyeSlash,
   faListUl,
+  faBookmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { BACKEND_URL } from "../assets/constants.js";
 import { refreshAccessToken } from "../assets/tokens.js";
 import axios from "axios";
@@ -53,7 +54,22 @@ const ListItem = ({
     justifyContent: "center",
     gap: "22px",
     fontWeight: "600",
+    marginLeft: "330px",
     width: "200px",
+  };
+  const bookmarkButtonStyle = {
+    backgroundColor: "var(--clr-primary)",
+    color: "#fff",
+    borderRadius: "var(--border-radius)",
+    padding: "10px 20px",
+    border: "none",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "22px",
+    fontWeight: "600",
+    width: "70px",
   };
 
   const actionButtonStyle = {
@@ -174,6 +190,35 @@ const ListItem = ({
   const joinQuiz = () => {
     navigate(`/quizzes/quiz?quizId=${quizId}`);
   };
+  
+  const bookmarkQuiz = async () => {
+    try {
+      const response = await axios.post(`${BACKEND_URL}/users/bookmarks`, {
+        quizId
+      } , {
+        withCredentials: true,
+      });
+
+      if (response?.status === 200) {
+        alert(response?.data?.message);
+      }
+
+    } catch (error) {
+      if (error?.response?.status == 401) {
+        try {
+          await refreshAccessToken();
+          await bookmarkQuiz();
+        } catch (refreshError) {
+          alert("Please login again");
+          navigate("/users/login");
+        }
+      } else {
+        alert(error?.message);
+      }
+    }
+  };
+
+
 
   const viewParticipants = () => {
     navigate(`/quizzes/participants?quizId=${quizId}`);
@@ -256,7 +301,7 @@ const ListItem = ({
       <div
         style={{
           display: "flex",
-          justifyContent: "space-between",
+          justifyContent: "space-around",
           flexWrap: "wrap",
           alignItems: "center",
           marginBottom: "20px",
@@ -314,10 +359,15 @@ const ListItem = ({
             </button>
           </div>
         ) : (
-          <button style={joinButtonStyle} onClick={joinQuiz}>
+          <div className="d-flex gap-4">
+              <button style={joinButtonStyle} onClick={joinQuiz}>
             Join Quiz
             <FontAwesomeIcon icon={faUpRightFromSquare} />
           </button>
+          <button style={bookmarkButtonStyle} onClick={bookmarkQuiz}>
+            <FontAwesomeIcon icon={faBookmark} />
+          </button>
+          </div>
         )}
 
         <div

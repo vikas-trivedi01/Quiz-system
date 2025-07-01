@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { BACKEND_URL } from "../assets/constants.js";
 import { useEffect, useState } from "react";
 import { refreshAccessToken } from "../assets/tokens.js";
@@ -12,6 +12,28 @@ const Bookmarks = () => {
   const [quizzes, setQuizzes] = useState([]);
   const [isQuizzesListFetched, setIsQuizzesListFetched] = useState(false);
   
+   const removeBookmarkedQuiz = async (quizId) => {
+      try {
+        const response = await axios.post(`${BACKEND_URL}/users/bookmarks`, {
+          quizId
+        } , {
+          withCredentials: true,
+        });
+  
+      } catch (error) {
+        if (error?.response?.status == 401) {
+          try {
+            await refreshAccessToken();
+            await removeBookmarkedQuiz();
+          } catch (refreshError) {
+            alert("Please login again");
+            navigate("/users/login");
+          }
+        } else {
+          alert(error?.message);
+        }
+      }
+    };
 
   useEffect(() => {
     const getQuizzesList = async () => {
@@ -20,7 +42,7 @@ const Bookmarks = () => {
           withCredentials: true,
         });
 
-        setQuizzes(response?.data?.data);
+        setQuizzes(response?.data?.data?.bookmarkedQuizzes);
         setIsQuizzesListFetched(true);
       } catch (error) {
         if (error?.response?.status == 401) {
@@ -47,9 +69,12 @@ const Bookmarks = () => {
 
   return (
   <>
-    {isQuizzesListFetched ? (
+    {isQuizzesListFetched  ? (
       <>
-        <h2
+       {
+        quizzes.length ? (
+          <>
+           <h2
           className="text-center mb-2 mt-5 fw-bold"
           style={{ fontSize: "2.5rem", letterSpacing: "1px" }}
         >
@@ -58,7 +83,7 @@ const Bookmarks = () => {
 
         <div className="container py-5 mb-5">
           <div className="row row-cols-1 row-cols-md-3 g-4">
-            {quizzes.map((quiz, index) => (
+            {quizzes?.map((quiz, index) => (
               <div className="col" key={index}>
                 <div
                   className="card h-100 shadow-sm border-0"
@@ -74,7 +99,7 @@ const Bookmarks = () => {
                     (e.currentTarget.style.transform = "translateY(0)")
                   }
                 >
-                  <div className="card-body">
+                  <div className="card-body p-4 ">
                     <h5 className="card-title text-primary fw-semibold">
                       {quiz.quizName}
                     </h5>
@@ -89,17 +114,27 @@ const Bookmarks = () => {
                       <strong>Total Marks:</strong> {quiz.totalMarks}
                     </p>
                   </div>
-                  <div className="card-footer bg-transparent border-0 text-end">
-                     <button onClick={() => joinQuiz(quiz._id)} className="btn btn-outline-primary btn-sm p-2">
-                        Start Quiz
-                        <FontAwesomeIcon icon={faUpRightFromSquare} className="ms-3" />
-                    </button>
-                  </div>
+                <div className="card-footer bg-transparent border-0 d-flex justify-content-between mb-3">
+                  <button onClick={() => joinQuiz(quiz._id)} className="btn btn-outline-primary btn-sm me-2">
+                      Start Quiz
+                      <FontAwesomeIcon icon={faUpRightFromSquare} className="ms-2" />
+                  </button>
+                  <button onClick={() => removeBookmarkedQuiz(quiz._id)} className="btn btn-outline-primary btn-sm">
+                      Remove Bookmark
+                      <FontAwesomeIcon icon={faUpRightFromSquare} className="ms-2" />
+                  </button>
+              </div>
+
                 </div>
               </div>
             ))}
           </div>
         </div>
+          </>
+        ) : (
+          <h4 className="mb-5 mt-5 p-5 text-center">No Bookmarked Quizzes...</h4>
+        )
+       }
       </>
     ) : (
       <h4 className="mb-5 mt-5 p-5 text-center">Loading Bookmarked Quizzes List...</h4>

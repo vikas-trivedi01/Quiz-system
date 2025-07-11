@@ -201,8 +201,8 @@ const getListOfQuizzes = asyncErrorHandler(async (req, res) => {
 const participateInQuiz = asyncErrorHandler(async (req, res) => {
     const quiz = req.quiz;
 
-    //  if(quiz.participants.includes(req.user?._id))
-    //     return res.status(406).json(new ApiError("Already participated in this quiz", 406, "Already participated in this quiz"));
+     if(quiz.participants.includes(req.user?._id))
+        return res.status(406).json(new ApiError("Already participated in this quiz", 406, "Already participated in this quiz"));
 
     const updatedQuiz = await Quiz.findByIdAndUpdate(
         quiz?._id,

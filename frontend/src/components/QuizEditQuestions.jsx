@@ -42,18 +42,19 @@ const QuizEditQuestions = () => {
   );
 };
 
-const handleOptionChange = (questionIndex, optVal) => {
-  setEditedQuestions(prev => (
+const handleOptionChange = (questionIndex, optionIndex, optVal) => {
+  setEditedQuestions(prev =>
     prev.map((q, i) => {
-      if(i !== questionIndex) return q;
+      if (i !== questionIndex) return q;
 
-      const updatedOptions = q.options.map( opt => ({
-         ...opt, option: optVal
-      }))
+      const updatedOptions = q.options.map((opt, idx) => {
+        if (idx !== optionIndex) return opt;
+        return { ...opt, option: optVal };
+      });
 
       return { ...q, options: updatedOptions };
     })
-  ))
+  );
 };
 
     const handleCorrectOptionChange = (questionIndex, optionIndex) => {
@@ -113,7 +114,7 @@ const handleOptionChange = (questionIndex, optVal) => {
             </p>
          </div>
 
-          <h3 className="mt-5" style={{ marginLeft: "19.2em" }}>Quiz: {quizName}</h3>
+          <h3 className="mt-5" style={{ marginLeft: "16.2em" }}>Quiz: {quizName}</h3>
 
             {
                editedQuestions.map((questionObj, index) => {
@@ -142,12 +143,12 @@ const handleOptionChange = (questionIndex, optVal) => {
                           style={previewOptionsStyle}
                           onClick={() => toggleOptionsVisible(index)}
                         >
-                          {isShown ? "Hide Options" : "Show Options"}
+                          {optionsShown[index] ? "Hide Options" : "Show Options"}
                         </button>
                       </div>
 
                     
-                     {isShown && (
+                     {optionsShown[index] && (
                                     <div
                                       className="py-1 px-1 d-flex flex-wrap align-items-center"
                                       style={{ gap: "10px", marginLeft: "137px" }}
@@ -174,7 +175,7 @@ const handleOptionChange = (questionIndex, optVal) => {
                                                   }
                                                 : { border: "none" }
                                             }
-                                            onChange={e => handleOptionChange(index, e.target.value)}
+                                            onChange={e => handleOptionChange(index, optIndex, e.target.value)}
                                           />
                                           <input type="radio" name={`${index}-option`} style={{ height: "30px", width: "30px"}} defaultChecked={optionObj.isCorrect ? true : false} className="mt-3" onClick={() => handleCorrectOptionChange(index, optIndex)}/>
                                         </div>

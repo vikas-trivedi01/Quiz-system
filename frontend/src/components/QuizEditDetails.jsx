@@ -39,7 +39,7 @@ const QuizEditDetails = () => {
         `${BACKEND_URL}/quizzes/manage/${quizId}`,
         {
           quizName: editedQuizName,
-          totalMarks: eachQuestionMarks * noOfQuestions,
+          totalMarks: editedEachQuestionMarks * noOfQuestions,
           eachQuestionMarks:  editedEachQuestionMarks,
           category: editedCategory,
           difficulty: editedDifficulty,

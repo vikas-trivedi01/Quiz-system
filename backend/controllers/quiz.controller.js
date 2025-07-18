@@ -56,7 +56,7 @@ const createQuiz = asyncErrorHandler(async (req, res) => {
 
 
     return res.status(201)
-        .json(new ApiResponse("Quiz created successfully", 201));
+        .json(new ApiResponse({}, "Quiz created successfully", 201));
 
 });
 
@@ -202,7 +202,7 @@ const participateInQuiz = asyncErrorHandler(async (req, res) => {
     const quiz = req.quiz;
 
      if(quiz.participants.includes(req.user?._id))
-        return res.status(406).json(new ApiError("Already participated in this quiz", 406, "Already participated in this quiz"));
+        return res.status(406).json(new ApiError({}, 406, "Already participated in this quiz"));
 
     const updatedQuiz = await Quiz.findByIdAndUpdate(
         quiz?._id,

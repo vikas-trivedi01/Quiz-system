@@ -68,7 +68,6 @@ const quizSchema = new mongoose.Schema({
     quizCode: {
         type: String,
         trim: true, 
-        unique: true,
         default: null,
     },
     codeExpiresAt: {

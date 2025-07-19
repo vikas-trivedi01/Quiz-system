@@ -63,7 +63,6 @@ const Quiz = () => {
   const navigate = useNavigate();
 
   const intervalRef = useRef(null);
-  const lastSelectedRef = useRef(null);
 
 
   useEffect(() => {
@@ -73,7 +72,7 @@ const Quiz = () => {
   }, [quizData]);
 
   useEffect(() => {
-    setTimer(5);
+    setTimer(60);
     setIsAnswered(false);
     clearInterval(intervalRef.current);
 
@@ -102,7 +101,7 @@ const Quiz = () => {
         setQuestionsCounter((prev) => prev + 1);
         setIsAnswered(false);
         setSelectedOptionId(null);
-        setTimer(5);
+        setTimer(60);
       } else {
       alert("Please select an option");
     }
